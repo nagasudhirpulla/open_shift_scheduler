@@ -1,0 +1,54 @@
+﻿@model OpenShiftScheduler.Models.AppModels.ShiftType
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ShiftType</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StartOffsetHrs)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StartOffsetHrs)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StartOffsetMins)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StartOffsetMins)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RoasterSequence)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RoasterSequence)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ShiftSequence)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ShiftSequence)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ColorString)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ColorString)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ShiftTypeId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

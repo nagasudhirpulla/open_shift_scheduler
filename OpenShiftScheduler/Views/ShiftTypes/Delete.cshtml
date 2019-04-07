@@ -1,0 +1,57 @@
+﻿@model OpenShiftScheduler.Models.AppModels.ShiftType
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>ShiftType</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StartOffsetHrs)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StartOffsetHrs)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StartOffsetMins)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StartOffsetMins)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RoasterSequence)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RoasterSequence)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ShiftSequence)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ShiftSequence)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ColorString)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ColorString)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="ShiftTypeId" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>
