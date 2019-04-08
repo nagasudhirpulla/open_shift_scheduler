@@ -1,11 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
     <DebugType>full</DebugType>
-    <UserSecretsId>aspnet-OpenShiftScheduler-31C59C3A-5EF5-4F81-BC26-F7D4EAC1E50B</UserSecretsId>
+    <UserSecretsId>aspnet-Sample-F95393E0-96C7-499C-B389-F6794E271031</UserSecretsId>
   </PropertyGroup>
-
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore" Version="2.1.6" />

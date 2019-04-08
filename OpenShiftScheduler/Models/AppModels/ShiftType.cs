@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
+// color picker - https://www.eyecon.ro/colorpicker/#about
 namespace OpenShiftScheduler.Models.AppModels
 {
     public class ShiftType
