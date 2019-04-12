@@ -8,9 +8,18 @@ namespace OpenShiftScheduler.Models.AppModels
 {
     public class Employee
     {
+        public Employee()
+        {
+            // setting default attribute value - https://stackoverflow.com/questions/40936566/how-to-set-a-default-value-on-a-boolean-in-a-code-first-model
+            IsActive = true;
+        }
+
         public int EmployeeId { get; set; }
 
         public int? OfficeId { get; set; }
+
+        [Required]
+        public Gender Gender { get; set; }
 
         [Required, StringLength(50, MinimumLength = 1)]
         public string Name { get; set; }
@@ -26,6 +35,10 @@ namespace OpenShiftScheduler.Models.AppModels
 
         [Required]
         public ShiftRole ShiftRole { get; set; }
+
+        public ShiftGroup ShiftGroup { get; set; }
+
+        public ICollection<ShiftSkill> ShiftSkills { get; set; }
 
     }
 }

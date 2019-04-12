@@ -8,13 +8,16 @@ using System.Threading.Tasks;
 
 namespace OpenShiftScheduler.Data
 {
-    public class ShiftScheduleDbContext: DbContext
+    public class ShiftScheduleDbContext : DbContext
     {
         public IConfiguration Configuration { get; }
 
         public DbSet<ShiftType> ShiftTypes { get; set; }
         public DbSet<ShiftRole> ShiftRoles { get; set; }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<ShiftSkill> ShiftSkills { get; set; }
+        public DbSet<Gender> Genders { get; set; }
+        public DbSet<ShiftGroup> ShiftGroups { get; set; }
 
         public ShiftScheduleDbContext(DbContextOptions<ShiftScheduleDbContext> options, IConfiguration configuration) : base(options)
         {
@@ -35,6 +38,33 @@ namespace OpenShiftScheduler.Data
             .HasKey(e => e.EmployeeId);
             builder.Entity<Employee>()
             .HasIndex(e => e.Name)
+            .IsUnique();
+            builder.Entity<Employee>()
+            .HasIndex(e => e.Email)
+            .IsUnique();
+
+            builder.Entity<ShiftGroup>()
+            .HasKey(sg => sg.ShiftGroupId);
+            builder.Entity<ShiftGroup>()
+            .HasIndex(sg => sg.Name)
+            .IsUnique();
+
+            builder.Entity<Gender>()
+            .HasKey(g => g.GenderId);
+            builder.Entity<Gender>()
+            .HasIndex(g => g.Name)
+            .IsUnique();
+
+            builder.Entity<ShiftSkill>()
+            .HasKey(sk => sk.ShiftSkillId);
+            builder.Entity<ShiftSkill>()
+            .HasIndex(sk => sk.Name)
+            .IsUnique();
+
+            builder.Entity<ShiftType>()
+            .HasKey(st => st.ShiftTypeId);
+            builder.Entity<ShiftType>()
+            .HasIndex(st => st.Name)
             .IsUnique();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

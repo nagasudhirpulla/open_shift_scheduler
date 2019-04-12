@@ -13,6 +13,8 @@ namespace OpenShiftScheduler.Models.AppModels
     public class ShiftType
     {
         public int ShiftTypeId { get; set; }
+
+        [Required, StringLength(100, MinimumLength = 1)]
         public string Name { get; set; }
         [Range(0, 23)]
         public int StartOffsetHrs { get; set; }
