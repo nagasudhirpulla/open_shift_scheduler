@@ -70,7 +70,7 @@ namespace OpenShiftScheduler.Data
 
             builder.Entity<EmployeeShiftSkill>().HasKey(ess => ess.EmployeeShiftSkillId);
             // setting multiple columns as alternate key - https://stackoverflow.com/questions/18889218/unique-key-constraints-for-multiple-columns-in-entity-framework
-            builder.Entity<EmployeeShiftSkill>().HasAlternateKey(ess => new { ess.EmployeeId, ess.ShiftSkillId });
+            builder.Entity<EmployeeShiftSkill>().HasIndex(ess => new { ess.EmployeeId, ess.ShiftSkillId }).IsUnique();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

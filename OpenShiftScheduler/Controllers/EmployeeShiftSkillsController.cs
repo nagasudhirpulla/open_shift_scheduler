@@ -106,8 +106,6 @@ namespace OpenShiftScheduler.Controllers
             {
                 try
                 {
-                    // employeeShiftSkill.Employee = await _context.Employees.FirstOrDefaultAsync(e => e.EmployeeId == employeeShiftSkill.EmployeeId);
-                    // employeeShiftSkill.ShiftSkill = await _context.ShiftSkills.FirstOrDefaultAsync(sk => sk.ShiftSkillId == employeeShiftSkill.ShiftSkillId);
                     _context.Update(employeeShiftSkill);
                     await _context.SaveChangesAsync();
                 }

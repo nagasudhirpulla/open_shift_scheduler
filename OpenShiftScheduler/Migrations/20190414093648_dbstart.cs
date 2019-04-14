@@ -45,7 +45,19 @@ namespace OpenShiftScheduler.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ShiftRoles", x => x.ShiftRoleId);
-                    table.UniqueConstraint("AK_ShiftRoles_RoleName", x => x.RoleName);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ShiftSkills",
+                columns: table => new
+                {
+                    ShiftSkillId = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Name = table.Column<string>(maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShiftSkills", x => x.ShiftSkillId);
                 });
 
             migrationBuilder.CreateTable(
@@ -54,7 +66,7 @@ namespace OpenShiftScheduler.Migrations
                 {
                     ShiftTypeId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    Name = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(maxLength: 100, nullable: false),
                     StartOffsetHrs = table.Column<int>(nullable: false),
                     StartOffsetMins = table.Column<int>(nullable: false),
                     RoasterSequence = table.Column<int>(nullable: false),
@@ -73,14 +85,14 @@ namespace OpenShiftScheduler.Migrations
                     EmployeeId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     OfficeId = table.Column<int>(nullable: true),
-                    GenderId = table.Column<int>(nullable: true),
+                    GenderId = table.Column<int>(nullable: false),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     Phone = table.Column<string>(nullable: true),
                     Email = table.Column<string>(maxLength: 75, nullable: true),
                     Dob = table.Column<DateTime>(nullable: true),
                     IsActive = table.Column<bool>(nullable: false),
                     ShiftRoleId = table.Column<int>(nullable: false),
-                    ShiftGroupId = table.Column<int>(nullable: true)
+                    ShiftGroupId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -90,13 +102,13 @@ namespace OpenShiftScheduler.Migrations
                         column: x => x.GenderId,
                         principalTable: "Genders",
                         principalColumn: "GenderId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Employees_ShiftGroups_ShiftGroupId",
                         column: x => x.ShiftGroupId,
                         principalTable: "ShiftGroups",
                         principalColumn: "ShiftGroupId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Employees_ShiftRoles_ShiftRoleId",
                         column: x => x.ShiftRoleId,
@@ -106,23 +118,29 @@ namespace OpenShiftScheduler.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ShiftSkills",
+                name: "EmployeeShiftSkills",
                 columns: table => new
                 {
-                    ShiftSkillId = table.Column<int>(nullable: false)
+                    EmployeeShiftSkillId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    Name = table.Column<string>(maxLength: 100, nullable: false),
-                    EmployeeId = table.Column<int>(nullable: true)
+                    EmployeeId = table.Column<int>(nullable: false),
+                    ShiftSkillId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ShiftSkills", x => x.ShiftSkillId);
+                    table.PrimaryKey("PK_EmployeeShiftSkills", x => x.EmployeeShiftSkillId);
                     table.ForeignKey(
-                        name: "FK_ShiftSkills_Employees_EmployeeId",
+                        name: "FK_EmployeeShiftSkills_Employees_EmployeeId",
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "EmployeeId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EmployeeShiftSkills_ShiftSkills_ShiftSkillId",
+                        column: x => x.ShiftSkillId,
+                        principalTable: "ShiftSkills",
+                        principalColumn: "ShiftSkillId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -153,6 +171,23 @@ namespace OpenShiftScheduler.Migrations
                 column: "ShiftRoleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_EmployeeShiftSkills_ShiftSkillId",
+                table: "EmployeeShiftSkills",
+                column: "ShiftSkillId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EmployeeShiftSkills_EmployeeId_ShiftSkillId",
+                table: "EmployeeShiftSkills",
+                columns: new[] { "EmployeeId", "ShiftSkillId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Genders_Name",
+                table: "Genders",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ShiftGroups_Name",
                 table: "ShiftGroups",
                 column: "Name",
@@ -165,21 +200,31 @@ namespace OpenShiftScheduler.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ShiftSkills_EmployeeId",
+                name: "IX_ShiftSkills_Name",
                 table: "ShiftSkills",
-                column: "EmployeeId");
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShiftTypes_Name",
+                table: "ShiftTypes",
+                column: "Name",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ShiftSkills");
+                name: "EmployeeShiftSkills");
 
             migrationBuilder.DropTable(
                 name: "ShiftTypes");
 
             migrationBuilder.DropTable(
                 name: "Employees");
+
+            migrationBuilder.DropTable(
+                name: "ShiftSkills");
 
             migrationBuilder.DropTable(
                 name: "Genders");

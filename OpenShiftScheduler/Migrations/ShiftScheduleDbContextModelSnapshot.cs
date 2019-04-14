@@ -73,9 +73,10 @@ namespace OpenShiftScheduler.Migrations
 
                     b.HasKey("EmployeeShiftSkillId");
 
-                    b.HasAlternateKey("EmployeeId", "ShiftSkillId");
-
                     b.HasIndex("ShiftSkillId");
+
+                    b.HasIndex("EmployeeId", "ShiftSkillId")
+                        .IsUnique();
 
                     b.ToTable("EmployeeShiftSkills");
                 });

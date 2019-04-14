@@ -11,11 +11,9 @@ namespace OpenShiftScheduler.Models.AppModels
         public int EmployeeShiftSkillId { get; set; }
 
         public Employee Employee { get; set; }
-        [Required]
         public int EmployeeId { get; set; }
 
         public ShiftSkill ShiftSkill { get; set; }
-        [Required]
         public int ShiftSkillId { get; set; }
     }
 }
