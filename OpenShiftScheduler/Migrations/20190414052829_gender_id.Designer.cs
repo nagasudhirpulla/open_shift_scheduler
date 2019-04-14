@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OpenShiftScheduler.Data;
@@ -9,9 +10,10 @@ using OpenShiftScheduler.Data;
 namespace OpenShiftScheduler.Migrations
 {
     [DbContext(typeof(ShiftScheduleDbContext))]
-    partial class ShiftScheduleDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190414052829_gender_id")]
+    partial class gender_id
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,7 +43,7 @@ namespace OpenShiftScheduler.Migrations
 
                     b.Property<string>("Phone");
 
-                    b.Property<int>("ShiftGroupId");
+                    b.Property<int?>("ShiftGroupId");
 
                     b.Property<int>("ShiftRoleId");
 
@@ -60,24 +62,6 @@ namespace OpenShiftScheduler.Migrations
                     b.HasIndex("ShiftRoleId");
 
                     b.ToTable("Employees");
-                });
-
-            modelBuilder.Entity("OpenShiftScheduler.Models.AppModels.EmployeeShiftSkill", b =>
-                {
-                    b.Property<int>("EmployeeShiftSkillId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("EmployeeId");
-
-                    b.Property<int>("ShiftSkillId");
-
-                    b.HasKey("EmployeeShiftSkillId");
-
-                    b.HasAlternateKey("EmployeeId", "ShiftSkillId");
-
-                    b.HasIndex("ShiftSkillId");
-
-                    b.ToTable("EmployeeShiftSkills");
                 });
 
             modelBuilder.Entity("OpenShiftScheduler.Models.AppModels.Gender", b =>
@@ -125,6 +109,8 @@ namespace OpenShiftScheduler.Migrations
 
                     b.HasKey("ShiftRoleId");
 
+                    b.HasAlternateKey("RoleName");
+
                     b.HasIndex("RoleName")
                         .IsUnique();
 
@@ -136,11 +122,15 @@ namespace OpenShiftScheduler.Migrations
                     b.Property<int>("ShiftSkillId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("EmployeeId");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100);
 
                     b.HasKey("ShiftSkillId");
+
+                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("Name")
                         .IsUnique();
@@ -184,8 +174,7 @@ namespace OpenShiftScheduler.Migrations
 
                     b.HasOne("OpenShiftScheduler.Models.AppModels.ShiftGroup", "ShiftGroup")
                         .WithMany()
-                        .HasForeignKey("ShiftGroupId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ShiftGroupId");
 
                     b.HasOne("OpenShiftScheduler.Models.AppModels.ShiftRole", "ShiftRole")
                         .WithMany()
@@ -193,17 +182,11 @@ namespace OpenShiftScheduler.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("OpenShiftScheduler.Models.AppModels.EmployeeShiftSkill", b =>
+            modelBuilder.Entity("OpenShiftScheduler.Models.AppModels.ShiftSkill", b =>
                 {
-                    b.HasOne("OpenShiftScheduler.Models.AppModels.Employee", "Employee")
-                        .WithMany("EmployeeShiftSkills")
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("OpenShiftScheduler.Models.AppModels.ShiftSkill", "ShiftSkill")
-                        .WithMany("EmployeeShiftSkills")
-                        .HasForeignKey("ShiftSkillId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("OpenShiftScheduler.Models.AppModels.Employee")
+                        .WithMany("ShiftSkills")
+                        .HasForeignKey("EmployeeId");
                 });
 #pragma warning restore 612, 618
         }

@@ -16,6 +16,9 @@
                 @Html.DisplayNameFor(model => model.OfficeId)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Gender)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
@@ -30,6 +33,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.IsActive)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShiftRole)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShiftGroup)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -38,6 +47,9 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.OfficeId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gender.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -53,6 +65,12 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShiftRole.RoleName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShiftGroup.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.EmployeeId">Edit</a> |

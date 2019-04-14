@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OpenShiftScheduler.Data;
@@ -9,9 +10,10 @@ using OpenShiftScheduler.Data;
 namespace OpenShiftScheduler.Migrations
 {
     [DbContext(typeof(ShiftScheduleDbContext))]
-    partial class ShiftScheduleDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190414061326_employee_shift_skill")]
+    partial class employee_shift_skill
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,7 +75,8 @@ namespace OpenShiftScheduler.Migrations
 
                     b.HasKey("EmployeeShiftSkillId");
 
-                    b.HasAlternateKey("EmployeeId", "ShiftSkillId");
+                    b.HasAlternateKey("EmployeeId", "ShiftSkillId")
+                        .HasName("IX_EmployeeShiftSkill");
 
                     b.HasIndex("ShiftSkillId");
 
@@ -124,6 +127,8 @@ namespace OpenShiftScheduler.Migrations
                         .HasMaxLength(100);
 
                     b.HasKey("ShiftRoleId");
+
+                    b.HasAlternateKey("RoleName");
 
                     b.HasIndex("RoleName")
                         .IsUnique();

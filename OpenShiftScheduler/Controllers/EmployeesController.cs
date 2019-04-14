@@ -22,7 +22,8 @@ namespace OpenShiftScheduler.Controllers
         // GET: Employees
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Employees.ToListAsync());
+            var shiftScheduleDbContext = _context.Employees.Include(e => e.Gender).Include(e => e.ShiftGroup).Include(e => e.ShiftRole);
+            return View(await shiftScheduleDbContext.ToListAsync());
         }
 
         // GET: Employees/Details/5
@@ -34,6 +35,9 @@ namespace OpenShiftScheduler.Controllers
             }
 
             var employee = await _context.Employees
+                .Include(e => e.Gender)
+                .Include(e => e.ShiftGroup)
+                .Include(e => e.ShiftRole)
                 .FirstOrDefaultAsync(m => m.EmployeeId == id);
             if (employee == null)
             {
@@ -46,7 +50,9 @@ namespace OpenShiftScheduler.Controllers
         // GET: Employees/Create
         public IActionResult Create()
         {
-            // todo dropdown for create page - https://www.tutorialsteacher.com/mvc/htmlhelper-dropdownlist-dropdownlistfor
+            ViewData["GenderId"] = new SelectList(_context.Genders, "GenderId", "Name");
+            ViewData["ShiftGroupId"] = new SelectList(_context.ShiftGroups, "ShiftGroupId", "Name");
+            ViewData["ShiftRoleId"] = new SelectList(_context.ShiftRoles, "ShiftRoleId", "RoleName");
             return View();
         }
 
@@ -55,7 +61,7 @@ namespace OpenShiftScheduler.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmployeeId,OfficeId,Name,Phone,Email,Dob,IsActive")] Employee employee)
+        public async Task<IActionResult> Create([Bind("EmployeeId,OfficeId,GenderId,Name,Phone,Email,Dob,IsActive,ShiftRoleId,ShiftGroupId")] Employee employee)
         {
             if (ModelState.IsValid)
             {
@@ -63,6 +69,9 @@ namespace OpenShiftScheduler.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["GenderId"] = new SelectList(_context.Genders, "GenderId", "Name", employee.GenderId);
+            ViewData["ShiftGroupId"] = new SelectList(_context.ShiftGroups, "ShiftGroupId", "Name", employee.ShiftGroupId);
+            ViewData["ShiftRoleId"] = new SelectList(_context.ShiftRoles, "ShiftRoleId", "RoleName", employee.ShiftRoleId);
             return View(employee);
         }
 
@@ -79,6 +88,9 @@ namespace OpenShiftScheduler.Controllers
             {
                 return NotFound();
             }
+            ViewData["GenderId"] = new SelectList(_context.Genders, "GenderId", "Name", employee.GenderId);
+            ViewData["ShiftGroupId"] = new SelectList(_context.ShiftGroups, "ShiftGroupId", "Name", employee.ShiftGroupId);
+            ViewData["ShiftRoleId"] = new SelectList(_context.ShiftRoles, "ShiftRoleId", "RoleName", employee.ShiftRoleId);
             return View(employee);
         }
 
@@ -87,7 +99,7 @@ namespace OpenShiftScheduler.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EmployeeId,OfficeId,Name,Phone,Email,Dob,IsActive")] Employee employee)
+        public async Task<IActionResult> Edit(int id, [Bind("EmployeeId,OfficeId,GenderId,Name,Phone,Email,Dob,IsActive,ShiftRoleId,ShiftGroupId")] Employee employee)
         {
             if (id != employee.EmployeeId)
             {
@@ -114,6 +126,9 @@ namespace OpenShiftScheduler.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["GenderId"] = new SelectList(_context.Genders, "GenderId", "Name", employee.GenderId);
+            ViewData["ShiftGroupId"] = new SelectList(_context.ShiftGroups, "ShiftGroupId", "Name", employee.ShiftGroupId);
+            ViewData["ShiftRoleId"] = new SelectList(_context.ShiftRoles, "ShiftRoleId", "RoleName", employee.ShiftRoleId);
             return View(employee);
         }
 
@@ -126,6 +141,9 @@ namespace OpenShiftScheduler.Controllers
             }
 
             var employee = await _context.Employees
+                .Include(e => e.Gender)
+                .Include(e => e.ShiftGroup)
+                .Include(e => e.ShiftRole)
                 .FirstOrDefaultAsync(m => m.EmployeeId == id);
             if (employee == null)
             {

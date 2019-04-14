@@ -17,6 +17,12 @@
             @Html.DisplayFor(model => model.OfficeId)
         </dd>
         <dt>
+            @Html.DisplayNameFor(model => model.Gender)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Gender.Name)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.Name)
         </dt>
         <dd>
@@ -45,6 +51,18 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.IsActive)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ShiftRole)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ShiftRole.RoleName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ShiftGroup)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ShiftGroup.Name)
         </dd>
     </dl>
 </div>

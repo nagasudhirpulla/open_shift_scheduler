@@ -16,6 +16,7 @@ namespace OpenShiftScheduler.Data
         public DbSet<ShiftRole> ShiftRoles { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<ShiftSkill> ShiftSkills { get; set; }
+        public DbSet<EmployeeShiftSkill> EmployeeShiftSkills { get; set; }
         public DbSet<Gender> Genders { get; set; }
         public DbSet<ShiftGroup> ShiftGroups { get; set; }
 
@@ -66,7 +67,12 @@ namespace OpenShiftScheduler.Data
             builder.Entity<ShiftType>()
             .HasIndex(st => st.Name)
             .IsUnique();
+
+            builder.Entity<EmployeeShiftSkill>().HasKey(ess => ess.EmployeeShiftSkillId);
+            // setting multiple columns as alternate key - https://stackoverflow.com/questions/18889218/unique-key-constraints-for-multiple-columns-in-entity-framework
+            builder.Entity<EmployeeShiftSkill>().HasAlternateKey(ess => new { ess.EmployeeId, ess.ShiftSkillId });
         }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
     }

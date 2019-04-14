@@ -18,8 +18,9 @@ namespace OpenShiftScheduler.Models.AppModels
 
         public int? OfficeId { get; set; }
 
-        [Required]
         public Gender Gender { get; set; }
+        [Required]
+        public int GenderId { get; set; }
 
         [Required, StringLength(50, MinimumLength = 1)]
         public string Name { get; set; }
@@ -33,12 +34,14 @@ namespace OpenShiftScheduler.Models.AppModels
 
         public bool IsActive { get; set; } = true;
 
-        [Required]
         public ShiftRole ShiftRole { get; set; }
+        [Required]
+        public int ShiftRoleId { get; set; }
 
         public ShiftGroup ShiftGroup { get; set; }
+        public int ShiftGroupId { get; set; }
 
-        public ICollection<ShiftSkill> ShiftSkills { get; set; }
+        public IList<EmployeeShiftSkill> EmployeeShiftSkills { get; set; }
 
     }
 }
