@@ -19,6 +19,8 @@ namespace OpenShiftScheduler.Data
         public DbSet<EmployeeShiftSkill> EmployeeShiftSkills { get; set; }
         public DbSet<Gender> Genders { get; set; }
         public DbSet<ShiftGroup> ShiftGroups { get; set; }
+        public DbSet<Shift> Shifts { get; set; }
+        public DbSet<ShiftParticipation> ShiftParticipations { get; set; }
 
         public ShiftScheduleDbContext(DbContextOptions<ShiftScheduleDbContext> options, IConfiguration configuration) : base(options)
         {
@@ -71,6 +73,12 @@ namespace OpenShiftScheduler.Data
             builder.Entity<EmployeeShiftSkill>().HasKey(ess => ess.EmployeeShiftSkillId);
             // setting multiple columns as alternate key - https://stackoverflow.com/questions/18889218/unique-key-constraints-for-multiple-columns-in-entity-framework
             builder.Entity<EmployeeShiftSkill>().HasIndex(ess => new { ess.EmployeeId, ess.ShiftSkillId }).IsUnique();
+
+            builder.Entity<Shift>().HasKey(s => s.ShiftId);
+            builder.Entity<Shift>().HasIndex(s => new { s.ShiftTypeId, s.ShiftDate }).IsUnique();
+
+            builder.Entity<ShiftParticipation>().HasKey(sp => sp.ShiftParticipationId);
+            builder.Entity<ShiftParticipation>().HasIndex(sp => new { sp.ShiftId, sp.EmployeeId }).IsUnique();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

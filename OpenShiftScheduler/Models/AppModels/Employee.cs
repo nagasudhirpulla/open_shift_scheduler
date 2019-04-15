@@ -43,5 +43,7 @@ namespace OpenShiftScheduler.Models.AppModels
 
         public IList<EmployeeShiftSkill> EmployeeShiftSkills { get; set; }
 
+        public IList<ShiftParticipation> ShiftParticipations { get; set; }
+
     }
 }
