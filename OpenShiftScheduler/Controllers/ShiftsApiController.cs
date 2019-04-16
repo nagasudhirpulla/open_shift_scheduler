@@ -25,7 +25,7 @@ namespace OpenShiftScheduler.Controllers
         [HttpGet]
         public IEnumerable<Shift> GetShifts()
         {
-            return _context.Shifts;
+            return _context.Shifts.Include(s=>s.ShiftParticipations);
         }
 
         // GET: api/ShiftsApi/5

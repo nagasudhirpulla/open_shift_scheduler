@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using OpenShiftScheduler.Data;
 using OpenShiftScheduler.Models;
 using OpenShiftScheduler.Services;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace OpenShiftScheduler
 {
@@ -40,7 +42,11 @@ namespace OpenShiftScheduler
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
 
-            services.AddMvc();
+            // self referencing json serialization error - https://stackoverflow.com/questions/34753498/self-referencing-loop-detected-in-asp-net-core
+            services.AddMvc().AddJsonOptions(options => {
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
