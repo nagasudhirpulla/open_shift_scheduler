@@ -1,0 +1,18 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "redux@4.0.1",
+      "destination": "wwwroot/lib/redux/"
+    },
+    {
+      "library": "react-redux@7.0.2",
+      "destination": "wwwroot/lib/react-redux/"
+    },
+    {
+      "library": "redux-thunk@2.3.0",
+      "destination": "wwwroot/lib/redux-thunk/"
+    }
+  ]
+}

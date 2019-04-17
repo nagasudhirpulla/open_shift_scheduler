@@ -30,4 +30,9 @@
     <PackageReference Include="React.AspNet" Version="4.1.1" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="wwwroot\js\shifts_ui_app\actions\" />
+  </ItemGroup>
+
 </Project>

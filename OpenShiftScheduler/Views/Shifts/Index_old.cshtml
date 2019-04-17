@@ -1,0 +1,41 @@
+﻿@model IEnumerable<OpenShiftScheduler.Models.AppModels.Shift>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ShiftType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShiftDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShiftType.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShiftDate)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ShiftId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ShiftId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ShiftId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
