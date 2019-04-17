@@ -12,5 +12,7 @@ namespace OpenShiftScheduler.Models.AppModels
 
         [Required, StringLength(100, MinimumLength = 1)]
         public string Name { get; set; }
+
+        public IList<Employee> Employees { get; set; }
     }
 }
