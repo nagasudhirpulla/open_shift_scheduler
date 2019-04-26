@@ -5,7 +5,7 @@ import './index.css';
 import { Provider } from 'react-redux';
 // import { createBrowserHistory } from 'history'
 import configureStore from './store/index';
-// import App from './components/App';
+import App from './components/App';
 // import registerServiceWorker from './registerServiceWorker';
 
 
@@ -13,7 +13,8 @@ import configureStore from './store/index';
 const store = configureStore(history);
 
 render(
-    <Provider store={store}>        
+    <Provider store={store}>
+        <App />
     </Provider>,
     document.getElementById('root')
 );
