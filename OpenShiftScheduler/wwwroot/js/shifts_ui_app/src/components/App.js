@@ -2,7 +2,7 @@
 https://github.com/SophieDeBenedetto/catbook-redux/blob/blog-post/src/index.js
 */
 import React, { Component } from 'react';
-// import './App.css';
+import './App.css';
 
 class HelloMessage extends React.Component {
   render() {
