@@ -9,5 +9,5 @@ export function processTransactions(transactionsList) {
 }
 
 export function doNothing(transactionsList) {
-    return { type: types.SET_DASHBOARD, dashboard: dashboardObj };
+    return { type: "typeString", actionObjKey: {} };
 }

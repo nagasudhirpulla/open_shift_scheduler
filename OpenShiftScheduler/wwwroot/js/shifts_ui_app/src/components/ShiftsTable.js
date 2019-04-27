@@ -5,21 +5,20 @@ Using flexbox for aligning items
 https://www.youtube.com/watch?v=k32voqQhODc
 https://codepen.io/anon/pen/VKxRoE?editors=1100
 */
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import DashboardCell from './DashboardCell';
-import { Link } from "react-router-dom";
 import './ShiftsTable.css';
 import classNames from 'classnames';
 import { processTransactions } from '../actions/shiftsTableActions'
 import essentialProps from '../reducers/essentialProps'
+import deepmerge from 'deepmerge'
 
-class ShiftsTable extends React.Component {
+class ShiftsTable extends Component {
     constructor(props) {
         super(props);
         this.processQueuedTransactions = this.processQueuedTransactions.bind(this);
         // Don't call this.setState() here!
-        this.state = { };
+        this.state = {};
         this.state.props = props;
     }
 
@@ -34,7 +33,7 @@ class ShiftsTable extends React.Component {
     }
 
     render() {
-        let props = deepmerge(essentialProps.dashboard, this.state.props);
+        let props = deepmerge(essentialProps.shifts_ui, this.state.props);
         return (
             <div className={classNames('container-fluid', { 'dashboard': true })}>
                 {/* <span>{JSON.stringify(dashboard)}</span> */}
@@ -45,7 +44,7 @@ class ShiftsTable extends React.Component {
                     </div>
                 </div>
                 <div className={classNames('row')}>
-                <span>This is shifts table div 2</span>
+                    <span>This is shifts table div 2</span>
                 </div>
             </div>
         );
@@ -53,7 +52,7 @@ class ShiftsTable extends React.Component {
 };
 
 const mapStateToProps = (state) => {
-    return { shifts: state.shifts };
+    return { shifts: state.shifts_ui };
 };
 
 const mapDispatchToProps = (dispatch) => {

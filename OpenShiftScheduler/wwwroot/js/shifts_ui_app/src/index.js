@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 // import { createBrowserHistory } from 'history'
 import configureStore from './store/index';
 import App from './components/App';
+import ShiftsTable from './components/ShiftsTable';
 // import registerServiceWorker from './registerServiceWorker';
 
 
@@ -14,7 +15,7 @@ const store = configureStore(history);
 
 render(
     <Provider store={store}>
-        <App />
+        <ShiftsTable />
     </Provider>,
     document.getElementById('root')
 );
