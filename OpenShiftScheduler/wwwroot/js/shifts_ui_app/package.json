@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": false,
   "homepage": "https://github.com/nagasudhirpulla/open_shift_scheduler",
-  "dependencies": {},
+  "dependencies": {
+    "bootstrap": "^4.3.1"
+  },
   "devDependencies": {
     "@babel/core": "^7.4.3",
     "@babel/plugin-proposal-class-properties": "^7.4.4",
