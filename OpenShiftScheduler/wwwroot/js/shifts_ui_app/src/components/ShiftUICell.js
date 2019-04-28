@@ -9,6 +9,7 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 import essentialProps from '../reducers/essentialProps';
 import deepmerge from 'deepmerge';
+import './ShiftUICell.css';
 
 class ShiftUICell extends Component {
     constructor(props) {
@@ -24,12 +25,18 @@ class ShiftUICell extends Component {
 
     render() {
         let props = deepmerge(essentialProps.shifts_ui_cell, this.state.props);
-
+        //console.log(props);
         return (
-            <div className={classNames('col-md-' + props.col_size, 'shift_cell')}>
-                <span>This is shifts table cell</span>
-                <br />
-                <span>{JSON.stringify(props)}</span>
+            <div className={classNames('col-md-' + props.col_size, 'shift_cell')} style={{ minHeight: '100px', backgroundColor: props.shift_type.colorString, border: '1px solid black' }}>
+                <span className={classNames('shift_cell_type_name')}>{props.shift_type.name}</span>
+                <div>
+                    {
+                        props.shift.shiftParticipations.map((participationobj, ind) =>
+                            <div key={'participation_display_' + ind}><span>{props.employees_dict[participationobj.employeeId][0]['name']}</span></div>
+                        )
+                    }
+                </div>
+                {/* <div>{JSON.stringify(props)}</div> */}
             </div>
         );
     }

@@ -10,7 +10,24 @@ export default {
         shift_skills: []
     },
     shifts_ui_cell: {
-        shift: {},
-        col_size: 4
+        shift: {
+            "shiftId": null,
+            "shiftType": null,
+            "shiftTypeId": 0,
+            "shiftDate": null,
+            "shiftParticipations": []
+        },
+        shift_type: {
+            "shiftTypeId": 1,
+            "name": "Morning",
+            "startOffsetHrs": 8,
+            "startOffsetMins": 0,
+            "roasterSequence": 1,
+            "shiftSequence": 1,
+            "displayColor": "0, 255, 230",
+            "colorString": "#00FFE6"
+        },
+        'employees_dict':{},
+        col_size: 3
     }
 }
