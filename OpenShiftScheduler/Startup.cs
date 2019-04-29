@@ -62,6 +62,14 @@ namespace OpenShiftScheduler
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
+
+            // https://docs.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-2.1
+            //https://stackoverflow.com/questions/31942037/how-to-enable-cors-in-asp-net-core
+            services.AddCors(options =>
+            {
+                options.AddPolicy("anyorigin",
+                    policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

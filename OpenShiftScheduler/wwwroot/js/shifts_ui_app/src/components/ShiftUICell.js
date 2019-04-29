@@ -36,6 +36,7 @@ class ShiftUICell extends Component {
                         )
                     }
                 </div>
+                <button onClick={() => props.createShiftParticipation(props.shift.shiftId)}>Add Employee</button>
                 {/* <div>{JSON.stringify(props)}</div> */}
             </div>
         );

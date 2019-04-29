@@ -9,7 +9,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './ShiftsTable.css';
 import classNames from 'classnames';
-import { processTransactions } from '../actions/shiftsTableActions';
+import { updateShiftsInUI, updateShiftTypesInUI, createShiftParticipation } from '../actions/shiftsTableActions';
 import essentialProps from '../reducers/essentialProps';
 import deepmerge from 'deepmerge';
 import { groupObjBy } from '../utils/objUtils'
@@ -19,8 +19,8 @@ import ShiftUICell from './ShiftUICell'
 class ShiftsTable extends Component {
     constructor(props) {
         super(props);
-        this.processQueuedTransactions = this.processQueuedTransactions.bind(this);
         this.loadShifts = this.loadShifts.bind(this);
+        this.createShiftParticipation = this.createShiftParticipation.bind(this);
         // Don't call this.setState() here!
         this.state = {};
         this.state.props = props;
@@ -30,19 +30,31 @@ class ShiftsTable extends Component {
         this.endDateInput = React.createRef();
     }
 
-    processQueuedTransactions = async () => {
-        //alert(`Saving Dashboard as ${this.dashBoardNameInput.current.value} with override ${this.state.saveOverride}...`);
-        // derive the dashboard json,strip off csv arrays and then store it
-
-    }
-
     loadShifts = () => {
         const startDateStr = this.startDateInput.current.value;
         const endDateStr = this.endDateInput.current.value;
+        const startDate = new Date(startDateStr + "T00:00:00");
+        const endDate = new Date(endDateStr + "T00:00:00");
+        let baseAddr = this.state.props.server_base_addr;
+        if (baseAddr == undefined) {
+            baseAddr = essentialProps.shifts_ui.server_base_addr;
+        }
         //console.log(startDateStr);
         //console.log(endDateStr);
+        //console.log(baseAddr);
         //update nested state properties in react - https://stackoverflow.com/questions/43040721/how-to-update-nested-state-properties-in-react
         this.setState({ start_date: startDateStr, end_date: endDateStr });
+        this.state.props.updateShiftTypesInUI(baseAddr);
+        this.state.props.updateShiftsInUI(baseAddr, startDate, endDate);
+    }
+
+    createShiftParticipation = (shiftId) => {
+        let baseAddr = this.state.props.server_base_addr;
+        if (baseAddr == undefined) {
+            baseAddr = essentialProps.shifts_ui.server_base_addr;
+        }
+        let employeeId = +prompt("Please enter employee Id", "1");
+        this.state.props.createShiftParticipation(baseAddr, employeeId, shiftId);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -113,6 +125,7 @@ class ShiftsTable extends Component {
                                 shift_type={groupedShiftTypes[shiftObj.shiftTypeId][0]}
                                 col_size={colSize}
                                 employees_dict={groupedEmployees}
+                                createShiftParticipation = {this.createShiftParticipation}
                             />
                         )
                     }
@@ -144,9 +157,16 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        processTransactions: (transactionsList) => {
-            dispatch(processTransactions(transactionsList));
+        updateShiftTypesInUI: (baseAddr) => {
+            dispatch(updateShiftTypesInUI(baseAddr));
+        },
+        updateShiftsInUI: (baseAddr, start_date, end_date) => {
+            dispatch(updateShiftsInUI(baseAddr, start_date, end_date));
+        },
+        createShiftParticipation: (baseAddr, employeeId, shiftId) => {
+            dispatch(createShiftParticipation(baseAddr, employeeId, shiftId));
         }
+
     };
 };
 

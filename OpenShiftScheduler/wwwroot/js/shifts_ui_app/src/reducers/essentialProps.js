@@ -3,6 +3,7 @@ https://github.com/SophieDeBenedetto/catbook-redux/blob/master/src/reducers/init
 */
 export default {
     shifts_ui: {
+        server_base_addr: 'http://localhost:8807',
         shifts: [],
         employees: [],
         shift_types: [],

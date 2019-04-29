@@ -13,3 +13,7 @@ export function dateToDisplayDate(dateObj) {
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     return ensureTwoDigits(dateObj.getDate()) + "-" + monthNames[dateObj.getMonth()] + "-" + dateObj.getFullYear();
 };
+
+export function dateToApiStr(dateObj) {
+    return dateObj.getFullYear() + "-" + ensureTwoDigits(dateObj.getMonth() + 1) + "-" + ensureTwoDigits(dateObj.getDate());
+};
