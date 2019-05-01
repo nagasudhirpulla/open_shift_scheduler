@@ -30,7 +30,7 @@ class ShiftUICell extends Component {
             <div className={classNames('col-md-' + props.col_size, 'shift_cell')} style={{ minHeight: '100px', backgroundColor: props.shift_type.colorString, border: '1px solid black' }}>
                 <span className={classNames('shift_cell_type_name')}>{props.shift_type.name}</span>
                 <div>
-                    {
+                    {props.shift.shiftParticipations != null &&
                         props.shift.shiftParticipations.map((participationobj, ind) =>
                             <div key={'participation_display_' + ind}><span>{props.employees_dict[participationobj.employeeId][0]['name']}</span></div>
                         )

@@ -1,4 +1,4 @@
-import { getShiftsForUI, createShiftParticipation as addShiftParticipation } from '../server_mediators/shifts_ui';
+import { getShiftsForUI, createShiftParticipation as addShiftParticipation, createShift } from '../server_mediators/shifts_ui';
 import { getShiftTypes } from '../server_mediators/shift_type';
 import * as types from './actionTypes';
 
@@ -23,8 +23,13 @@ export function updateShiftTypesInUI(baseAddr) {
 export function createShiftParticipation(baseAddr, employeeId, shift) {
     return async function (dispatch) {
         //todo if shift object is null, create shift in server, and then dispatch action to update shift object in redux state
-        
-        const shift_participation = await addShiftParticipation(baseAddr,employeeId, shift);
+        let shiftObj = shift;
+        if (shift.shiftId == null) {
+            shiftObj = await createShift(baseAddr, shift);
+            // console.log(shiftObj);
+            dispatch(createShiftUIShift(shiftObj));
+        }
+        const shift_participation = await addShiftParticipation(baseAddr, employeeId, shiftObj);
         // console.log(shift_participation);
         dispatch(addShiftUIShiftParticipation(shift_participation));
     };
@@ -44,4 +49,9 @@ export function updateShiftsUIShiftTypes(shift_types) {
 export function addShiftUIShiftParticipation(shift_participation) {
     //console.log(dashboardCell);
     return { type: types.ADD_SHIFTS_UI_SHIFT_PARTICIPATION, shift_participation: shift_participation };
+}
+
+export function createShiftUIShift(shift) {
+    //console.log(dashboardCell);
+    return { type: types.CREATE_SHIFTS_UI_SHIFT, shift: shift };
 }
