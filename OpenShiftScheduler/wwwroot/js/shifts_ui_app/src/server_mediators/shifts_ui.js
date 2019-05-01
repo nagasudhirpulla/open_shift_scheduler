@@ -17,8 +17,10 @@ export async function getShiftsForUI(baseAddr, start_date, end_date) {
     }
 }
 
-export async function createShiftParticipation(baseAddr, employeeId, ShiftId) {
+export async function createShiftParticipation(baseAddr, employeeId, shift) {
     try {
+        // console.log("shift object for shift participation cretion is " + JSON.stringify(shift));
+        //todo create shift in server via api if shft id is null, create shift in server, update shift object in redux state, and the add shift participaion
         const resp = await fetch(`${baseAddr}/api/ShiftParticipationsApi`, {
             method: 'post',
             headers: {
@@ -30,7 +32,7 @@ export async function createShiftParticipation(baseAddr, employeeId, ShiftId) {
             },
             body: JSON.stringify({
                 "EmployeeId": employeeId,
-                "ShiftId": ShiftId
+                "ShiftId": shift.shiftId
             })
         });
         // console.log(resp);

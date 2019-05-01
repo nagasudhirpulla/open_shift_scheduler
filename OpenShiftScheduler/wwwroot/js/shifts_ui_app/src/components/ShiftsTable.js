@@ -48,13 +48,13 @@ class ShiftsTable extends Component {
         this.state.props.updateShiftsInUI(baseAddr, startDate, endDate);
     }
 
-    createShiftParticipation = (shiftId) => {
+    createShiftParticipation = (shift) => {
         let baseAddr = this.state.props.server_base_addr;
         if (baseAddr == undefined) {
             baseAddr = essentialProps.shifts_ui.server_base_addr;
         }
         let employeeId = +prompt("Please enter employee Id", "1");
-        this.state.props.createShiftParticipation(baseAddr, employeeId, shiftId);
+        this.state.props.createShiftParticipation(baseAddr, employeeId, shift);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -163,8 +163,8 @@ const mapDispatchToProps = (dispatch) => {
         updateShiftsInUI: (baseAddr, start_date, end_date) => {
             dispatch(updateShiftsInUI(baseAddr, start_date, end_date));
         },
-        createShiftParticipation: (baseAddr, employeeId, shiftId) => {
-            dispatch(createShiftParticipation(baseAddr, employeeId, shiftId));
+        createShiftParticipation: (baseAddr, employeeId, shift) => {
+            dispatch(createShiftParticipation(baseAddr, employeeId, shift));
         }
 
     };

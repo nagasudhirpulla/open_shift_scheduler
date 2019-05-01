@@ -20,9 +20,11 @@ export function updateShiftTypesInUI(baseAddr) {
 
 }
 
-export function createShiftParticipation(baseAddr, employeeId, shiftId) {
+export function createShiftParticipation(baseAddr, employeeId, shift) {
     return async function (dispatch) {
-        const shift_participation = await addShiftParticipation(baseAddr,employeeId, shiftId);
+        //todo if shift object is null, create shift in server, and then dispatch action to update shift object in redux state
+        
+        const shift_participation = await addShiftParticipation(baseAddr,employeeId, shift);
         // console.log(shift_participation);
         dispatch(addShiftUIShiftParticipation(shift_participation));
     };
