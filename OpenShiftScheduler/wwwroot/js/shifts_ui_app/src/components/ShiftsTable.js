@@ -9,7 +9,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './ShiftsTable.css';
 import classNames from 'classnames';
-import { updateShiftsInUI, updateShiftTypesInUI, createShiftParticipation } from '../actions/shiftsTableActions';
+import { updateShiftsInUI, updateShiftTypesInUI, createShiftParticipation, removeShiftParticipation } from '../actions/shiftsTableActions';
 import essentialProps from '../reducers/essentialProps';
 import deepmerge from 'deepmerge';
 import { groupObjBy } from '../utils/objUtils'
@@ -21,6 +21,7 @@ class ShiftsTable extends Component {
         super(props);
         this.loadShifts = this.loadShifts.bind(this);
         this.createShiftParticipation = this.createShiftParticipation.bind(this);
+        this.removeShiftParticipation = this.removeShiftParticipation.bind(this);
         // Don't call this.setState() here!
         this.state = {};
         this.state.props = props;
@@ -55,6 +56,16 @@ class ShiftsTable extends Component {
         }
         let employeeId = +prompt("Please enter employee Id", "1");
         this.state.props.createShiftParticipation(baseAddr, employeeId, shift);
+    }
+
+    removeShiftParticipation = (shiftParticipation) => {
+        let baseAddr = this.state.props.server_base_addr;
+        if (baseAddr == undefined) {
+            baseAddr = essentialProps.shifts_ui.server_base_addr;
+        }
+        if (confirm('Are you sure you want to delete...')) {
+            this.state.props.removeShiftParticipation(baseAddr, shiftParticipation);
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -125,7 +136,8 @@ class ShiftsTable extends Component {
                                 shift_type={groupedShiftTypes[shiftObj.shiftTypeId][0]}
                                 col_size={colSize}
                                 employees_dict={groupedEmployees}
-                                createShiftParticipation = {this.createShiftParticipation}
+                                createShiftParticipation={this.createShiftParticipation}
+                                removeShiftParticipation={this.removeShiftParticipation}
                             />
                         )
                     }
@@ -165,6 +177,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         createShiftParticipation: (baseAddr, employeeId, shift) => {
             dispatch(createShiftParticipation(baseAddr, employeeId, shift));
+        },
+        removeShiftParticipation: (baseAddr, shiftParticipation) => {
+            dispatch(removeShiftParticipation(baseAddr, shiftParticipation));
         }
 
     };

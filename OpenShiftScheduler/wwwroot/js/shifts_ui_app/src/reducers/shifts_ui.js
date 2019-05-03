@@ -54,7 +54,7 @@ export default function shiftsUIReducer(state = initialState.shifts_ui, action) 
             return newState;
         case types.ADD_SHIFTS_UI_SHIFT_PARTICIPATION:
             // find the relavent shift and add the participation object to it
-            const shiftParticipation = action.shift_participation;
+            let shiftParticipation = action.shift_participation;
             // console.log(shiftParticipation);
             let shiftInd = -1;
             for (let shiftIter = 0; (shiftIter < state.shifts.length) && (shiftInd == -1); shiftIter++) {
@@ -85,7 +85,48 @@ export default function shiftsUIReducer(state = initialState.shifts_ui, action) 
                 console.log('Could not find shift to add the shift participation');
                 return state;
             }
+        case types.DELETE_SHIFTS_UI_SHIFT_PARTICIPATION:
+            // find the relavent shift and add the participation object to it
+            shiftParticipation = action.shift_participation;
+            // console.log(shiftParticipation);
+            shiftInd = -1;
+            let shiftParticipationInd = -1;
+            for (let shiftIter = 0; (shiftIter < state.shifts.length) && (shiftInd == -1); shiftIter++) {
+                //console.log(state.shifts[shiftIter].shiftId);
+                if (state.shifts[shiftIter].shiftId == shiftParticipation.shiftId) {
+                    shiftInd = shiftIter;
+                    // find the shift participation index for the shift
+                    for (let partIter = 0; (partIter < state.shifts[shiftInd].shiftParticipations.length) && (shiftParticipationInd == -1); partIter++) {
+                        if (state.shifts[shiftInd].shiftParticipations[partIter].shiftParticipationId == shiftParticipation.shiftParticipationId) {
+                            shiftParticipationInd = partIter;
+                        }
+                    }
+                }
+            }
+            if (shiftInd != -1 && shiftParticipationInd != -1) {
+                const newState = {
+                    ...state,
+                    shifts: [
+                        ...state.shifts.slice(0, shiftInd),
+                        {
+                            ...state.shifts[shiftInd],
+                            "shiftParticipations": [
+                                ...state.shifts[shiftInd].shiftParticipations.slice(0, shiftParticipationInd),
+                                ...state.shifts[shiftInd].shiftParticipations.slice(shiftParticipationInd + 1),
+                            ]
+                        },
+                        ...state.shifts.slice(shiftInd + 1)
+                    ]
+                };
+                // console.log(newState);
+                return newState;
+            }
+            else {
+                console.log('Could not find shift participation to delete in application state');
+                return state;
+            }
         default:
             return state;
+
     }
 }
