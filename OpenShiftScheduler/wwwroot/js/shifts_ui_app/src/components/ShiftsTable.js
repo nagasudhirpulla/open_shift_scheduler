@@ -13,22 +13,29 @@ import { updateShiftsInUI, updateShiftTypesInUI, createShiftParticipation, remov
 import essentialProps from '../reducers/essentialProps';
 import deepmerge from 'deepmerge';
 import { groupObjBy } from '../utils/objUtils'
-import { dateToKeyString, dateToDisplayDate } from '../utils/timeUtils'
-import ShiftUICell from './ShiftUICell'
+import { dateToKeyString, dateToDisplayDate } from '../utils/timeUtils';
+import ShiftUICell from './ShiftUICell';
+import PopPop from 'react-poppop';
 
 class ShiftsTable extends Component {
     constructor(props) {
         super(props);
         this.loadShifts = this.loadShifts.bind(this);
+        this.setModalShow = this.setModalShow.bind(this);
         this.createShiftParticipation = this.createShiftParticipation.bind(this);
         this.removeShiftParticipation = this.removeShiftParticipation.bind(this);
+        this.onEmpSelForPartClick = this.onEmpSelForPartClick.bind(this);
+
         // Don't call this.setState() here!
         this.state = {};
         this.state.props = props;
         this.state.start_date = "2019-04-15";
         this.state.end_date = "2019-04-25";
+        this.state.modalShow = false;
+        this.state.activeShift = null;
         this.startDateInput = React.createRef();
         this.endDateInput = React.createRef();
+        this.employeesComboBox = React.createRef();
     }
 
     loadShifts = () => {
@@ -50,12 +57,23 @@ class ShiftsTable extends Component {
     }
 
     createShiftParticipation = (shift) => {
+        this.setState({ activeShift: shift });
+        this.setModalShow(true);
+    }
+
+    onEmpSelForPartClick = () => {
+        this.setModalShow(false);
         let baseAddr = this.state.props.server_base_addr;
         if (baseAddr == undefined) {
             baseAddr = essentialProps.shifts_ui.server_base_addr;
         }
-        let employeeId = +prompt("Please enter employee Id", "1");
-        this.state.props.createShiftParticipation(baseAddr, employeeId, shift);
+        let employeeId = this.employeesComboBox.current.value;
+        // console.log(`The selected employee Id for shift participation is ${employeeId}`);
+        this.state.props.createShiftParticipation(baseAddr, employeeId, this.state.activeShift);
+    }
+
+    setModalShow = modalShow => {
+        this.setState({ modalShow });
     }
 
     removeShiftParticipation = (shiftParticipation) => {
@@ -78,6 +96,7 @@ class ShiftsTable extends Component {
         const endDate = new Date(this.state.end_date + "T00:00:00");
         const colSize = Math.floor((12 / (props.shift_types.length + 1)));
         const groupedEmployees = groupObjBy(props.employees, 'employeeId');
+        const { modalShow } = this.state;
         // group the shift objects by date and shift type
         let groupedShifts = groupObjBy(props.shifts, 'shiftDate');
         for (var dateStr in groupedShifts) {
@@ -144,6 +163,7 @@ class ShiftsTable extends Component {
                 </div>;
             shiftMatrixRows.push(matrixRow);
         }
+
         return (
             <div className={classNames('container-fluid', { 'shifts_ui_table': true })}>
                 {/* <span>{JSON.stringify(groupedShifts)}</span> */}
@@ -158,7 +178,25 @@ class ShiftsTable extends Component {
                     </div>
                 </div>
                 {shiftMatrixRows}
+                <PopPop position="centerCenter"
+                    open={modalShow}
+                    closeBtn={true}
+                    closeOnEsc={true}
+                    onClose={() => this.setModalShow(false)}
+                    closeOnOverlay={true}>
+                    <h1>Add Employee</h1>
+                    <p>Employees List</p>
+                    <select ref={this.employeesComboBox}>
+                        {
+                            props.employees.map((empObj, empInd) =>
+                                <option value={empObj.employeeId} key={`empSelOpt_${empInd}`}>{empObj.name}</option>
+                            )
+                        }
+                    </select>
+                    <button onClick={this.onEmpSelForPartClick}>Add Employee</button>
+                </PopPop>
             </div>
+
         );
     }
 };

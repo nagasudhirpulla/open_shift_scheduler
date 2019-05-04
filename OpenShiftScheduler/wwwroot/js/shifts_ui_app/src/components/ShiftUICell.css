@@ -1,3 +1,15 @@
 .shift_cell_type_name {
+    font-size: small;
+    float: right;
+}
+
+.part_add_btn {
+    font-size: small;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+.part_del_btn {
     font-size: small
 }
