@@ -13,6 +13,11 @@ export default function shiftsUIReducer(state = initialState.shifts_ui, action) 
                 ...state,
                 shift_types: action.shift_types
             };
+        case types.UPDATE_SHIFTS_UI_EMPLOYEES:
+            return {
+                ...state,
+                employees: action.employees
+            };
         case types.UPDATE_SHIFTS_UI_SHIFT:
             // find the shift index from shifts array using date and shift type
             // console.log(`shift that is to be updated in reducer is ${JSON.stringify(action.shift)}`);

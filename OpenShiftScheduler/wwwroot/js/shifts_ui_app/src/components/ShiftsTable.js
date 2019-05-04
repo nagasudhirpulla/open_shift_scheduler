@@ -9,7 +9,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './ShiftsTable.css';
 import classNames from 'classnames';
-import { updateShiftsInUI, updateShiftTypesInUI, createShiftParticipation, removeShiftParticipation } from '../actions/shiftsTableActions';
+import { updateShiftsInUI, updateShiftTypesInUI, updateEmployeesInUI, createShiftParticipation, removeShiftParticipation } from '../actions/shiftsTableActions';
 import essentialProps from '../reducers/essentialProps';
 import deepmerge from 'deepmerge';
 import { groupObjBy } from '../utils/objUtils'
@@ -53,6 +53,7 @@ class ShiftsTable extends Component {
         //update nested state properties in react - https://stackoverflow.com/questions/43040721/how-to-update-nested-state-properties-in-react
         this.setState({ start_date: startDateStr, end_date: endDateStr });
         this.state.props.updateShiftTypesInUI(baseAddr);
+        this.state.props.updateEmployeesInUI(baseAddr);
         this.state.props.updateShiftsInUI(baseAddr, startDate, endDate);
     }
 
@@ -94,7 +95,7 @@ class ShiftsTable extends Component {
         let props = deepmerge(essentialProps.shifts_ui, this.state.props);
         const startDate = new Date(this.state.start_date + "T00:00:00");
         const endDate = new Date(this.state.end_date + "T00:00:00");
-        const colSize = Math.floor((12 / (props.shift_types.length + 1)));
+        const colSize = Math.floor((100 / (props.shift_types.length)));
         const groupedEmployees = groupObjBy(props.employees, 'employeeId');
         const { modalShow } = this.state;
         // group the shift objects by date and shift type
@@ -144,28 +145,32 @@ class ShiftsTable extends Component {
             let shiftDate = new Date(dateShifts[0]['shiftDate']);
             const matrixRow =
                 <div className={classNames('row')} key={'row_' + dateIter}>
-                    <div className={classNames('shift_date_display')} key={'date_display_' + dateIter}>
+                    <div className={classNames('shift_date_display')} key={'date_display_' + dateIter} style={{ width: '5%' }}>
                         <span>{dateToDisplayDate(shiftDate)}</span>
                     </div>
-                    {
-                        dateShifts.map((shiftObj, shiftInd) =>
-                            <ShiftUICell
-                                key={shiftObj.shiftDate + shiftInd}
-                                shift={shiftObj}
-                                shift_type={groupedShiftTypes[shiftObj.shiftTypeId][0]}
-                                col_size={colSize}
-                                employees_dict={groupedEmployees}
-                                createShiftParticipation={this.createShiftParticipation}
-                                removeShiftParticipation={this.removeShiftParticipation}
-                            />
-                        )
-                    }
+                    <div style={{ width: '95%' }} className={classNames('col')}>
+                        <div className={classNames('row')}>
+                            {
+                                dateShifts.map((shiftObj, shiftInd) =>
+                                    <ShiftUICell
+                                        key={shiftObj.shiftDate + shiftInd}
+                                        shift={shiftObj}
+                                        shift_type={groupedShiftTypes[shiftObj.shiftTypeId][0]}
+                                        col_size={colSize}
+                                        employees_dict={groupedEmployees}
+                                        createShiftParticipation={this.createShiftParticipation}
+                                        removeShiftParticipation={this.removeShiftParticipation}
+                                    />
+                                )
+                            }
+                        </div>
+                    </div>
                 </div>;
             shiftMatrixRows.push(matrixRow);
         }
 
         return (
-            <div className={classNames('container-fluid', { 'shifts_ui_table': true })}>
+            <div className={classNames({ 'shifts_ui_table': true })}>
                 {/* <span>{JSON.stringify(groupedShifts)}</span> */}
                 {/* <span>{JSON.stringify(onDashBoardFetchClick())}</span> */}
                 <div className={classNames('row')}>
@@ -184,8 +189,7 @@ class ShiftsTable extends Component {
                     closeOnEsc={true}
                     onClose={() => this.setModalShow(false)}
                     closeOnOverlay={true}>
-                    <h1>Add Employee</h1>
-                    <p>Employees List</p>
+                    <h2>Add Employee</h2>
                     <select ref={this.employeesComboBox}>
                         {
                             props.employees.map((empObj, empInd) =>
@@ -209,6 +213,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         updateShiftTypesInUI: (baseAddr) => {
             dispatch(updateShiftTypesInUI(baseAddr));
+        },
+        updateEmployeesInUI: (baseAddr) => {
+            dispatch(updateEmployeesInUI(baseAddr));
         },
         updateShiftsInUI: (baseAddr, start_date, end_date) => {
             dispatch(updateShiftsInUI(baseAddr, start_date, end_date));

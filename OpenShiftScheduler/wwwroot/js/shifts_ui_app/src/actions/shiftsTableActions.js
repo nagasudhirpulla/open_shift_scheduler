@@ -1,4 +1,5 @@
 import { getShiftsForUI, createShiftParticipation as addShiftParticipation, deleteShiftParticipation, createShift } from '../server_mediators/shifts_ui';
+import { getEmployees } from '../server_mediators/employee';
 import { getShiftTypes } from '../server_mediators/shift_type';
 import * as types from './actionTypes';
 
@@ -45,6 +46,15 @@ export function removeShiftParticipation(baseAddr, shiftParticipation) {
     };
 }
 
+export function updateEmployeesInUI(baseAddr) {
+    return async function (dispatch) {
+        const employees = await getEmployees(baseAddr);
+        // console.log(employees);
+        dispatch(updateShiftsUIEmployees(employees));
+    };
+
+}
+
 export function updateShiftsUIShifts(shifts) {
     //console.log(dashboardCell);
     return { type: types.UPDATE_SHIFTS_UI_SHIFTS, shifts: shifts };
@@ -53,6 +63,10 @@ export function updateShiftsUIShifts(shifts) {
 export function updateShiftsUIShiftTypes(shift_types) {
     //console.log(dashboardCell);
     return { type: types.UPDATE_SHIFTS_UI_SHIFT_TYPES, shift_types: shift_types };
+}
+
+export function updateShiftsUIEmployees(employees) {
+    return { type: types.UPDATE_SHIFTS_UI_EMPLOYEES, employees: employees };
 }
 
 export function addShiftUIShiftParticipation(shift_participation) {

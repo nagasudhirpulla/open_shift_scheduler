@@ -14,9 +14,6 @@ using OpenShiftScheduler.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Http;
-using JavaScriptEngineSwitcher.ChakraCore;
-using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
-using React.AspNet;
 
 
 namespace OpenShiftScheduler
@@ -47,15 +44,6 @@ namespace OpenShiftScheduler
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
 
-            // React integration start
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddReact();
-
-            // Make sure a JS engine is registered, or you will get an error!
-            services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName)
-              .AddChakraCore();
-            // React integration end
-
             // self referencing json serialization error - https://stackoverflow.com/questions/34753498/self-referencing-loop-detected-in-asp-net-core
             services.AddMvc().AddJsonOptions(options =>
             {
@@ -84,29 +72,7 @@ namespace OpenShiftScheduler
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-            }
-
-            // React integration start
-            // Initialise ReactJS.NET. Must be before static files.
-            app.UseReact(config =>
-            {
-                // If you want to use server-side rendering of React components,
-                // add all the necessary JavaScript files here. This includes
-                // your components as well as all of their dependencies.
-                // See http://reactjs.net/ for more information. Example:
-                //config
-                  //.AddScript("~/js/sample.jsx")
-                //  .AddScript("~/Scripts/Second.jsx");
-
-                // If you use an external build too (for example, Babel, Webpack,
-                // Browserify or Gulp), you can improve performance by disabling
-                // ReactJS.NET's version of Babel and loading the pre-transpiled
-                // scripts. Example:
-                //config
-                //  .SetLoadBabel(false)
-                //  .AddScriptWithoutTransform("~/Scripts/bundle.server.js");
-            });
-            // React integration end
+            }           
 
             app.UseStaticFiles();
 

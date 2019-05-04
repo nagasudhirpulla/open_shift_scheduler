@@ -1,10 +1,10 @@
 export async function getEmployees(baseAddr) {
     try {        
-        const resp = await fetch(`${baseAddr}/api/EmloyeesApi`, {
+        const resp = await fetch(`${baseAddr}/api/EmployeesApi`, {
             method: 'get'
         });
         const respJSON = await resp.json();
-        console.log(respJSON);
+        // console.log(respJSON);
         return respJSON;
     } catch (e) {
         console.log(e);

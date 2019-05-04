@@ -1,16 +1,9 @@
 ﻿
 @{
-    @using React.AspNet
-    ViewData["Title"] = "ShiftsUI";
+    ViewData["Title"] = "Shifts";
+    Layout = "_Layout_Shifts";
 }
 
-<h2>Shifts</h2>
+<div id="root"></div>
 
-<div id="content"></div>
-<script crossorigin src="@Url.Content("~/lib/react/react.production.min.js")"></script>
-<script crossorigin src="@Url.Content("~/lib/react/react-dom.production.min.js")"></script>
-<script crossorigin src="@Url.Content("~/lib/redux/redux.min.js")"></script>
-<script crossorigin src="@Url.Content("~/lib/react-redux/react-redux.min.js")"></script>
-<script crossorigin src="@Url.Content("~/lib/redux-thunk/redux-thunk.min.js")"></script>
-<script crossorigin src="@Url.Content("~/js/registerServiceWorker.js")"></script>
-<script src="@Url.Content("~/js/sample.jsx")"></script>
+<script src="@Url.Content("~/js/shifts_ui_app/dist/main.js")"></script>

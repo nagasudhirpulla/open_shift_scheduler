@@ -2,17 +2,16 @@
   "version": "1.0",
   "defaultProvider": "cdnjs",
   "libraries": [
+
     {
-      "library": "redux@4.0.1",
-      "destination": "wwwroot/lib/redux/"
+      "provider": "cdnjs",
+      "library": "jquery@3.4.1",
+      "destination": "wwwroot/lib/jquery/"
     },
     {
-      "library": "react-redux@7.0.2",
-      "destination": "wwwroot/lib/react-redux/"
-    },
-    {
-      "library": "redux-thunk@2.3.0",
-      "destination": "wwwroot/lib/redux-thunk/"
+      "provider": "cdnjs",
+      "library": "twitter-bootstrap@4.3.1",
+      "destination": "wwwroot/lib/bootstrap/"
     }
   ]
 }
