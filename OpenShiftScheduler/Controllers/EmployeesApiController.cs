@@ -23,7 +23,7 @@ namespace OpenShiftScheduler.Controllers
             _context = context;
         }
 
-        // GET: api/EmloyeesApi
+        // GET: api/EmployeesApi
         [HttpGet]
         public IEnumerable<Employee> GetEmployees()
         {

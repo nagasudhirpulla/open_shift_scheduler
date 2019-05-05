@@ -9,7 +9,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './ShiftsTable.css';
 import classNames from 'classnames';
-import { updateShiftsInUI, updateShiftTypesInUI, updateEmployeesInUI, createShiftParticipation, removeShiftParticipation } from '../actions/shiftsTableActions';
+import { updateShiftsUIData, updateShiftsInUI, updateShiftTypesInUI, updateEmployeesInUI, createShiftParticipation, removeShiftParticipation } from '../actions/shiftsTableActions';
 import essentialProps from '../reducers/essentialProps';
 import deepmerge from 'deepmerge';
 import { groupObjBy } from '../utils/objUtils'
@@ -52,9 +52,10 @@ class ShiftsTable extends Component {
         //console.log(baseAddr);
         //update nested state properties in react - https://stackoverflow.com/questions/43040721/how-to-update-nested-state-properties-in-react
         this.setState({ start_date: startDateStr, end_date: endDateStr });
-        this.state.props.updateShiftTypesInUI(baseAddr);
-        this.state.props.updateEmployeesInUI(baseAddr);
-        this.state.props.updateShiftsInUI(baseAddr, startDate, endDate);
+        //this.state.props.updateShiftTypesInUI(baseAddr);
+        //this.state.props.updateEmployeesInUI(baseAddr);
+        //this.state.props.updateShiftsInUI(baseAddr, startDate, endDate);
+        this.state.props.updateShiftsUIData(baseAddr, startDate, endDate);
     }
 
     createShiftParticipation = (shift) => {
@@ -220,13 +221,15 @@ const mapDispatchToProps = (dispatch) => {
         updateShiftsInUI: (baseAddr, start_date, end_date) => {
             dispatch(updateShiftsInUI(baseAddr, start_date, end_date));
         },
+        updateShiftsUIData: (baseAddr, start_date, end_date) => {
+            dispatch(updateShiftsUIData(baseAddr, start_date, end_date));
+        },
         createShiftParticipation: (baseAddr, employeeId, shift) => {
             dispatch(createShiftParticipation(baseAddr, employeeId, shift));
         },
         removeShiftParticipation: (baseAddr, shiftParticipation) => {
             dispatch(removeShiftParticipation(baseAddr, shiftParticipation));
         }
-
     };
 };
 

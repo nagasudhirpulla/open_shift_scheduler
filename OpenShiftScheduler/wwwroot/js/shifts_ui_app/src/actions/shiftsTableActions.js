@@ -15,10 +15,38 @@ export function updateShiftsInUI(baseAddr, start_date, end_date) {
 export function updateShiftTypesInUI(baseAddr) {
     return async function (dispatch) {
         const shift_types = await getShiftTypes(baseAddr);
-        // console.log(shifts);
+        // console.log(shift_types);
         dispatch(updateShiftsUIShiftTypes(shift_types));
     };
 
+}
+
+export function updateEmployeesInUI(baseAddr) {
+    return async function (dispatch) {
+        const employees = await getEmployees(baseAddr);
+        // console.log(employees);
+        dispatch(updateShiftsUIEmployees(employees));
+    };
+
+}
+
+export function updateShiftsUIData(baseAddr, start_date, end_date) {
+    return async function (dispatch) {
+        // update employees
+        const employees = await getEmployees(baseAddr);
+        // console.log(employees);
+        dispatch(updateShiftsUIEmployees(employees));
+
+        // update shift types
+        const shift_types = await getShiftTypes(baseAddr);
+        // console.log(shift_types);
+        dispatch(updateShiftsUIShiftTypes(shift_types));
+
+        // update shifts
+        const shifts = await getShiftsForUI(baseAddr, start_date, end_date);
+        // console.log(shifts);
+        dispatch(updateShiftsUIShifts(shifts));
+    };
 }
 
 export function createShiftParticipation(baseAddr, employeeId, shift) {
@@ -44,15 +72,6 @@ export function removeShiftParticipation(baseAddr, shiftParticipation) {
             dispatch(deleteShiftUIShiftParticipation(shiftParticipationObj));
         }
     };
-}
-
-export function updateEmployeesInUI(baseAddr) {
-    return async function (dispatch) {
-        const employees = await getEmployees(baseAddr);
-        // console.log(employees);
-        dispatch(updateShiftsUIEmployees(employees));
-    };
-
 }
 
 export function updateShiftsUIShifts(shifts) {
