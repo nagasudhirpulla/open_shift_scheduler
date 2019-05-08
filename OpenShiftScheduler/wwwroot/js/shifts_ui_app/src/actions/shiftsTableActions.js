@@ -1,4 +1,4 @@
-import { getShiftsForUI, createShiftParticipation as addShiftParticipation, deleteShiftParticipation, createShift } from '../server_mediators/shifts_ui';
+import { getShiftsForUI, createShiftParticipation as addShiftParticipation, addShiftParticipationFromShiftGroup, deleteShiftParticipation, createShift, deleteShift } from '../server_mediators/shifts_ui';
 import { getEmployees } from '../server_mediators/employee';
 import { getShiftTypes } from '../server_mediators/shift_type';
 import * as types from './actionTypes';
@@ -64,12 +64,37 @@ export function createShiftParticipation(baseAddr, employeeId, shift) {
 
 }
 
+export function createShiftParticipationFromGroup(baseAddr, shiftGroupId, shift) {
+    return async function (dispatch) {
+        let shiftObj = shift;
+        if (shift.shiftId == null) {
+            shiftObj = await createShift(baseAddr, shift);
+            // console.log(shiftObj);
+            dispatch(createShiftUIShift(shiftObj));
+        }
+        const shift_participations = await addShiftParticipationFromShiftGroup(baseAddr, shiftGroupId, shiftObj);
+        // console.log(shift_participation);
+        dispatch(updateShiftUIShiftParticipations(shift_participations));
+    };
+
+}
+
 export function removeShiftParticipation(baseAddr, shiftParticipation) {
     return async function (dispatch) {
         if (shiftParticipation.shiftParticipationId != null) {
             const shiftParticipationObj = await deleteShiftParticipation(baseAddr, shiftParticipation);
             // console.log(shiftParticipationObj);
             dispatch(deleteShiftUIShiftParticipation(shiftParticipationObj));
+        }
+    };
+}
+
+export function removeShift(baseAddr, shift) {
+    return async function (dispatch) {
+        if (shift.shiftId != null) {
+            const shiftObj = await deleteShift(baseAddr, shift);
+            // console.log(shiftParticipationObj);
+            dispatch(removeShiftUIShift(shiftObj));
         }
     };
 }
@@ -93,6 +118,11 @@ export function addShiftUIShiftParticipation(shift_participation) {
     return { type: types.ADD_SHIFTS_UI_SHIFT_PARTICIPATION, shift_participation: shift_participation };
 }
 
+export function updateShiftUIShiftParticipations(shift_participations) {
+    //console.log(dashboardCell);
+    return { type: types.UPDATE_SHIFTS_UI_SHIFT_PARTICIPATIONS, shift_participations: shift_participations };
+}
+
 export function deleteShiftUIShiftParticipation(shift_participation) {
     //console.log(dashboardCell);
     return { type: types.DELETE_SHIFTS_UI_SHIFT_PARTICIPATION, shift_participation: shift_participation };
@@ -101,4 +131,9 @@ export function deleteShiftUIShiftParticipation(shift_participation) {
 export function createShiftUIShift(shift) {
     //console.log(dashboardCell);
     return { type: types.CREATE_SHIFTS_UI_SHIFT, shift: shift };
+}
+
+export function removeShiftUIShift(shift) {
+    //console.log(dashboardCell);
+    return { type: types.DELETE_SHIFTS_UI_SHIFT, shift: shift };
 }

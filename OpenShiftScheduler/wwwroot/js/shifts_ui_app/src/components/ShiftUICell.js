@@ -27,7 +27,7 @@ class ShiftUICell extends Component {
         let props = deepmerge(essentialProps.shifts_ui_cell, this.state.props);
         //console.log(props);
         return (
-            <div className={classNames('shift_cell', 'col')} style={{ backgroundColor: props.shift_type.colorString, border: '1px dashed black', width: props.col_size+"%" }}>
+            <div className={classNames('shift_cell', 'col')} style={{ backgroundColor: props.shift_type.colorString, border: '1px dashed black', width: props.col_size + "%" }}>
                 <span className={classNames('shift_cell_type_name')}>{props.shift_type.name}</span>
                 <div>
                     {props.shift.shiftParticipations != null &&
@@ -39,7 +39,11 @@ class ShiftUICell extends Component {
                         )
                     }
                 </div>
-                <button onClick={() => props.createShiftParticipation(props.shift)} className={classNames('btn', 'part_add_btn')} >+ Add Employee</button>
+                <div className={classNames('btn', 'cell_btns_div')}>
+                    <button onClick={() => props.createShiftParticipation(props.shift)} className={classNames('btn', 'part_add_btn')} >+Employee</button>
+                    <button onClick={() => props.createShiftParticipationFromGroup(props.shift)} className={classNames('btn', 'grp_add_btn')} >+Shift Group</button>
+                    <button onClick={() => props.removeAllShiftParticipations(props.shift)} className={classNames('btn', 'rem_all_part_btn')} >-Remove All</button>
+                </div>
                 {/* <div>{JSON.stringify(props)}</div> */}
             </div>
         );

@@ -73,6 +73,35 @@ export async function createShiftParticipation(baseAddr, employeeId, shift) {
     }
 }
 
+export async function addShiftParticipationFromShiftGroup(baseAddr, shiftGroupId, shift) {
+    try {
+        // console.log("shift object for shift participation creation is " + JSON.stringify(shift));
+        if (shift.shiftId == null) {
+            return { success: false, message: `could not create shift participation for shift since shift id is null` };
+        }
+        const resp = await fetch(`${baseAddr}/api/ShiftParticipationsApi/FromGroup`, {
+            method: 'post',
+            headers: {
+                "accept": "application/json",
+                "accept-encoding": "gzip, deflate",
+                "accept-language": "en-US,en;q=0.8",
+                "content-type": "application/json",
+                "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) advanced-rest-client/12.1.3 Chrome/58.0.3029.110 Electron/1.7.12 Safari/537.36"
+            },
+            body: JSON.stringify({
+                "ShiftGroupId": shiftGroupId,
+                "ShiftId": shift.shiftId
+            })
+        });
+        // console.log(resp);
+        const respJSON = await resp.json();
+        return respJSON;
+    } catch (e) {
+        console.log(e);
+        return { success: false, message: `Could not retrieve shifts for shifts ui data due to error ${JSON.stringify(e)}` };
+    }
+}
+
 export async function deleteShiftParticipation(baseAddr, shiftParticipation) {
     try {
         if (shiftParticipation.shiftParticipationId == null) {
@@ -94,5 +123,29 @@ export async function deleteShiftParticipation(baseAddr, shiftParticipation) {
     } catch (e) {
         console.log(e);
         return { success: false, message: `Could not delete shift participation due to error ${JSON.stringify(e)}` };
+    }
+}
+
+export async function deleteShift(baseAddr, shift) {
+    try {
+        if (shift.shiftId == null) {
+            return { success: false, message: `could not delete shift since id is null` };
+        }
+        const resp = await fetch(`${baseAddr}/api/ShiftsApi/${shift.shiftId}`, {
+            method: 'delete',
+            headers: {
+                "accept": "application/json",
+                "accept-encoding": "gzip, deflate",
+                "accept-language": "en-US,en;q=0.8",
+                "content-type": "application/json",
+                "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) advanced-rest-client/12.1.3 Chrome/58.0.3029.110 Electron/1.7.12 Safari/537.36"
+            }
+        });
+        // console.log(resp);
+        const respJSON = await resp.json();
+        return respJSON;
+    } catch (e) {
+        console.log(e);
+        return { success: false, message: `Could not delete shift due to error ${JSON.stringify(e)}` };
     }
 }

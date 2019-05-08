@@ -8,6 +8,27 @@ export default function shiftsUIReducer(state = initialState.shifts_ui, action) 
                 ...state,
                 shifts: action.shifts
             };
+        case types.DELETE_SHIFTS_UI_SHIFT:
+            let shift = action.shift;
+            let reqShiftIter = -1;
+            for (let shiftIter = 0; (shiftIter < state.shifts.length) && (reqShiftIter == -1); shiftIter++) {
+                if (state.shifts[shiftIter].shiftId == shift.shiftId) {
+                    reqShiftIter = shiftIter;
+                }
+            }
+            if (reqShiftIter == -1) {
+                console.log(`Could not find the requested shift ${shift} to update in the redux state`);
+                return state;
+            }
+            let newState = {
+                ...state,
+                shifts:
+                    [
+                        ...state.shifts.slice(0, reqShiftIter),
+                        ...state.shifts.slice(reqShiftIter + 1)
+                    ]
+            }
+            return newState;
         case types.UPDATE_SHIFTS_UI_SHIFT_TYPES:
             return {
                 ...state,
@@ -21,8 +42,8 @@ export default function shiftsUIReducer(state = initialState.shifts_ui, action) 
         case types.UPDATE_SHIFTS_UI_SHIFT:
             // find the shift index from shifts array using date and shift type
             // console.log(`shift that is to be updated in reducer is ${JSON.stringify(action.shift)}`);
-            let shift = action.shift;
-            let reqShiftIter = -1;
+            shift = action.shift;
+            reqShiftIter = -1;
             for (let shiftIter = 0; (shiftIter < state.shifts.length) && (reqShiftIter == -1); shiftIter++) {
                 if (state.shifts[shiftIter].shiftId == shift.shiftId) {
                     reqShiftIter = shiftIter;
@@ -32,7 +53,7 @@ export default function shiftsUIReducer(state = initialState.shifts_ui, action) 
                 console.log(`Could not find the requested shift ${shift} to update in the redux state`);
                 return state;
             }
-            let newState = {
+            newState = {
                 ...state,
                 shifts:
                     [
@@ -69,7 +90,7 @@ export default function shiftsUIReducer(state = initialState.shifts_ui, action) 
                 }
             }
             if (shiftInd != -1) {
-                const newState = {
+                newState = {
                     ...state,
                     shifts: [
                         ...state.shifts.slice(0, shiftInd),
@@ -88,6 +109,42 @@ export default function shiftsUIReducer(state = initialState.shifts_ui, action) 
             }
             else {
                 console.log('Could not find shift to add the shift participation');
+                return state;
+            }
+        case types.UPDATE_SHIFTS_UI_SHIFT_PARTICIPATIONS:
+            // find the relavent shift and add the participation object to it
+            let shiftParticipations = action.shift_participations;
+            // console.log(shiftParticipation);
+            shiftInd = -1;
+            if (shiftParticipations.length == 0) {
+                console.log('No shift participations present, hence not changing the app state');
+                return state;
+            }
+            for (let shiftIter = 0; (shiftIter < state.shifts.length) && (shiftInd == -1); shiftIter++) {
+                //console.log(state.shifts[shiftIter].shiftId);
+                if (state.shifts[shiftIter].shiftId == shiftParticipations[0].shiftId) {
+                    shiftInd = shiftIter;
+                }
+            }
+            if (shiftInd != -1) {
+                newState = {
+                    ...state,
+                    shifts: [
+                        ...state.shifts.slice(0, shiftInd),
+                        {
+                            ...state.shifts[shiftInd],
+                            "shiftParticipations": [
+                                ...shiftParticipations
+                            ]
+                        },
+                        ...state.shifts.slice(shiftInd + 1)
+                    ]
+                };
+                // console.log(newState);
+                return newState;
+            }
+            else {
+                console.log('Could not find shift to add the shift participations');
                 return state;
             }
         case types.DELETE_SHIFTS_UI_SHIFT_PARTICIPATION:
@@ -109,7 +166,7 @@ export default function shiftsUIReducer(state = initialState.shifts_ui, action) 
                 }
             }
             if (shiftInd != -1 && shiftParticipationInd != -1) {
-                const newState = {
+                newState = {
                     ...state,
                     shifts: [
                         ...state.shifts.slice(0, shiftInd),

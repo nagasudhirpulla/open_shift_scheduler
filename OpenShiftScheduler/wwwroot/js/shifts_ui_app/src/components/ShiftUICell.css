@@ -4,15 +4,39 @@
 }
 
 .part_add_btn {
-    font-size: small;
-    position: absolute;
-    left: 0;
-    bottom: 0;
+    font-size: x-small;
+    margin-right:12px;
     background: none !important;
     border: none;
     padding: 0 !important;
     /*optional*/
     cursor: pointer;
+}
+
+.grp_add_btn {
+    font-size: x-small;
+    margin-right: 12px;
+    background: none !important;
+    border: none;
+    padding: 0 !important;
+    /*optional*/
+    cursor: pointer;
+}
+
+.rem_all_part_btn {
+    font-size: x-small;
+    margin-right: 12px;
+    background: none !important;
+    border: none;
+    padding: 0 !important;
+    color:red;
+    /*optional*/
+    cursor: pointer;
+}
+
+.cell_btns_div {
+    position: absolute;
+    bottom: 0;
 }
 
 .part_del_btn {
@@ -25,7 +49,7 @@
     /*optional*/
     color: #ff0000;
     cursor: pointer;
-    font-size: small;
+    font-size: xx-small;
 }
 
 .part_disp_row {

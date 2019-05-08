@@ -9,7 +9,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './ShiftsTable.css';
 import classNames from 'classnames';
-import { updateShiftsUIData, updateShiftsInUI, updateShiftTypesInUI, updateEmployeesInUI, createShiftParticipation, removeShiftParticipation } from '../actions/shiftsTableActions';
+import { updateShiftsUIData, updateShiftsInUI, updateShiftTypesInUI, updateEmployeesInUI, createShiftParticipation, createShiftParticipationFromGroup, removeShiftParticipation, removeShift } from '../actions/shiftsTableActions';
 import essentialProps from '../reducers/essentialProps';
 import deepmerge from 'deepmerge';
 import { groupObjBy } from '../utils/objUtils'
@@ -22,9 +22,13 @@ class ShiftsTable extends Component {
         super(props);
         this.loadShifts = this.loadShifts.bind(this);
         this.setModalShow = this.setModalShow.bind(this);
+        this.setShiftGroupModalShow = this.setShiftGroupModalShow.bind(this);
         this.createShiftParticipation = this.createShiftParticipation.bind(this);
+        this.createShiftParticipationFromGroup = this.createShiftParticipationFromGroup.bind(this);
         this.removeShiftParticipation = this.removeShiftParticipation.bind(this);
+        this.removeAllShiftParticipations = this.removeAllShiftParticipations.bind(this);
         this.onEmpSelForPartClick = this.onEmpSelForPartClick.bind(this);
+        this.onShiftGroupSelForPartClick = this.onShiftGroupSelForPartClick.bind(this);
 
         // Don't call this.setState() here!
         this.state = {};
@@ -32,10 +36,12 @@ class ShiftsTable extends Component {
         this.state.start_date = "2019-04-15";
         this.state.end_date = "2019-04-25";
         this.state.modalShow = false;
+        this.state.modalShowShiftGroup = false;
         this.state.activeShift = null;
         this.startDateInput = React.createRef();
         this.endDateInput = React.createRef();
         this.employeesComboBox = React.createRef();
+        this.shiftGroupsComboBox = React.createRef();
     }
 
     loadShifts = () => {
@@ -63,6 +69,11 @@ class ShiftsTable extends Component {
         this.setModalShow(true);
     }
 
+    createShiftParticipationFromGroup = (shift) => {
+        this.setState({ activeShift: shift });
+        this.setShiftGroupModalShow(true);
+    }
+
     onEmpSelForPartClick = () => {
         this.setModalShow(false);
         let baseAddr = this.state.props.server_base_addr;
@@ -74,8 +85,23 @@ class ShiftsTable extends Component {
         this.state.props.createShiftParticipation(baseAddr, employeeId, this.state.activeShift);
     }
 
+    onShiftGroupSelForPartClick = () => {
+        this.setShiftGroupModalShow(false);
+        let baseAddr = this.state.props.server_base_addr;
+        if (baseAddr == undefined) {
+            baseAddr = essentialProps.shifts_ui.server_base_addr;
+        }
+        let shiftGroupId = this.shiftGroupsComboBox.current.value;
+        // console.log(`The selected employee Id for shift participation is ${employeeId}`);
+        this.state.props.createShiftParticipationFromGroup(baseAddr, shiftGroupId, this.state.activeShift);
+    }
+
     setModalShow = modalShow => {
         this.setState({ modalShow });
+    }
+
+    setShiftGroupModalShow = modalShowShiftGroup => {
+        this.setState({ modalShowShiftGroup });
     }
 
     removeShiftParticipation = (shiftParticipation) => {
@@ -85,6 +111,17 @@ class ShiftsTable extends Component {
         }
         if (confirm('Are you sure you want to delete...')) {
             this.state.props.removeShiftParticipation(baseAddr, shiftParticipation);
+        }
+    }
+
+    removeAllShiftParticipations = (shift) => {
+        // we will remove the shift itself
+        let baseAddr = this.state.props.server_base_addr;
+        if (baseAddr == undefined) {
+            baseAddr = essentialProps.shifts_ui.server_base_addr;
+        }
+        if (confirm('Are you sure you want to delete all in shift...')) {
+            this.state.props.removeShift(baseAddr, shift);
         }
     }
 
@@ -99,6 +136,7 @@ class ShiftsTable extends Component {
         const colSize = Math.floor((100 / (props.shift_types.length)));
         const groupedEmployees = groupObjBy(props.employees, 'employeeId');
         const { modalShow } = this.state;
+        const { modalShowShiftGroup } = this.state;
         // group the shift objects by date and shift type
         let groupedShifts = groupObjBy(props.shifts, 'shiftDate');
         for (var dateStr in groupedShifts) {
@@ -160,7 +198,9 @@ class ShiftsTable extends Component {
                                         col_size={colSize}
                                         employees_dict={groupedEmployees}
                                         createShiftParticipation={this.createShiftParticipation}
+                                        createShiftParticipationFromGroup={this.createShiftParticipationFromGroup}
                                         removeShiftParticipation={this.removeShiftParticipation}
+                                        removeAllShiftParticipations={this.removeAllShiftParticipations}
                                     />
                                 )
                             }
@@ -190,7 +230,7 @@ class ShiftsTable extends Component {
                     closeOnEsc={true}
                     onClose={() => this.setModalShow(false)}
                     closeOnOverlay={true}>
-                    <h2>Add Employee</h2>
+                    <h3>Add Employee</h3>
                     <select ref={this.employeesComboBox}>
                         {
                             props.employees.map((empObj, empInd) =>
@@ -199,6 +239,23 @@ class ShiftsTable extends Component {
                         }
                     </select>
                     <button onClick={this.onEmpSelForPartClick}>Add Employee</button>
+                </PopPop>
+
+                <PopPop position="centerCenter"
+                    open={modalShowShiftGroup}
+                    closeBtn={true}
+                    closeOnEsc={true}
+                    onClose={() => this.setShiftGroupModalShow(false)}
+                    closeOnOverlay={true}>
+                    <h3>Add from Shift Group</h3>
+                    <select ref={this.shiftGroupsComboBox}>
+                        {
+                            props.shift_groups.map((shiftGrpObj, grpInd) =>
+                                <option value={shiftGrpObj.shiftGroupId} key={`shiftGrpSelOpt_${grpInd}`}>{shiftGrpObj.name}</option>
+                            )
+                        }
+                    </select>
+                    <button onClick={this.onShiftGroupSelForPartClick}>Add From Group</button>
                 </PopPop>
             </div>
 
@@ -229,6 +286,12 @@ const mapDispatchToProps = (dispatch) => {
         },
         removeShiftParticipation: (baseAddr, shiftParticipation) => {
             dispatch(removeShiftParticipation(baseAddr, shiftParticipation));
+        },
+        createShiftParticipationFromGroup: (baseAddr, shiftGroupId, shift) => {
+            dispatch(createShiftParticipationFromGroup(baseAddr, shiftGroupId, shift));
+        },
+        removeShift: (baseAddr, shift) => {
+            dispatch(removeShift(baseAddr, shift));
         }
     };
 };
