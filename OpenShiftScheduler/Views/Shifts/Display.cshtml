@@ -1,0 +1,49 @@
+﻿
+@model OpenShiftScheduler.Models.AppModels.ShiftsPrintViewModel
+
+@{
+    ViewData["Title"] = "Display";
+}
+
+<form asp-controller="Shifts" asp-action="Display" method="post">
+    <label asp-for="StartDate"></label>
+    <input asp-for="StartDate" />
+    <label asp-for="EndDate" style="margin-left:16px"></label>
+    <input asp-for="EndDate" />
+    <button type="submit">Show</button>
+
+    @if (Model.ShiftTypes != null && Model.ShiftParticipations != null)
+    {
+        <table class="table">
+            <tr>
+                <th>Date</th>
+                @foreach (string sType in Model.ShiftTypes)
+                {
+                    <th>@sType</th>
+                }
+            </tr>
+            @foreach (KeyValuePair<DateTime, List<List<string>>> day_parts in Model.ShiftParticipations)
+            {
+                <tr>
+                    <td>
+                        @day_parts.Key.ToString("dd-MMM-yy")
+                    </td>
+                    @foreach (List<string> day_shift_parts in day_parts.Value)
+                    {
+                        <td>
+                            <div>
+                                @foreach (string day_shift_part in day_shift_parts)
+                                {
+                                    @day_shift_part
+                                    <br />
+                                }
+                            </div>
+                        </td>
+                    }
+                </tr>
+            }
+        </table>
+    }
+
+</form>
+

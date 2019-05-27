@@ -218,13 +218,13 @@ namespace OpenShiftScheduler.Controllers
                         Tuple<int, int> nextShiftTypeInfo = GetNextShiftTypeInfo(currentShiftTypeId, numTimesAlreadyOccured);
                         currentShiftTypeId = nextShiftTypeInfo.Item1;
                         numTimesAlreadyOccured = nextShiftTypeInfo.Item2;
-                        
+
                         // delete all the shifts of the particular shift type on that day if present
                         List<Shift> existingShifts = await _context.Shifts.Where(s => s.ShiftDate == shiftDate && s.ShiftTypeId == currentShiftTypeId).ToListAsync();
                         foreach (Shift existingShift in existingShifts)
                         {
                             _context.Shifts.Remove(existingShift);
-                        }                        
+                        }
 
                         // create new shift with the shift participations
                         Shift newShift = new Shift { ShiftTypeId = currentShiftTypeId, ShiftDate = shiftDate };
@@ -234,7 +234,7 @@ namespace OpenShiftScheduler.Controllers
                         // create the shift participations for the new shift
                         foreach (ShiftParticipation shiftPart in startDayShift.ShiftParticipations)
                         {
-                            ShiftParticipation newShiftPart = new ShiftParticipation { ShiftId = newShift.ShiftId, EmployeeId = shiftPart.EmployeeId};
+                            ShiftParticipation newShiftPart = new ShiftParticipation { ShiftId = newShift.ShiftId, EmployeeId = shiftPart.EmployeeId };
                             _context.ShiftParticipations.Add(newShiftPart);
                             await _context.SaveChangesAsync();
                         }
@@ -245,6 +245,70 @@ namespace OpenShiftScheduler.Controllers
             }
             return View();
         }
+
+        // GET: Shifts/Display
+        public IActionResult Display()
+        {
+            ShiftsPrintViewModel vm = new ShiftsPrintViewModel { StartDate = DateTime.Now, EndDate = DateTime.Now.AddDays(10) };
+            return View(vm);
+        }
+
+        // Post: Shifts/Display
+        [HttpPost]
+        public async Task<IActionResult> Display(ShiftsPrintViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                // check if start date > end date
+                if (vm.StartDate > vm.EndDate)
+                {
+                    return View(vm);
+                }
+
+                //fetch the shift types
+                List<ShiftType> shiftTypes = await _context.ShiftTypes.OrderBy(st => st.RoasterSequence).ToListAsync();
+                List<int> shiftTypeIds = shiftTypes.Select(st => st.ShiftTypeId).ToList();
+
+                // set the view model shift Types
+                vm.ShiftTypes = new List<string>();
+                foreach (ShiftType shiftType in shiftTypes)
+                {
+                    vm.ShiftTypes.Add(shiftType.Name);
+                }
+
+                // initiaize the shift participations in view model
+                vm.ShiftParticipations = new Dictionary<DateTime, List<List<string>>>();
+                for (DateTime dt = vm.StartDate; dt <= vm.EndDate; dt = dt.AddDays(1))
+                {
+                    vm.ShiftParticipations.Add(dt, new List<List<string>>());
+                    foreach (var sType in shiftTypes)
+                    {
+                        vm.ShiftParticipations[dt].Add(new List<string>());
+                    }
+                }
+
+                // get the shift participations from db
+                List<ShiftParticipation> shiftParticipations = await _context.ShiftParticipations.Include(sp => sp.Shift).Include(sp => sp.Employee).Where(sp => sp.Shift.ShiftDate >= vm.StartDate && sp.Shift.ShiftDate <= vm.EndDate).ToListAsync();
+
+                // assign the fetched shift participations to the vm
+                foreach (ShiftParticipation shiftPart in shiftParticipations)
+                {
+                    DateTime shiftDate = shiftPart.Shift.ShiftDate;
+                    int shiftTypeIndex = -1;
+                    try
+                    {
+                        shiftTypeIndex = shiftTypeIds.FindIndex(sTId => sTId == shiftPart.Shift.ShiftTypeId);
+                    }
+                    catch (Exception)
+                    {
+                        continue;
+                    }
+                    vm.ShiftParticipations[shiftPart.Shift.ShiftDate][shiftTypeIndex].Add(shiftPart.Employee.Name);
+                }
+            }
+            return View(vm);
+        }
+
     }
 
     public class AutoInitializeParamsViewModel
