@@ -32,7 +32,7 @@ class ShiftUICell extends Component {
                 <div>
                     {props.shift.shiftParticipations != null &&
                         props.shift.shiftParticipations.map((participationobj, ind) =>
-                            <div key={'participation_display_' + ind} className={classNames('btn', 'part_disp_row')}>
+                            <div key={'participation_display_' + ind} className={classNames('part_disp_row')}>
                                 <span>{props.employees_dict[participationobj.employeeId][0]['name']}</span>
                                 <button className={classNames('btn', 'part_del_btn')} onClick={() => props.removeShiftParticipation(participationobj)}>Remove</button>
                             </div>
