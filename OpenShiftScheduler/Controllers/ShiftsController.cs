@@ -249,7 +249,7 @@ namespace OpenShiftScheduler.Controllers
         // GET: Shifts/Display
         public IActionResult Display()
         {
-            ShiftsPrintViewModel vm = new ShiftsPrintViewModel { StartDate = DateTime.Now, EndDate = DateTime.Now.AddDays(10) };
+            ShiftsPrintViewModel vm = new ShiftsPrintViewModel { StartDate = DateTime.Now, EndDate = DateTime.Now.AddDays(1) };
             return View(vm);
         }
 
