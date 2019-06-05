@@ -37,7 +37,13 @@ namespace OpenShiftScheduler
             services.AddDbContext<ShiftScheduleDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, AppIdentityRole>(options =>
+            {
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 6;
+            })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -61,7 +67,7 @@ namespace OpenShiftScheduler
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<ApplicationUser> userManager, RoleManager<AppIdentityRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -77,6 +83,8 @@ namespace OpenShiftScheduler
             app.UseStaticFiles();
 
             app.UseAuthentication();
+
+            AppIdentityDataInitializer.SeedData(userManager, roleManager, Configuration);
 
             app.UseMvc(routes =>
             {
