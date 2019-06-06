@@ -331,7 +331,7 @@ namespace OpenShiftScheduler.Controllers
                 }
 
                 // fetch employees
-                List<Employee> employees = await _context.Employees.OrderBy(e => e.EmployeeId).ToListAsync();
+                List<Employee> employees = await _context.Employees.OrderBy(e => e.Name).ToListAsync();
                 List<string> employeeNames = employees.Select(e => e.Name).ToList();
 
                 //fetch the shift types
