@@ -1,0 +1,41 @@
+﻿
+@model OpenShiftScheduler.Models.AppModels.EmployeesCalendarPrintViewModel
+
+@{
+    ViewData["Title"] = "Employees Calendar";
+}
+
+<form asp-controller="Shifts" asp-action="EmployeesCalendar" method="post">
+    <label asp-for="StartDate"></label>
+    <input asp-for="StartDate" />
+    <label asp-for="EndDate" style="margin-left:16px"></label>
+    <input asp-for="EndDate" />
+    <button type="submit">Show</button>
+
+    @if (Model.EmployeeShifts != null)
+    {
+        <table class="table">
+            <tr>
+                <th>Name</th>
+                @for (DateTime dt = Model.StartDate; dt <= Model.EndDate; dt = dt.AddDays(1))
+                {
+                    <th>@dt.ToString("dd-MMM ddd")</th>
+                }
+            </tr>
+            @foreach (KeyValuePair<string, List<string>> emp_shift_types in Model.EmployeeShifts)
+            {
+                <tr>
+                    <td>
+                        @emp_shift_types.Key
+                    </td>
+                    @foreach (string emp_shift_type in emp_shift_types.Value)
+                    {
+                        <td>
+                            @emp_shift_type
+                        </td>
+                    }
+                </tr>
+            }
+        </table>
+    }
+</form>

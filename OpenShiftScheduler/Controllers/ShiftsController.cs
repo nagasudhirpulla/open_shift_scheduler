@@ -311,6 +311,89 @@ namespace OpenShiftScheduler.Controllers
             return View(vm);
         }
 
+        // GET: Shifts/EmployeesCalendar
+        public IActionResult EmployeesCalendar()
+        {
+            EmployeesCalendarPrintViewModel vm = new EmployeesCalendarPrintViewModel { StartDate = DateTime.Now, EndDate = DateTime.Now.AddDays(1) };
+            return View(vm);
+        }
+
+        // Post: Shifts/EmployeesCalendar
+        [HttpPost]
+        public async Task<IActionResult> EmployeesCalendar(EmployeesCalendarPrintViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                // check if start date > end date
+                if (vm.StartDate > vm.EndDate)
+                {
+                    return View(vm);
+                }
+
+                // fetch employees
+                List<Employee> employees = await _context.Employees.OrderBy(e => e.EmployeeId).ToListAsync();
+                List<string> employeeNames = employees.Select(e => e.Name).ToList();
+
+                //fetch the shift types
+                List<ShiftType> shiftTypes = await _context.ShiftTypes.OrderBy(st => st.RoasterSequence).ToListAsync();
+                List<int> shiftTypeIds = shiftTypes.Select(st => st.ShiftTypeId).ToList();
+
+                // initiaize the EmployeeShifts in view model
+                vm.EmployeeShifts = new Dictionary<String, List<string>>();
+                foreach (string employeeName in employeeNames)
+                {
+                    vm.EmployeeShifts.Add(employeeName, new List<string>());
+                    for (DateTime dt = vm.StartDate; dt <= vm.EndDate; dt = dt.AddDays(1))
+                    {
+                        vm.EmployeeShifts[employeeName].Add("");
+                    }
+                }
+
+                // get the shift participations from db
+                List<ShiftParticipation> shiftParticipations = await _context.ShiftParticipations.Include(sp => sp.Shift).Include(sp => sp.Employee).Where(sp => sp.Shift.ShiftDate >= vm.StartDate && sp.Shift.ShiftDate <= vm.EndDate).ToListAsync();
+
+                // assign the fetched shift participations to the vm
+                foreach (ShiftParticipation shiftPart in shiftParticipations)
+                {
+                    // find the shiftDate
+                    DateTime shiftDate = shiftPart.Shift.ShiftDate;
+
+                    // find the shiftType Name
+                    int shiftTypeIndex = -1;
+                    try
+                    {
+                        shiftTypeIndex = shiftTypeIds.FindIndex(sTId => sTId == shiftPart.Shift.ShiftTypeId);
+                    }
+                    catch (Exception)
+                    {
+                        continue;
+                    }
+                    string shiftTypeName = shiftTypes[shiftTypeIndex].Name;
+
+                    // find the employee Name
+                    string employeeName = shiftPart.Employee.Name;
+
+                    // check if employee name exists
+                    int empIndex = -1;
+                    try
+                    {
+                        empIndex = employeeNames.FindIndex(eName => eName == shiftPart.Employee.Name);
+                    }
+                    catch (Exception)
+                    {
+                        continue;
+                    }
+
+                    // find the date list index by the shiftParticipation Date
+                    int dateIndex = (int)Math.Floor((shiftDate - vm.StartDate).TotalDays);
+
+                    // set the employeeShift value
+                    vm.EmployeeShifts[employeeName][dateIndex] = shiftTypeName;
+                }
+            }
+            return View(vm);
+        }
+
     }
 
     public class AutoInitializeParamsViewModel
