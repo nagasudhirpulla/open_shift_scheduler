@@ -15,7 +15,7 @@ namespace OpenShiftScheduler.Controllers
     [EnableCors("anyorigin")]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Administrator")]
     public class ShiftParticipationsApiController : ControllerBase
     {
         private readonly ShiftScheduleDbContext _context;

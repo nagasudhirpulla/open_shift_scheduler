@@ -11,7 +11,7 @@ using OpenShiftScheduler.Models.AppModels;
 
 namespace OpenShiftScheduler.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Administrator, GuestUser")]
     public class ShiftsController : Controller
     {
         private readonly ShiftScheduleDbContext _context;
@@ -22,6 +22,7 @@ namespace OpenShiftScheduler.Controllers
         }
 
         // GET: Shifts
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Index()
         {
             var shiftScheduleDbContext = _context.Shifts.Include(s => s.ShiftType);
@@ -48,6 +49,7 @@ namespace OpenShiftScheduler.Controllers
         }
 
         // GET: Shifts/Create
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             ViewData["ShiftTypeId"] = new SelectList(_context.ShiftTypes, "ShiftTypeId", "Name");
@@ -59,6 +61,7 @@ namespace OpenShiftScheduler.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create([Bind("ShiftId,ShiftTypeId,ShiftDate")] Shift shift)
         {
             if (ModelState.IsValid)
@@ -72,6 +75,7 @@ namespace OpenShiftScheduler.Controllers
         }
 
         // GET: Shifts/Edit/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -93,6 +97,7 @@ namespace OpenShiftScheduler.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int id, [Bind("ShiftId,ShiftTypeId,ShiftDate")] Shift shift)
         {
             if (id != shift.ShiftId)
@@ -125,6 +130,7 @@ namespace OpenShiftScheduler.Controllers
         }
 
         // GET: Shifts/Delete/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -146,6 +152,7 @@ namespace OpenShiftScheduler.Controllers
         // POST: Shifts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var shift = await _context.Shifts.FindAsync(id);
@@ -160,6 +167,7 @@ namespace OpenShiftScheduler.Controllers
         }
 
         // GET: Shifts/AutoCreate
+        [Authorize(Roles = "Administrator")]
         public IActionResult AutoCreate()
         {
             return View();
@@ -168,6 +176,7 @@ namespace OpenShiftScheduler.Controllers
         // POST: Shifts/AutoCreate/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> AutoCreate([Bind("StartDate,EndDate")] AutoInitializeParamsViewModel autoInitParams)
         {
             if (ModelState.IsValid)
@@ -249,6 +258,7 @@ namespace OpenShiftScheduler.Controllers
         }
 
         // GET: Shifts/Display
+        [Authorize(Roles = "Administrator, GuestUser")]
         public IActionResult Display()
         {
             ShiftsPrintViewModel vm = new ShiftsPrintViewModel { StartDate = DateTime.Now, EndDate = DateTime.Now.AddDays(1) };
@@ -257,6 +267,7 @@ namespace OpenShiftScheduler.Controllers
 
         // Post: Shifts/Display
         [HttpPost]
+        [Authorize(Roles = "Administrator, GuestUser")]
         public async Task<IActionResult> Display(ShiftsPrintViewModel vm)
         {
             if (ModelState.IsValid)

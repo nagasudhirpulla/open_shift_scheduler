@@ -11,7 +11,7 @@ using OpenShiftScheduler.Models.AppModels;
 
 namespace OpenShiftScheduler.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Administrator")]
     public class ShiftGroupsController : Controller
     {
         private readonly ShiftScheduleDbContext _context;

@@ -13,7 +13,7 @@ namespace OpenShiftScheduler.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Administrator")]
     public class ShiftGroupsApiController : ControllerBase
     {
         private readonly ShiftScheduleDbContext _context;
