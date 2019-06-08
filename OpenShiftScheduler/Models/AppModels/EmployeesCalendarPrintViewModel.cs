@@ -16,5 +16,8 @@ namespace OpenShiftScheduler.Models.AppModels
 
         // the shift participations for a date will in the same order as the shift types array
         public Dictionary<String, List<string>> EmployeeShifts { get; set; }
+
+        // shift type count summary of employees
+        public Dictionary<string, Dictionary<string, int>> EmployeeShiftSummaries { get; set; }
     }
 }

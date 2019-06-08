@@ -14,28 +14,63 @@
 
     @if (Model.EmployeeShifts != null)
     {
-        <table class="table">
-            <tr>
-                <th>Name</th>
-                @for (DateTime dt = Model.StartDate; dt <= Model.EndDate; dt = dt.AddDays(1))
-                {
-                    <th>@dt.ToString("dd-MMM ddd")</th>
-                }
-            </tr>
-            @foreach (KeyValuePair<string, List<string>> emp_shift_types in Model.EmployeeShifts)
-            {
+        <table id="calendar_table" class="display table table-bordered table-hover">
+            <thead>
                 <tr>
-                    <td>
-                        @emp_shift_types.Key
-                    </td>
-                    @foreach (string emp_shift_type in emp_shift_types.Value)
+                    <td>Name</td>
+                    @for (DateTime dt = Model.StartDate; dt <= Model.EndDate; dt = dt.AddDays(1))
                     {
-                        <td>
-                            @emp_shift_type
-                        </td>
+                        <td>@dt.ToString("dd-MMM ddd")</td>
+                    }
+                    @*print shifts types*@
+                    @foreach (KeyValuePair<string, int> emp_shift_summary in Model.EmployeeShiftSummaries.First().Value)
+                    {
+                        <td>@emp_shift_summary.Key</td>
                     }
                 </tr>
-            }
+            </thead>
+            <tbody>
+                @foreach (KeyValuePair<string, List<string>> emp_shift_types in Model.EmployeeShifts)
+                {
+                    <tr>
+                        <td>@emp_shift_types.Key</td>
+                        @foreach (string emp_shift_type in emp_shift_types.Value)
+                        {
+                            <td>
+                                @emp_shift_type
+                            </td>
+                        }
+                        @*print number of shifts of each shift type*@
+                        @foreach (KeyValuePair<string, int> emp_shift_summary in Model.EmployeeShiftSummaries[emp_shift_types.Key])
+                        {
+                            <td>
+                                @emp_shift_summary.Value
+                            </td>
+                        }
+                    </tr>
+                }
+
+            </tbody>
         </table>
     }
 </form>
+
+@section Scripts{
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/fc-3.2.5/fh-3.1.4/r-2.2.2/datatables.min.css" />
+
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/fc-3.2.5/fh-3.1.4/r-2.2.2/datatables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#calendar_table').DataTable({
+                fixedColumns: true,
+                fixedHeader: true,
+                scrollX: true,
+                columnDefs: [{
+                    targets: [0],
+                    orderData: [0]
+                }]
+            });
+        });
+    </script>
+}

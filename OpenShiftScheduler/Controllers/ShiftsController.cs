@@ -351,12 +351,20 @@ namespace OpenShiftScheduler.Controllers
 
                 // initiaize the EmployeeShifts in view model
                 vm.EmployeeShifts = new Dictionary<String, List<string>>();
+                vm.EmployeeShiftSummaries = new Dictionary<string, Dictionary<string, int>>();
                 foreach (string employeeName in employeeNames)
                 {
                     vm.EmployeeShifts.Add(employeeName, new List<string>());
                     for (DateTime dt = vm.StartDate; dt <= vm.EndDate; dt = dt.AddDays(1))
                     {
                         vm.EmployeeShifts[employeeName].Add("");
+                    }
+
+                    // initialize the shift counts summary for each employee
+                    vm.EmployeeShiftSummaries.Add(employeeName, new Dictionary<string, int>());
+                    foreach (ShiftType shiftType in shiftTypes)
+                    {
+                        vm.EmployeeShiftSummaries[employeeName].Add(shiftType.Name, 0);
                     }
                 }
 
@@ -400,6 +408,9 @@ namespace OpenShiftScheduler.Controllers
 
                     // set the employeeShift value
                     vm.EmployeeShifts[employeeName][dateIndex] = shiftTypeName;
+
+                    // increment the number of shifts in summary
+                    vm.EmployeeShiftSummaries[employeeName][shiftTypeName] += 1;
                 }
             }
             return View(vm);
