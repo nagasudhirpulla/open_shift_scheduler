@@ -184,10 +184,10 @@ class ShiftsTable extends Component {
             let shiftDate = new Date(dateShifts[0]['shiftDate']);
             const matrixRow =
                 <div className={classNames('row')} key={'row_' + dateIter}>
-                    <div className={classNames('shift_date_display')} key={'date_display_' + dateIter} style={{ width: '5%' }}>
-                        <span>{dateToDisplayDate(shiftDate)}</span>
+                    <div className={classNames('shift_date_display', 'col-md-auto', 'col-sm-12')} key={'date_display_' + dateIter}>
+                        <span className={classNames('h6','font-weight-bold')}>{dateToDisplayDate(shiftDate)}</span>
                     </div>
-                    <div style={{ width: '95%' }} className={classNames('col')}>
+                    <div className={classNames('col')}>
                         <div className={classNames('row')}>
                             {
                                 dateShifts.map((shiftObj, shiftInd) =>
@@ -215,12 +215,12 @@ class ShiftsTable extends Component {
                 {/* <span>{JSON.stringify(groupedShifts)}</span> */}
                 {/* <span>{JSON.stringify(onDashBoardFetchClick())}</span> */}
                 <div className={classNames('row')}>
-                    <div className={classNames('col-md-12', 'dashboard_bar')}>
-                        <label>From Date - </label>
+                    <div className={classNames('col-md-12', 'dashboard_bar','d-flex','flex-sm-row','flex-column','justify-content-center','child_hor_space')}>
+                        <label className={classNames('h6')}>From Date - </label>
                         <input type='date' ref={this.startDateInput} />
-                        <label>To Date - </label>
+                        <label className={classNames('h6')}>To Date - </label>
                         <input type='date' ref={this.endDateInput} />
-                        <button onClick={this.loadShifts}>Load Shifts</button>
+                        <button className={classNames('btn','btn-outline-primary','btn-sm')} onClick={this.loadShifts}>Load Shifts</button>
                     </div>
                 </div>
                 {shiftMatrixRows}

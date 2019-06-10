@@ -27,22 +27,22 @@ class ShiftUICell extends Component {
         let props = deepmerge(essentialProps.shifts_ui_cell, this.state.props);
         //console.log(props);
         return (
-            <div className={classNames('shift_cell', 'col')} style={{ backgroundColor: props.shift_type.colorString, border: '1px dashed black', width: props.col_size + "%" }}>
-                <span className={classNames('shift_cell_type_name')}>{props.shift_type.name}</span>
+            <div className={classNames('shift_cell', 'col-md-auto', 'd-flex', 'align-items-stretch', 'flex-column')} style={{ backgroundColor: props.shift_type.colorString, border: '1px dashed #aaa' }}>
+                <h6 className={classNames('shift_cell_type_name', 'd-flex', 'flex-row-reverse', 'small')}>{props.shift_type.name}</h6>
                 <div>
                     {props.shift.shiftParticipations != null &&
                         props.shift.shiftParticipations.map((participationobj, ind) =>
-                            <div key={'participation_display_' + ind} className={classNames('part_disp_row')}>
-                                <span>{props.employees_dict[participationobj.employeeId][0]['name']}</span>
-                                <button className={classNames('btn', 'part_del_btn')} onClick={() => props.removeShiftParticipation(participationobj)}>Remove</button>
+                            <div key={'participation_display_' + ind} className={classNames('part_disp_row', 'm-1')}>
+                                <span className={classNames('h6', 'font-weight-bold')}>{props.employees_dict[participationobj.employeeId][0]['name']}</span>
+                                <button className={classNames('btn', 'btn-outline-danger', 'btn-sm', 'part_del_btn')} onClick={() => props.removeShiftParticipation(participationobj)}><i class="fa fa-trash-o"></i></button>
                             </div>
                         )
                     }
                 </div>
-                <div className={classNames('btn', 'cell_btns_div')}>
-                    <button onClick={() => props.createShiftParticipation(props.shift)} className={classNames('btn', 'part_add_btn')} >+Employee</button>
-                    <button onClick={() => props.createShiftParticipationFromGroup(props.shift)} className={classNames('btn', 'grp_add_btn')} >+Shift Group</button>
-                    <button onClick={() => props.removeAllShiftParticipations(props.shift)} className={classNames('btn', 'rem_all_part_btn')} >-Remove All</button>
+                <div className={classNames('cell_btns_div', 'd-flex', 'flex-sm-row', 'flex-column', 'mt-auto')}>
+                    <button onClick={() => props.createShiftParticipation(props.shift)} className={classNames('btn', 'btn-sm', 'btn-outline-success', 'part_add_btn', 'm-1')} ><span className={classNames('h6', 'small')}>+Employee</span></button>
+                    <button onClick={() => props.createShiftParticipationFromGroup(props.shift)} className={classNames('btn', 'btn-sm', 'btn-outline-success', 'grp_add_btn', 'm-1')} ><span className={classNames('h6', 'small')}>+Shift Group</span></button>
+                    <button onClick={() => props.removeAllShiftParticipations(props.shift)} className={classNames('btn', 'btn-sm', 'btn-outline-danger', 'rem_all_part_btn', 'm-1')} ><span className={classNames('h6', 'small')}>-Remove All</span></button>
                 </div>
                 {/* <div>{JSON.stringify(props)}</div> */}
             </div>

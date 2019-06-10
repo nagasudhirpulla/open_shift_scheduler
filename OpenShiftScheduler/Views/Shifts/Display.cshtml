@@ -14,36 +14,58 @@
 
     @if (Model.ShiftTypes != null && Model.ShiftParticipations != null)
     {
-        <table class="table">
-            <tr>
-                <th>Date</th>
-                @foreach (string sType in Model.ShiftTypes)
-                {
-                    <th>@sType</th>
-                }
-            </tr>
-            @foreach (KeyValuePair<DateTime, List<List<string>>> day_parts in Model.ShiftParticipations)
-            {
+        <table id="dis_table" class="table table-striped table-bordered table-hover" style="width:100%">
+            <thead>
                 <tr>
-                    <td>
-                        @day_parts.Key.ToString("dd-MMM-yy")
-                    </td>
-                    @foreach (List<string> day_shift_parts in day_parts.Value)
+                    <th>Date</th>
+                    @foreach (string sType in Model.ShiftTypes)
                     {
-                        <td>
-                            <div>
-                                @foreach (string day_shift_part in day_shift_parts)
-                                {
-                                    @day_shift_part
-                                    <br />
-                                }
-                            </div>
-                        </td>
+                        <th>@sType</th>
                     }
                 </tr>
-            }
+            </thead>
+            <tbody>
+                @foreach (KeyValuePair<DateTime, List<List<string>>> day_parts in Model.ShiftParticipations)
+                {
+                    <tr>
+                        <td>
+                            @day_parts.Key.ToString("dd-MMM-yy")
+                        </td>
+                        @foreach (List<string> day_shift_parts in day_parts.Value)
+                        {
+                            <td>
+                                <div>
+                                    @foreach (string day_shift_part in day_shift_parts)
+                                    {
+                                        @day_shift_part
+                                        <br />
+                                    }
+                                </div>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
         </table>
     }
 
 </form>
 
+@section Scripts{
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/fc-3.2.5/fh-3.1.4/r-2.2.2/datatables.min.css" />
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/fc-3.2.5/fh-3.1.4/r-2.2.2/datatables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#dis_table').DataTable({
+                fixedColumns: true,
+                scrollX: true,
+                columnDefs: [{
+                    targets: [0],
+                    orderData: [0]
+                }],
+                scrollCollapse: true,
+                paging: false
+            });
+        });
+    </script>
+}

@@ -1,59 +1,16 @@
-.shift_cell_type_name {
-    font-size: small;
-    float: right;
-}
-
-.part_add_btn {
-    font-size: x-small;
-    margin-right:12px;
-    background: none !important;
+.part_add_btn, .grp_add_btn, .rem_all_part_btn {
     border: none;
     padding: 0 !important;
-    /*optional*/
-    cursor: pointer;
-}
-
-.grp_add_btn {
-    font-size: x-small;
-    margin-right: 12px;
-    background: none !important;
-    border: none;
-    padding: 0 !important;
-    /*optional*/
-    cursor: pointer;
-}
-
-.rem_all_part_btn {
-    font-size: x-small;
-    margin-right: 12px;
-    background: none !important;
-    border: none;
-    padding: 0 !important;
-    color:red;
-    /*optional*/
-    cursor: pointer;
-}
-
-.cell_btns_div {
-    position: absolute;
-    bottom: 0;
+    /*border is optional*/
 }
 
 .part_del_btn {
-    background: none !important;
     border: none;
-    padding-left: 8px !important;
-    padding-right: 8px !important;
-    padding-top: 0px !important;
-    padding-bottom: 0px !important;
-    /*optional*/
-    color: #ff0000;
-    cursor: pointer;
-    font-size: xx-small;
 }
 
-.part_disp_row {
-    width: 100%;
+.shift_date_display {
+    margin: 0;
+    padding: 2px;
 }
 
 .shift_cell {
