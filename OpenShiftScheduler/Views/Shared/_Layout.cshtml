@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - OpenShiftScheduler</title>
+    <title>@ViewData["Title"]</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css" />
@@ -32,7 +32,7 @@
                         Shifts
                     </a>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <a class="dropdown-item" asp-area="" asp-controller="Shifts" asp-action="Display">View</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="Shifts" asp-action="Roaster">Roaster</a>
                         <a class="dropdown-item" asp-area="" asp-controller="Shifts" asp-action="EmployeesCalendar">Calendar</a>
                         <a class="dropdown-item" asp-area="" asp-controller="Shifts" asp-action="Index">Edit</a>
                     </div>

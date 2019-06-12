@@ -257,18 +257,21 @@ namespace OpenShiftScheduler.Controllers
             return View();
         }
 
-        // GET: Shifts/Display
+        // GET: Shifts/Roaster
         [Authorize(Roles = "Administrator, GuestUser")]
-        public IActionResult Display()
+        public IActionResult Roaster()
         {
-            ShiftsPrintViewModel vm = new ShiftsPrintViewModel { StartDate = DateTime.Now, EndDate = DateTime.Now.AddDays(1) };
+            DateTime dt = DateTime.Now;
+            DateTime monthStart = new DateTime(dt.Year, dt.Month, 1);
+            DateTime monthEnd = monthStart.AddMonths(1).AddDays(-1);
+            ShiftsPrintViewModel vm = new ShiftsPrintViewModel { StartDate = monthStart, EndDate = monthEnd };
             return View(vm);
         }
 
-        // Post: Shifts/Display
+        // Post: Shifts/Roaster
         [HttpPost]
         [Authorize(Roles = "Administrator, GuestUser")]
-        public async Task<IActionResult> Display(ShiftsPrintViewModel vm)
+        public async Task<IActionResult> Roaster(ShiftsPrintViewModel vm)
         {
             if (ModelState.IsValid)
             {
@@ -325,7 +328,10 @@ namespace OpenShiftScheduler.Controllers
         // GET: Shifts/EmployeesCalendar
         public IActionResult EmployeesCalendar()
         {
-            EmployeesCalendarPrintViewModel vm = new EmployeesCalendarPrintViewModel { StartDate = DateTime.Now, EndDate = DateTime.Now.AddDays(1) };
+            DateTime dt = DateTime.Now;
+            DateTime monthStart = new DateTime(dt.Year, dt.Month, 1);
+            DateTime monthEnd = monthStart.AddMonths(1).AddDays(-1);
+            EmployeesCalendarPrintViewModel vm = new EmployeesCalendarPrintViewModel { StartDate = monthStart, EndDate = monthEnd };
             return View(vm);
         }
 
