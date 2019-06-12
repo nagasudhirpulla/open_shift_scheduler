@@ -26,5 +26,7 @@ namespace OpenShiftScheduler.Models.AppModels
         public DateTime ShiftDate { get; set; }
 
         public IList<ShiftParticipation> ShiftParticipations { get; set; }
+
+        public string Comments { get; set; }
     }
 }

@@ -13,6 +13,11 @@
     <None Remove="wwwroot\js\shifts_ui_app\actions\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Migrations\20190612172406_add_comments.cs" />
+    <Compile Remove="Migrations\20190612172406_add_comments.Designer.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore" Version="3.0.9" />
