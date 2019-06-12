@@ -16,7 +16,8 @@ export default {
             "shiftType": null,
             "shiftTypeId": 0,
             "shiftDate": null,
-            "shiftParticipations": []
+            "shiftParticipations": [],
+            "comments":""
         },
         shift_type: {
             "shiftTypeId": 1,
