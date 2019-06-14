@@ -1,5 +1,6 @@
 import initialState from './initialState';
 import * as types from '../actions/actionTypes';
+import { UPDATE_SHIFTS_UI_SHIFT_COMMENTS } from '../actions/actionTypes';
 
 export default function shiftsUIReducer(state = initialState.shifts_ui, action) {
     switch (action.type) {
@@ -185,6 +186,36 @@ export default function shiftsUIReducer(state = initialState.shifts_ui, action) 
             }
             else {
                 console.log('Could not find shift participation to delete in application state');
+                return state;
+            }
+        case UPDATE_SHIFTS_UI_SHIFT_COMMENTS:
+            // find the relavent shift object to update the comments
+            shift = action.shift;
+            // console.log(shift);
+            shiftInd = -1;
+            for (let shiftIter = 0; (shiftIter < state.shifts.length) && (shiftInd == -1); shiftIter++) {
+                //console.log(state.shifts[shiftIter].shiftId);
+                if (state.shifts[shiftIter].shiftId == shift.shiftId) {
+                    shiftInd = shiftIter;
+                }
+            }
+            if (shiftInd != -1) {
+                newState = {
+                    ...state,
+                    shifts: [
+                        ...state.shifts.slice(0, shiftInd),
+                        {
+                            ...state.shifts[shiftInd],
+                            "comments": (shift.comments == undefined || shift.comments == null) ? "" : shift.comments
+                        },
+                        ...state.shifts.slice(shiftInd + 1)
+                    ]
+                };
+                // console.log(newState);
+                return newState;
+            }
+            else {
+                console.log('Could not find shift to update the comments');
                 return state;
             }
         default:

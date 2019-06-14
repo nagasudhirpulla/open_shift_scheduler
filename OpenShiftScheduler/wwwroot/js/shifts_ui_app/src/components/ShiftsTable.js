@@ -9,11 +9,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './ShiftsTable.css';
 import classNames from 'classnames';
-import { updateShiftsUIData, updateShiftsInUI, updateShiftTypesInUI, updateEmployeesInUI, createShiftParticipation, createShiftParticipationFromGroup, removeShiftParticipation, removeShift } from '../actions/shiftsTableActions';
+import { updateShiftsUIData, updateShiftsInUI, updateShiftTypesInUI, updateEmployeesInUI, createShiftParticipation, createShiftParticipationFromGroup, removeShiftParticipation, removeShift, updateShiftComments } from '../actions/shiftsTableActions';
 import essentialProps from '../reducers/essentialProps';
 import deepmerge from 'deepmerge';
 import { groupObjBy } from '../utils/objUtils'
-import { dateToKeyString, dateToDisplayDate } from '../utils/timeUtils';
+import { dateToKeyString, dateToDisplayDate, dateToDayOfWeek } from '../utils/timeUtils';
 import ShiftUICell from './ShiftUICell';
 import PopPop from 'react-poppop';
 
@@ -27,6 +27,7 @@ class ShiftsTable extends Component {
         this.createShiftParticipationFromGroup = this.createShiftParticipationFromGroup.bind(this);
         this.removeShiftParticipation = this.removeShiftParticipation.bind(this);
         this.removeAllShiftParticipations = this.removeAllShiftParticipations.bind(this);
+        this.editShiftComments = this.editShiftComments.bind(this);
         this.onEmpSelForPartClick = this.onEmpSelForPartClick.bind(this);
         this.onShiftGroupSelForPartClick = this.onShiftGroupSelForPartClick.bind(this);
 
@@ -125,6 +126,18 @@ class ShiftsTable extends Component {
         }
     }
 
+    editShiftComments = (shift) => {
+        let baseAddr = this.state.props.server_base_addr;
+        if (baseAddr == undefined) {
+            baseAddr = essentialProps.shifts_ui.server_base_addr;
+        }
+        var existingComments = (shift.comments == undefined || shift.comments == null) ? "" : shift.comments;
+        var updatedComments = prompt("Please edit comments", existingComments);
+        if (updatedComments != null) {
+            this.state.props.updateShiftComments(baseAddr, { ...shift, "comments": updatedComments });
+        }
+    }
+
     componentWillReceiveProps(nextProps) {
         this.setState({ props: nextProps });
     }
@@ -185,7 +198,8 @@ class ShiftsTable extends Component {
             const matrixRow =
                 <div className={classNames('row')} key={'row_' + dateIter}>
                     <div className={classNames('shift_date_display', 'col-md-auto', 'col-sm-12')} key={'date_display_' + dateIter}>
-                        <span className={classNames('h6','font-weight-bold')}>{dateToDisplayDate(shiftDate)}</span>
+                        <span className={classNames('h6')}>{dateToDisplayDate(shiftDate)}</span><br />
+                        <span className={classNames('h6')}>{dateToDayOfWeek(shiftDate)}</span>
                     </div>
                     <div className={classNames('col')}>
                         <div className={classNames('row')}>
@@ -201,6 +215,7 @@ class ShiftsTable extends Component {
                                         createShiftParticipationFromGroup={this.createShiftParticipationFromGroup}
                                         removeShiftParticipation={this.removeShiftParticipation}
                                         removeAllShiftParticipations={this.removeAllShiftParticipations}
+                                        editShiftComments={this.editShiftComments}
                                     />
                                 )
                             }
@@ -209,21 +224,47 @@ class ShiftsTable extends Component {
                 </div>;
             shiftMatrixRows.push(matrixRow);
         }
+        const commentsList =
+            <div className={classNames('row')}>
+                <table className={classNames('table', 'table-bordered', 'table-striped', 'table-hover')}>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Shift</th>
+                            <th>Comments</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            props.shifts.map((shiftObj, shiftInd) =>
+                                (shiftObj.comments != null && shiftObj.comments != "") ? (<tr key={"table_comment" + shiftInd} >
+                                    <td>{`${dateToDisplayDate(new Date(shiftObj.shiftDate))}, ${dateToDayOfWeek(new Date(shiftObj.shiftDate))}`}</td>
+                                    <td>{groupedShiftTypes[shiftObj.shiftTypeId][0].name}</td>
+                                    <td>{shiftObj.comments}</td>
+                                    <td><button className={classNames('btn', 'btn-outline', 'btn-sm', 'shift_comm_btn')} onClick={() => this.editShiftComments(shiftObj)}><i class={"fa fa-commenting-o"}></i></button></td>
+                                </tr>) : ""
+                            )
+                        }
+                    </tbody>
+                </table>
+            </div>;
 
         return (
             <div className={classNames({ 'shifts_ui_table': true })}>
                 {/* <span>{JSON.stringify(groupedShifts)}</span> */}
                 {/* <span>{JSON.stringify(onDashBoardFetchClick())}</span> */}
                 <div className={classNames('row')}>
-                    <div className={classNames('col-md-12', 'dashboard_bar','d-flex','flex-sm-row','flex-column','justify-content-center','child_hor_space')}>
+                    <div className={classNames('col-md-12', 'dashboard_bar', 'd-flex', 'flex-sm-row', 'flex-column', 'justify-content-center', 'child_hor_space')}>
                         <label className={classNames('h6')}>From Date - </label>
                         <input type='date' ref={this.startDateInput} />
                         <label className={classNames('h6')}>To Date - </label>
                         <input type='date' ref={this.endDateInput} />
-                        <button className={classNames('btn','btn-outline-primary','btn-sm')} onClick={this.loadShifts}>Load Shifts</button>
+                        <button className={classNames('btn', 'btn-outline-primary', 'btn-sm')} onClick={this.loadShifts}>Load Shifts</button>
                     </div>
                 </div>
                 {shiftMatrixRows}
+                {commentsList}
                 <PopPop position="centerCenter"
                     open={modalShow}
                     closeBtn={true}
@@ -292,6 +333,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         removeShift: (baseAddr, shift) => {
             dispatch(removeShift(baseAddr, shift));
+        },
+        updateShiftComments: (baseAddr, shift) => {
+            dispatch(updateShiftComments(baseAddr, shift));
         }
     };
 };

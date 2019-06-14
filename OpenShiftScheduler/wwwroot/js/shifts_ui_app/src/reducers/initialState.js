@@ -10,6 +10,7 @@ export default {
                 "shiftType": null,
                 "shiftTypeId": 2,
                 "shiftDate": "2019-04-15T00:00:00",
+                "comments": "abc",
                 "shiftParticipations": [
                     {
                         "shiftParticipationId": 1,
@@ -24,7 +25,8 @@ export default {
                 "shiftType": null,
                 "shiftTypeId": 3,
                 "shiftDate": "2019-04-15T00:00:00",
-                "shiftParticipations": []
+                "shiftParticipations": [],
+                "comments": "def"
             }
         ],
         employees: [

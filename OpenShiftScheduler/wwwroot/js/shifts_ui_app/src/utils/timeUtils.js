@@ -10,8 +10,14 @@ export function dateToKeyString(dateObj) {
 };
 
 export function dateToDisplayDate(dateObj) {
+    //var dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     return ensureTwoDigits(dateObj.getDate()) + "-" + monthNames[dateObj.getMonth()] + "-" + dateObj.getFullYear();
+};
+
+export function dateToDayOfWeek(dateObj) {
+    var dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    return dayNames[dateObj.getDay()];
 };
 
 export function dateToApiStr(dateObj) {

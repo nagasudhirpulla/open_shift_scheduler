@@ -20,5 +20,8 @@ namespace OpenShiftScheduler.Models.AppModels
 
         // the shift participations for a date will in the same order as the shift types array
         public Dictionary<DateTime, List<List<string>>> ShiftParticipations { get; set; }
+
+        // Shift Comments
+        public List<Tuple<DateTime, string, string>> ShiftComments { get; set; }
     }
 }

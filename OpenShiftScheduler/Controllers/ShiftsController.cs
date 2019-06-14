@@ -321,6 +321,29 @@ namespace OpenShiftScheduler.Controllers
                     }
                     vm.ShiftParticipations[shiftPart.Shift.ShiftDate][shiftTypeIndex].Add(shiftPart.Employee.Name);
                 }
+
+                // get all the shift objects for comments
+                List<Shift> shifts = await _context.Shifts.Where(s => s.ShiftDate >= vm.StartDate && s.ShiftDate <= vm.EndDate).OrderBy(s => s.ShiftDate).ToListAsync();
+
+                // assign the fetched shift comments to the vm
+                vm.ShiftComments = new List<Tuple<DateTime, string, string>>();
+                foreach (Shift shift in shifts)
+                {
+                    if (shift.Comments != null && shift.Comments != "")
+                    {
+                        DateTime shiftDate = shift.ShiftDate;
+                        int shiftTypeIndex = -1;
+                        try
+                        {
+                            shiftTypeIndex = shiftTypeIds.FindIndex(sTId => sTId == shift.ShiftTypeId);
+                        }
+                        catch (Exception)
+                        {
+                            continue;
+                        }
+                        vm.ShiftComments.Add(new Tuple<DateTime, string, string>(shift.ShiftDate, shiftTypes[shiftTypeIndex].Name, shift.Comments));
+                    }
+                }
             }
             return View(vm);
         }

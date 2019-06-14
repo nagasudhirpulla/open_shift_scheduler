@@ -28,7 +28,10 @@ class ShiftUICell extends Component {
         //console.log(props);
         return (
             <div className={classNames('shift_cell', 'col-md-auto', 'd-flex', 'align-items-stretch', 'flex-column')} style={{ backgroundColor: props.shift_type.colorString, border: '1px dashed #aaa' }}>
-                <h6 className={classNames('shift_cell_type_name', 'd-flex', 'flex-row-reverse', 'small')}>{props.shift_type.name}</h6>
+                <div className={classNames('d-flex', 'flex-row-reverse')}>
+                    <h6 classNames={classNames('shift_cell_type_name', 'small')}>{props.shift_type.name}</h6>
+                    <button className={classNames('btn', 'btn-outline', 'btn-sm', 'shift_comm_btn')} onClick={() => props.editShiftComments(props.shift)}><i class={(props.shift.comments != "" && props.shift.comments != null) ? "fa fa-commenting-o" : "fa fa-comment-o"}></i></button>
+                </div>
                 <div>
                     {props.shift.shiftParticipations != null &&
                         props.shift.shiftParticipations.map((participationobj, ind) =>

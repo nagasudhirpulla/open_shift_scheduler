@@ -1,4 +1,4 @@
-import { getShiftsForUI, createShiftParticipation as addShiftParticipation, addShiftParticipationFromShiftGroup, deleteShiftParticipation, createShift, deleteShift } from '../server_mediators/shifts_ui';
+import { getShiftsForUI, createServerShiftParticipation, addShiftParticipationFromShiftGroup, deleteShiftParticipation, createShift, deleteShift, updateServerShiftComments } from '../server_mediators/shifts_ui';
 import { getEmployees } from '../server_mediators/employee';
 import { getShiftTypes } from '../server_mediators/shift_type';
 import * as types from './actionTypes';
@@ -57,7 +57,7 @@ export function createShiftParticipation(baseAddr, employeeId, shift) {
             // console.log(shiftObj);
             dispatch(createShiftUIShift(shiftObj));
         }
-        const shift_participation = await addShiftParticipation(baseAddr, employeeId, shiftObj);
+        const shift_participation = await createServerShiftParticipation(baseAddr, employeeId, shiftObj);
         // console.log(shift_participation);
         dispatch(addShiftUIShiftParticipation(shift_participation));
     };
@@ -99,6 +99,29 @@ export function removeShift(baseAddr, shift) {
     };
 }
 
+export function updateShiftComments(baseAddr, shift) {
+    return async function (dispatch) {
+        let shiftObj = shift;
+        if (shift.shiftId == null) {
+            shiftObj = await createShift(baseAddr, shift);
+            // console.log(shiftObj);
+            dispatch(createShiftUIShift(shiftObj));
+            if (res.success == undefined || res.success == false) {
+                console.log("unable to create shif at server, recieved undesirable response " + JSON.stringify(res));
+                return;
+            }
+        }
+        const res = await updateServerShiftComments(baseAddr, shiftObj);
+        // console.log(res);
+        if (res.success != undefined && res.success != false) {
+            dispatch(updateShiftUIShiftComments(shiftObj));
+        } else {
+            console.log("On update shift comments action at server, recieved undesirable response " + JSON.stringify(res));
+        }
+    };
+
+}
+
 export function updateShiftsUIShifts(shifts) {
     //console.log(dashboardCell);
     return { type: types.UPDATE_SHIFTS_UI_SHIFTS, shifts: shifts };
@@ -136,4 +159,9 @@ export function createShiftUIShift(shift) {
 export function removeShiftUIShift(shift) {
     //console.log(dashboardCell);
     return { type: types.DELETE_SHIFTS_UI_SHIFT, shift: shift };
+}
+
+export function updateShiftUIShiftComments(shift) {
+    //console.log(shift);
+    return { type: types.UPDATE_SHIFTS_UI_SHIFT_COMMENTS, shift: shift };
 }

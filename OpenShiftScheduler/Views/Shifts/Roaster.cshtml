@@ -49,6 +49,36 @@
         </table>
     }
 
+    @if (Model.ShiftTypes != null && Model.ShiftComments != null)
+    {
+        <h3>Remarks</h3>
+        <table id="com_table" class="table table-striped table-bordered table-hover" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Shift</th>
+                    <th>Date</th>
+                    <th>Comments</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Tuple<DateTime, string, string> shift_comms in Model.ShiftComments)
+                {
+                    <tr>
+                        <td>
+                            @shift_comms.Item2
+                        </td>
+                        <td>
+                            @shift_comms.Item1.ToString("dd-MMM-yy")
+                        </td>
+                        <td>
+                            @shift_comms.Item3
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
 </form>
 
 @section Scripts{
@@ -70,6 +100,17 @@
                 columnDefs: [{
                     targets: [0],
                     orderData: [0]
+                }],
+                scrollCollapse: true,
+                paging: false,
+                dom: 'Bfrtip',
+                buttons: ['pdf']
+            });
+            $('#com_table').DataTable({
+                scrollX: true,
+                columnDefs: [{
+                    targets: [1],
+                    orderData: [1]
                 }],
                 scrollCollapse: true,
                 paging: false,

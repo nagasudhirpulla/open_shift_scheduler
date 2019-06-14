@@ -35,5 +35,55 @@ namespace OpenShiftScheduler.Controllers
             return await _context.Shifts.Where(s => s.ShiftDate >= startDate && s.ShiftDate <= endDate).Include(s => s.ShiftParticipations).ToListAsync();
         }
 
+        // PUT: api/ShiftsUI/PutShiftComments/5
+        [HttpPut("PutShiftComments/{id}")]
+        public async Task<IActionResult> PutShiftComments([FromRoute] int id, [FromBody] CommentsEditViewModel shiftComments)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // get the required shift by id
+            Shift shift = await _context.Shifts.FindAsync(id);
+            if (shift == null)
+            {
+                return BadRequest();
+            }
+
+            //edit the comments
+            shift.Comments = shiftComments.Comments;
+
+            // save changes
+            _context.Entry(shift).State = EntityState.Modified;
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ShiftExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        private bool ShiftExists(int id)
+        {
+            return _context.Shifts.Any(e => e.ShiftId == id);
+        }
+
+    }
+
+    public class CommentsEditViewModel
+    {
+        public string Comments { get; set; }
     }
 }
