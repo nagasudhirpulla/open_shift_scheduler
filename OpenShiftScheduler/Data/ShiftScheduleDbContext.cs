@@ -21,6 +21,7 @@ namespace OpenShiftScheduler.Data
         public DbSet<ShiftGroup> ShiftGroups { get; set; }
         public DbSet<Shift> Shifts { get; set; }
         public DbSet<ShiftParticipation> ShiftParticipations { get; set; }
+        public DbSet<ShiftParticipationType> ShiftParticipationTypes { get; set; }
 
         public ShiftScheduleDbContext(DbContextOptions<ShiftScheduleDbContext> options, IConfiguration configuration) : base(options)
         {
@@ -68,6 +69,12 @@ namespace OpenShiftScheduler.Data
             .HasKey(st => st.ShiftTypeId);
             builder.Entity<ShiftType>()
             .HasIndex(st => st.Name)
+            .IsUnique();
+
+            builder.Entity<ShiftParticipationType>()
+            .HasKey(b => b.ShiftParticipationTypeId);
+            builder.Entity<ShiftParticipationType>()
+            .HasIndex(b => b.Name)
             .IsUnique();
 
             builder.Entity<EmployeeShiftSkill>().HasKey(ess => ess.EmployeeShiftSkillId);
