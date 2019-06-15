@@ -86,6 +86,12 @@ namespace OpenShiftScheduler.Data
 
             builder.Entity<ShiftParticipation>().HasKey(sp => sp.ShiftParticipationId);
             builder.Entity<ShiftParticipation>().HasIndex(sp => new { sp.ShiftId, sp.EmployeeId }).IsUnique();
+
+            builder.Entity<ShiftParticipation>()
+            .HasOne(sp => sp.ShiftParticipationType)
+            .WithMany()
+            .HasForeignKey(sp => sp.ShiftParticipationTypeId)
+            .OnDelete(DeleteBehavior.Restrict);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
