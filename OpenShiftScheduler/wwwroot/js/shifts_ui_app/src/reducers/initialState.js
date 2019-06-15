@@ -14,6 +14,7 @@ export default {
                 "shiftParticipations": [
                     {
                         "shiftParticipationId": 1,
+                        "shiftParticipationTypeId": null,
                         "employee": null,
                         "employeeId": 1,
                         "shiftId": 3
@@ -172,6 +173,28 @@ export default {
                 "shiftSkillId": 3,
                 "name": "RTSD",
                 "employeeShiftSkills": null
+            }
+        ],
+        shift_participation_types: [
+            {
+                "shiftParticipationTypeId": 1,
+                "name": "Normal",
+                "isAbsence": false
+            },
+            {
+                "shiftParticipationTypeId": 2,
+                "name": "Leave",
+                "isAbsence": true
+            },
+            {
+                "shiftParticipationTypeId": 3,
+                "name": "Training",
+                "isAbsence": true
+            },
+            {
+                "shiftParticipationTypeId": 4,
+                "name": "From General",
+                "isAbsence": false
             }
         ]
     }

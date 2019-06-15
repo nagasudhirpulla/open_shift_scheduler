@@ -218,6 +218,11 @@ export default function shiftsUIReducer(state = initialState.shifts_ui, action) 
                 console.log('Could not find shift to update the comments');
                 return state;
             }
+        case types.UPDATE_SHIFTS_UI_SHIFT_PARTICIPATION_TYPES:
+            return {
+                ...state,
+                shift_participation_types: action.shift_participation_types
+            };
         default:
             return state;
 

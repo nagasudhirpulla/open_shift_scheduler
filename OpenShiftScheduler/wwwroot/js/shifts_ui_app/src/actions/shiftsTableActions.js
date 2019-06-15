@@ -1,6 +1,7 @@
 import { getShiftsForUI, createServerShiftParticipation, addShiftParticipationFromShiftGroup, deleteShiftParticipation, createShift, deleteShift, updateServerShiftComments } from '../server_mediators/shifts_ui';
 import { getEmployees } from '../server_mediators/employee';
 import { getShiftTypes } from '../server_mediators/shift_type';
+import { getShiftParticipationTypes } from '../server_mediators/shift_participation_type';
 import * as types from './actionTypes';
 
 export function updateShiftsInUI(baseAddr, start_date, end_date) {
@@ -41,6 +42,11 @@ export function updateShiftsUIData(baseAddr, start_date, end_date) {
         const shift_types = await getShiftTypes(baseAddr);
         // console.log(shift_types);
         dispatch(updateShiftsUIShiftTypes(shift_types));
+
+        // update shift participation types
+        const shift_participation_types = await getShiftParticipationTypes(baseAddr);
+        // console.log(shift_part_types);
+        dispatch(updateShiftsUIShiftParticipationTypes(shift_participation_types));
 
         // update shifts
         const shifts = await getShiftsForUI(baseAddr, start_date, end_date);
@@ -164,4 +170,8 @@ export function removeShiftUIShift(shift) {
 export function updateShiftUIShiftComments(shift) {
     //console.log(shift);
     return { type: types.UPDATE_SHIFTS_UI_SHIFT_COMMENTS, shift: shift };
+}
+
+export function updateShiftsUIShiftParticipationTypes(shift_participation_types) {
+    return { type: types.UPDATE_SHIFTS_UI_SHIFT_PARTICIPATION_TYPES, shift_participation_types: shift_participation_types };
 }
