@@ -42,6 +42,7 @@ class ShiftsTable extends Component {
         this.startDateInput = React.createRef();
         this.endDateInput = React.createRef();
         this.employeesComboBox = React.createRef();
+        this.participationTypesComboBox = React.createRef();        
         this.shiftGroupsComboBox = React.createRef();
     }
 
@@ -82,8 +83,9 @@ class ShiftsTable extends Component {
             baseAddr = essentialProps.shifts_ui.server_base_addr;
         }
         let employeeId = this.employeesComboBox.current.value;
+        let participationTypeId = this.participationTypesComboBox.current.value;
         // console.log(`The selected employee Id for shift participation is ${employeeId}`);
-        this.state.props.createShiftParticipation(baseAddr, employeeId, this.state.activeShift);
+        this.state.props.createShiftParticipation(baseAddr, employeeId, participationTypeId, this.state.activeShift);
     }
 
     onShiftGroupSelForPartClick = () => {
@@ -279,6 +281,13 @@ class ShiftsTable extends Component {
                             )
                         }
                     </select>
+                    <select ref={this.participationTypesComboBox}>
+                        {
+                            props.shift_participation_types.map((typeObj, typeInd) =>
+                                <option value={typeObj.shiftParticipationTypeId} key={`partTypeSelOpt_${typeInd}`}>{typeObj.name}</option>
+                            )
+                        }
+                    </select>
                     <button onClick={this.onEmpSelForPartClick}>Add Employee</button>
                 </PopPop>
 
@@ -322,8 +331,8 @@ const mapDispatchToProps = (dispatch) => {
         updateShiftsUIData: (baseAddr, start_date, end_date) => {
             dispatch(updateShiftsUIData(baseAddr, start_date, end_date));
         },
-        createShiftParticipation: (baseAddr, employeeId, shift) => {
-            dispatch(createShiftParticipation(baseAddr, employeeId, shift));
+        createShiftParticipation: (baseAddr, employeeId, participationTypeId, shift) => {
+            dispatch(createShiftParticipation(baseAddr, employeeId, participationTypeId, shift));
         },
         removeShiftParticipation: (baseAddr, shiftParticipation) => {
             dispatch(removeShiftParticipation(baseAddr, shiftParticipation));

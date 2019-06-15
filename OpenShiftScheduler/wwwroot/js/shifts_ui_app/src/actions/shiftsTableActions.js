@@ -55,7 +55,7 @@ export function updateShiftsUIData(baseAddr, start_date, end_date) {
     };
 }
 
-export function createShiftParticipation(baseAddr, employeeId, shift) {
+export function createShiftParticipation(baseAddr, employeeId, participationTypeId, shift) {
     return async function (dispatch) {
         let shiftObj = shift;
         if (shift.shiftId == null) {
@@ -63,7 +63,7 @@ export function createShiftParticipation(baseAddr, employeeId, shift) {
             // console.log(shiftObj);
             dispatch(createShiftUIShift(shiftObj));
         }
-        const shift_participation = await createServerShiftParticipation(baseAddr, employeeId, null, shiftObj);
+        const shift_participation = await createServerShiftParticipation(baseAddr, employeeId, participationTypeId, shiftObj);
         // console.log(shift_participation);
         dispatch(addShiftUIShiftParticipation(shift_participation));
     };
