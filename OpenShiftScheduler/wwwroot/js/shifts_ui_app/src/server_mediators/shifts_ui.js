@@ -44,7 +44,7 @@ export async function createShift(baseAddr, shift) {
     }
 }
 
-export async function createServerShiftParticipation(baseAddr, employeeId, shift) {
+export async function createServerShiftParticipation(baseAddr, employeeId, shiftParticipationTypeId, shift) {
     try {
         // console.log("shift object for shift participation creation is " + JSON.stringify(shift));
         if (shift.shiftId == null) {
@@ -61,7 +61,8 @@ export async function createServerShiftParticipation(baseAddr, employeeId, shift
             },
             body: JSON.stringify({
                 "EmployeeId": employeeId,
-                "ShiftId": shift.shiftId
+                "ShiftId": shift.shiftId,
+                "ShiftParticipationTypeId": shiftParticipationTypeId
             })
         });
         // console.log(resp);
@@ -90,7 +91,8 @@ export async function addShiftParticipationFromShiftGroup(baseAddr, shiftGroupId
             },
             body: JSON.stringify({
                 "ShiftGroupId": shiftGroupId,
-                "ShiftId": shift.shiftId
+                "ShiftId": shift.shiftId,
+                "ShiftParticipationTypeId": null
             })
         });
         // console.log(resp);

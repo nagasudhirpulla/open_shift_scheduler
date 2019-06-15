@@ -63,7 +63,7 @@ export function createShiftParticipation(baseAddr, employeeId, shift) {
             // console.log(shiftObj);
             dispatch(createShiftUIShift(shiftObj));
         }
-        const shift_participation = await createServerShiftParticipation(baseAddr, employeeId, shiftObj);
+        const shift_participation = await createServerShiftParticipation(baseAddr, employeeId, null, shiftObj);
         // console.log(shift_participation);
         dispatch(addShiftUIShiftParticipation(shift_participation));
     };
