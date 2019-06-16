@@ -8,7 +8,8 @@ export default {
         employees: [],
         shift_types: [],
         shift_groups: [],
-        shift_skills: []
+        shift_skills: [],
+        shift_participation_types: []
     },
     shifts_ui_cell: {
         shift: {
@@ -17,7 +18,7 @@ export default {
             "shiftTypeId": 0,
             "shiftDate": null,
             "shiftParticipations": [],
-            "comments":""
+            "comments": ""
         },
         shift_type: {
             "shiftTypeId": 1,
@@ -29,7 +30,8 @@ export default {
             "displayColor": "0, 255, 230",
             "colorString": "#00FFE6"
         },
-        'employees_dict':{},
-        col_size: 3
-    }
+        shift_part_types: {}
+    },
+    'employees_dict': {},
+    col_size: 3
 }

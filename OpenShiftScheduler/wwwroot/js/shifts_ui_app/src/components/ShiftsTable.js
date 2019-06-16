@@ -160,6 +160,7 @@ class ShiftsTable extends Component {
 
         // group the shift types by shiftTypeId
         let groupedShiftTypes = groupObjBy(props.shift_types, 'shiftTypeId');
+        let groupedShiftPartTypes = groupObjBy(props.shift_participation_types, 'shiftParticipationTypeId');
 
         /*
          Create a base shift matrix w.r.t date and shift type
@@ -211,6 +212,7 @@ class ShiftsTable extends Component {
                                         key={shiftObj.shiftDate + shiftInd}
                                         shift={shiftObj}
                                         shift_type={groupedShiftTypes[shiftObj.shiftTypeId][0]}
+                                        shift_part_types={groupedShiftPartTypes}
                                         col_size={colSize}
                                         employees_dict={groupedEmployees}
                                         createShiftParticipation={this.createShiftParticipation}

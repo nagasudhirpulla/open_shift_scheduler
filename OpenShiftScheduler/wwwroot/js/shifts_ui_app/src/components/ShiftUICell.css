@@ -16,3 +16,11 @@
 .shift_cell {
     min-height: 150px;
 }
+
+.general_shift_part {
+    color: blue;
+}
+
+.absence_shift_part {
+    text-decoration: line-through;
+}

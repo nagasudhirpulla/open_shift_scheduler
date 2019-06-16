@@ -25,6 +25,18 @@ class ShiftUICell extends Component {
 
     render() {
         let props = deepmerge(essentialProps.shifts_ui_cell, this.state.props);
+        let getPartDecorationClasses = (participationobj) => {
+            let classList = ['h6', 'font-weight-bold'];
+            if (participationobj.shiftParticipationTypeId != null) {
+                if (props.shift_part_types[participationobj.shiftParticipationTypeId][0].isAbsence == true) {
+                    classList.push("absence_shift_part");
+                }
+                if (props.shift_part_types[participationobj.shiftParticipationTypeId][0].name.toLowerCase() == "from general") {
+                    classList.push("general_shift_part");
+                }
+            }
+            return classList;
+        }
         //console.log(props);
         return (
             <div className={classNames('shift_cell', 'col-md-auto', 'd-flex', 'align-items-stretch', 'flex-column')} style={{ backgroundColor: props.shift_type.colorString, border: '1px dashed #aaa' }}>
@@ -36,7 +48,7 @@ class ShiftUICell extends Component {
                     {props.shift.shiftParticipations != null &&
                         props.shift.shiftParticipations.map((participationobj, ind) =>
                             <div key={'participation_display_' + ind} className={classNames('part_disp_row', 'm-1')}>
-                                <span className={classNames('h6', 'font-weight-bold')}>{props.employees_dict[participationobj.employeeId][0]['name']}</span>
+                                <span className={classNames(...getPartDecorationClasses(participationobj))}>{props.employees_dict[participationobj.employeeId][0]['name']}</span>
                                 <button className={classNames('btn', 'btn-outline-danger', 'btn-sm', 'part_del_btn')} onClick={() => props.removeShiftParticipation(participationobj)}><i class="fa fa-trash-o"></i></button>
                             </div>
                         )
