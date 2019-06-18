@@ -1,5 +1,6 @@
 ﻿
 @model OpenShiftScheduler.Models.AppModels.ShiftsPrintViewModel
+@using OpenShiftScheduler.Models.AppModels
 
 @{
     ViewData["Title"] = "Roaster";
@@ -25,19 +26,31 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (KeyValuePair<DateTime, List<List<string>>> day_parts in Model.ShiftParticipations)
+                @foreach (KeyValuePair<DateTime, List<List<Tuple<string, ShiftParticipationType>>>> day_parts in Model.ShiftParticipations)
                 {
                     <tr>
                         <td>
                             @day_parts.Key.ToString("dd-MMM-yy")
                         </td>
-                        @foreach (List<string> day_shift_parts in day_parts.Value)
+                        @foreach (List<Tuple<string, ShiftParticipationType>> day_shift_parts in day_parts.Value)
                         {
                             <td>
                                 <div>
-                                    @foreach (string day_shift_part in day_shift_parts)
+                                    @foreach (Tuple<string, ShiftParticipationType> day_shift_part in day_shift_parts)
                                     {
-                                        @day_shift_part
+                                        List<string> partClasses = new List<string>();
+                                        if (day_shift_part.Item2 != null)
+                                        {
+                                            if (day_shift_part.Item2.IsAbsence == true)
+                                            {
+                                                partClasses.Add("absence_part");
+                                            }
+                                            if (day_shift_part.Item2.Name.ToLower() == "from general")
+                                            {
+                                                partClasses.Add("general_part");
+                                            }
+                                        }
+                                        <span class="@String.Join(" ", partClasses.ToArray())">@day_shift_part.Item1</span>
                                         <br />
                                     }
                                 </div>
@@ -119,4 +132,13 @@
             });
         });
     </script>
+    <style>
+        .absence_part {
+            text-decoration: line-through;
+        }
+
+        .general_part {
+            color: blue;
+        }
+    </style>
 }

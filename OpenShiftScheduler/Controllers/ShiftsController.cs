@@ -285,6 +285,10 @@ namespace OpenShiftScheduler.Controllers
                 List<ShiftType> shiftTypes = await _context.ShiftTypes.OrderBy(st => st.RoasterSequence).ToListAsync();
                 List<int> shiftTypeIds = shiftTypes.Select(st => st.ShiftTypeId).ToList();
 
+                //fetch the shift Participation types
+                List<ShiftParticipationType> shiftPartTypes = await _context.ShiftParticipationTypes.ToListAsync();
+                List<int> shiftPartTypeIds = shiftPartTypes.Select(spt => spt.ShiftParticipationTypeId).ToList();
+
                 // set the view model shift Types
                 vm.ShiftTypes = new List<string>();
                 foreach (ShiftType shiftType in shiftTypes)
@@ -293,13 +297,13 @@ namespace OpenShiftScheduler.Controllers
                 }
 
                 // initiaize the shift participations in view model
-                vm.ShiftParticipations = new Dictionary<DateTime, List<List<string>>>();
+                vm.ShiftParticipations = new Dictionary<DateTime, List<List<Tuple<string, ShiftParticipationType>>>>();
                 for (DateTime dt = vm.StartDate; dt <= vm.EndDate; dt = dt.AddDays(1))
                 {
-                    vm.ShiftParticipations.Add(dt, new List<List<string>>());
+                    vm.ShiftParticipations.Add(dt, new List<List<Tuple<string, ShiftParticipationType>>>());
                     foreach (var sType in shiftTypes)
                     {
-                        vm.ShiftParticipations[dt].Add(new List<string>());
+                        vm.ShiftParticipations[dt].Add(new List<Tuple<string, ShiftParticipationType>>());
                     }
                 }
 
@@ -310,16 +314,23 @@ namespace OpenShiftScheduler.Controllers
                 foreach (ShiftParticipation shiftPart in shiftParticipations)
                 {
                     DateTime shiftDate = shiftPart.Shift.ShiftDate;
+                    ShiftParticipationType participationType = null;
                     int shiftTypeIndex = -1;
+                    int shiftPartTypeIndex = -1;
                     try
                     {
                         shiftTypeIndex = shiftTypeIds.FindIndex(sTId => sTId == shiftPart.Shift.ShiftTypeId);
+                        shiftPartTypeIndex = shiftPartTypeIds.FindIndex(sPTId => sPTId == shiftPart.ShiftParticipationTypeId);
                     }
                     catch (Exception)
                     {
                         continue;
                     }
-                    vm.ShiftParticipations[shiftPart.Shift.ShiftDate][shiftTypeIndex].Add(shiftPart.Employee.Name);
+                    if (shiftPartTypeIndex != -1)
+                    {
+                        participationType = shiftPartTypes[shiftPartTypeIndex];
+                    }
+                    vm.ShiftParticipations[shiftPart.Shift.ShiftDate][shiftTypeIndex].Add(new Tuple<string, ShiftParticipationType>(shiftPart.Employee.Name, participationType));
                 }
 
                 // get all the shift objects for comments
@@ -397,8 +408,11 @@ namespace OpenShiftScheduler.Controllers
                     }
                 }
 
-                // get the shift participations from db
-                List<ShiftParticipation> shiftParticipations = await _context.ShiftParticipations.Include(sp => sp.Shift).Include(sp => sp.Employee).Where(sp => sp.Shift.ShiftDate >= vm.StartDate && sp.Shift.ShiftDate <= vm.EndDate).ToListAsync();
+                //get the shiftParticipationTypes from db
+                List<ShiftParticipationType> shiftParticipationTypes = await _context.ShiftParticipationTypes.ToListAsync();
+                List<int> nonAbsenceShiftPartTypes = shiftParticipationTypes.Where(spt => spt.IsAbsence == true).Select(spt => spt.ShiftParticipationTypeId).ToList();
+                // get the required non absence shift participations from db
+                List<ShiftParticipation> shiftParticipations = await _context.ShiftParticipations.Include(sp => sp.Shift).Include(sp => sp.Employee).Where(sp => (sp.ShiftParticipationTypeId == null || nonAbsenceShiftPartTypes.Any(nasptId => nasptId == sp.ShiftParticipationTypeId)) && sp.Shift.ShiftDate >= vm.StartDate && sp.Shift.ShiftDate <= vm.EndDate).ToListAsync();
 
                 // assign the fetched shift participations to the vm
                 foreach (ShiftParticipation shiftPart in shiftParticipations)
