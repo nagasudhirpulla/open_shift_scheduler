@@ -28,5 +28,7 @@ namespace OpenShiftScheduler.Models.AppModels
 
         public ShiftParticipationType ShiftParticipationType { get; set; }
         public int? ShiftParticipationTypeId { get; set; }
+
+        public int ParticipationSequence { get; set; }
     }
 }

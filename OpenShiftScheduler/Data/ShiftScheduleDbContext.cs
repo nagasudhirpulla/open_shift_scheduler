@@ -92,6 +92,11 @@ namespace OpenShiftScheduler.Data
             .WithMany()
             .HasForeignKey(sp => sp.ShiftParticipationTypeId)
             .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ShiftParticipation>()
+            .Property(b => b.ParticipationSequence)
+            .IsRequired()
+            .HasDefaultValue(0);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
