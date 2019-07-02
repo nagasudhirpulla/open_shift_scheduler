@@ -4,7 +4,7 @@
     /*border is optional*/
 }
 
-.part_del_btn {
+.part_del_btn, .part_up_btn, .part_down_btn {
     border: none;
 }
 

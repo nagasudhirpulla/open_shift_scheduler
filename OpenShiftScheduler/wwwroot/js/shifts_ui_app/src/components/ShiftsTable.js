@@ -9,7 +9,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './ShiftsTable.css';
 import classNames from 'classnames';
-import { updateShiftsUIData, updateShiftsInUI, updateShiftTypesInUI, updateEmployeesInUI, createShiftParticipation, createShiftParticipationFromGroup, removeShiftParticipation, removeShift, updateShiftComments } from '../actions/shiftsTableActions';
+import { updateShiftsUIData, updateShiftsInUI, updateShiftTypesInUI, updateEmployeesInUI, createShiftParticipation, createShiftParticipationFromGroup, removeShiftParticipation, moveShiftParticipation, removeShift, updateShiftComments } from '../actions/shiftsTableActions';
 import essentialProps from '../reducers/essentialProps';
 import deepmerge from 'deepmerge';
 import { groupObjBy } from '../utils/objUtils'
@@ -26,6 +26,7 @@ class ShiftsTable extends Component {
         this.createShiftParticipation = this.createShiftParticipation.bind(this);
         this.createShiftParticipationFromGroup = this.createShiftParticipationFromGroup.bind(this);
         this.removeShiftParticipation = this.removeShiftParticipation.bind(this);
+        this.moveShiftParticipation = this.moveShiftParticipation.bind(this);
         this.removeAllShiftParticipations = this.removeAllShiftParticipations.bind(this);
         this.editShiftComments = this.editShiftComments.bind(this);
         this.onEmpSelForPartClick = this.onEmpSelForPartClick.bind(this);
@@ -128,6 +129,14 @@ class ShiftsTable extends Component {
         }
     }
 
+    moveShiftParticipation = (shiftParticipation, direction) => {
+        let baseAddr = this.state.props.server_base_addr;
+        if (baseAddr == undefined) {
+            baseAddr = essentialProps.shifts_ui.server_base_addr;
+        }
+        this.state.props.moveShiftParticipation(baseAddr, shiftParticipation, direction);
+    }
+
     editShiftComments = (shift) => {
         let baseAddr = this.state.props.server_base_addr;
         if (baseAddr == undefined) {
@@ -218,6 +227,7 @@ class ShiftsTable extends Component {
                                         createShiftParticipation={this.createShiftParticipation}
                                         createShiftParticipationFromGroup={this.createShiftParticipationFromGroup}
                                         removeShiftParticipation={this.removeShiftParticipation}
+                                        moveShiftParticipation={this.moveShiftParticipation}
                                         removeAllShiftParticipations={this.removeAllShiftParticipations}
                                         editShiftComments={this.editShiftComments}
                                     />
@@ -338,6 +348,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         removeShiftParticipation: (baseAddr, shiftParticipation) => {
             dispatch(removeShiftParticipation(baseAddr, shiftParticipation));
+        },
+        moveShiftParticipation: (baseAddr, shiftParticipation, direction) => {
+            dispatch(moveShiftParticipation(baseAddr, shiftParticipation, direction));
         },
         createShiftParticipationFromGroup: (baseAddr, shiftGroupId, shift) => {
             dispatch(createShiftParticipationFromGroup(baseAddr, shiftGroupId, shift));

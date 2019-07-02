@@ -17,7 +17,8 @@ export default {
                         "shiftParticipationTypeId": null,
                         "employee": null,
                         "employeeId": 1,
-                        "shiftId": 3
+                        "shiftId": 3,
+                        "participationSequence": 0
                     }
                 ]
             },

@@ -46,9 +46,11 @@ class ShiftUICell extends Component {
                 </div>
                 <div>
                     {props.shift.shiftParticipations != null &&
-                        props.shift.shiftParticipations.map((participationobj, ind) =>
+                        props.shift.shiftParticipations.sort((a, b) => (a.participationSequence > b.participationSequence) ? 1 : ((b.participationSequence > a.participationSequence) ? -1 : 0)).map((participationobj, ind) =>
                             <div key={'participation_display_' + ind} className={classNames('part_disp_row', 'm-1')}>
-                                <span className={classNames(...getPartDecorationClasses(participationobj))}>{props.employees_dict[participationobj.employeeId][0]['name']}</span>
+                                <button className={classNames('btn', 'btn-outline-info', 'btn-sm', 'part_up_btn')} onClick={() => props.moveShiftParticipation(participationobj, -1)}><i class="fa fa-arrow-circle-o-down"></i></button>
+                                <span className={classNames(...getPartDecorationClasses(participationobj))}>{(participationobj.participationSequence + 1) + ". "}{props.employees_dict[participationobj.employeeId][0]['name']}</span>
+                                <button className={classNames('btn', 'btn-outline-info', 'btn-sm', 'part_down_btn')} onClick={() => props.moveShiftParticipation(participationobj, 1)}><i class="fa fa-arrow-circle-o-up"></i></button>
                                 <button className={classNames('btn', 'btn-outline-danger', 'btn-sm', 'part_del_btn')} onClick={() => props.removeShiftParticipation(participationobj)}><i class="fa fa-trash-o"></i></button>
                             </div>
                         )
