@@ -155,7 +155,7 @@ export async function deleteShift(baseAddr, shift) {
 export async function moveServerShiftParticipation(baseAddr, shiftParticipation, direction) {
     try {
         if (shiftParticipation.shiftParticipationId == null) {
-            return { success: false, message: `could not delete shift participation since id is null` };
+            return { success: false, message: `could not move shift participation since id is null` };
         }
         const resp = await fetch(`${baseAddr}/api/ShiftsUI/MoveShiftParticipation/${shiftParticipation.shiftParticipationId}`, {
             method: 'POST',

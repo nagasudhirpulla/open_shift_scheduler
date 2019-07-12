@@ -2,6 +2,7 @@ import { getShiftsForUI, createServerShiftParticipation, addShiftParticipationFr
 import { getEmployees } from '../server_mediators/employee';
 import { getShiftTypes } from '../server_mediators/shift_type';
 import { getShiftParticipationTypes } from '../server_mediators/shift_participation_type';
+import { updateServerShiftParticipation } from '../server_mediators/shift_participation';
 import * as types from './actionTypes';
 
 export function updateShiftsInUI(baseAddr, start_date, end_date) {
@@ -139,6 +140,24 @@ export function updateShiftComments(baseAddr, shift) {
 
 }
 
+export function updateShiftParticipation(baseAddr, shiftParticipation) {
+    return async function (dispatch) {
+        let shiftPartObj = shiftParticipation;
+        if (shiftParticipation.shiftId == null) {
+            console.log("Cannot update shift participation with no shift id");
+            return;
+        }
+        const res = await updateServerShiftParticipation(baseAddr, shiftPartObj);
+        // console.log(res);
+        if (res.success != undefined && res.success != false) {
+            dispatch(updateShiftUIShiftParticipation(shiftPartObj));
+        } else {
+            console.log("On update shift participation action at server, recieved undesirable response " + JSON.stringify(res));
+        }
+    };
+
+}
+
 export function updateShiftsUIShifts(shifts) {
     //console.log(dashboardCell);
     return { type: types.UPDATE_SHIFTS_UI_SHIFTS, shifts: shifts };
@@ -161,6 +180,11 @@ export function addShiftUIShiftParticipation(shift_participation) {
 export function updateShiftUIShiftParticipations(shift_participations) {
     //console.log(shift_participations);
     return { type: types.UPDATE_SHIFTS_UI_SHIFT_PARTICIPATIONS, shift_participations: shift_participations };
+}
+
+export function updateShiftUIShiftParticipation(shift_participation) {
+    //console.log(shift_participation);
+    return { type: types.UPDATE_SHIFTS_UI_SHIFT_PARTICIPATION, shift_participation: shift_participation };
 }
 
 export function deleteShiftUIShiftParticipation(shift_participation) {

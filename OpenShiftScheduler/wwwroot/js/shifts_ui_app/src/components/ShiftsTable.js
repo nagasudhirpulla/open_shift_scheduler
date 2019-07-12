@@ -9,7 +9,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './ShiftsTable.css';
 import classNames from 'classnames';
-import { updateShiftsUIData, updateShiftsInUI, updateShiftTypesInUI, updateEmployeesInUI, createShiftParticipation, createShiftParticipationFromGroup, removeShiftParticipation, moveShiftParticipation, removeShift, updateShiftComments } from '../actions/shiftsTableActions';
+import { updateShiftsUIData, updateShiftsInUI, updateShiftTypesInUI, updateEmployeesInUI, createShiftParticipation, updateShiftParticipation, createShiftParticipationFromGroup, removeShiftParticipation, moveShiftParticipation, removeShift, updateShiftComments } from '../actions/shiftsTableActions';
 import essentialProps from '../reducers/essentialProps';
 import deepmerge from 'deepmerge';
 import { groupObjBy } from '../utils/objUtils'
@@ -24,6 +24,7 @@ class ShiftsTable extends Component {
         this.setModalShow = this.setModalShow.bind(this);
         this.setShiftGroupModalShow = this.setShiftGroupModalShow.bind(this);
         this.createShiftParticipation = this.createShiftParticipation.bind(this);
+        this.updateShiftParticipation = this.updateShiftParticipation.bind(this);
         this.createShiftParticipationFromGroup = this.createShiftParticipationFromGroup.bind(this);
         this.removeShiftParticipation = this.removeShiftParticipation.bind(this);
         this.moveShiftParticipation = this.moveShiftParticipation.bind(this);
@@ -69,6 +70,11 @@ class ShiftsTable extends Component {
 
     createShiftParticipation = (shift) => {
         this.setState({ activeShift: shift });
+        this.setModalShow(true);
+    }
+
+    updateShiftParticipation = (shiftParticipation) => {
+        this.setState({ activeShift: shiftParticipation });
         this.setModalShow(true);
     }
 
@@ -345,6 +351,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         createShiftParticipation: (baseAddr, employeeId, participationTypeId, shift) => {
             dispatch(createShiftParticipation(baseAddr, employeeId, participationTypeId, shift));
+        },
+        updateShiftParticipation: (baseAddr, shiftParticipation) => {
+            dispatch(updateShiftParticipation(baseAddr, shiftParticipation));
         },
         removeShiftParticipation: (baseAddr, shiftParticipation) => {
             dispatch(removeShiftParticipation(baseAddr, shiftParticipation));
