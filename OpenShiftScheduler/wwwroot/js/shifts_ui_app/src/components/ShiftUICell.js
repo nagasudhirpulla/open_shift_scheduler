@@ -25,17 +25,35 @@ class ShiftUICell extends Component {
 
     render() {
         let props = deepmerge(essentialProps.shifts_ui_cell, this.state.props);
+        // derive the participation type object of normal shift type
+        let normalShiftPartTypeObj = props.normal_shift_part_type;
+
         let getPartDecorationClasses = (participationobj) => {
-            let classList = ['h6', 'font-weight-bold'];
+            let classList = ['h6'];
+            let shiftParticipationTypeObj = normalShiftPartTypeObj;
             if (participationobj.shiftParticipationTypeId != null) {
-                if (props.shift_part_types[participationobj.shiftParticipationTypeId][0].isAbsence == true) {
-                    classList.push("absence_shift_part");
-                }
-                if (props.shift_part_types[participationobj.shiftParticipationTypeId][0].name.toLowerCase() == "from general") {
-                    classList.push("general_shift_part");
-                }
+                shiftParticipationTypeObj = props.shift_part_types[participationobj.shiftParticipationTypeId][0];
             }
+            if (shiftParticipationTypeObj.isAbsence == true) {
+                classList.push("absence_shift_part");
+            }
+            if (shiftParticipationTypeObj.isBold == true) {
+                classList.push("font-weight-bold");
+            }
+            //if (shiftParticipationTypeObj.name.toLowerCase() == "from general") {
+            //    classList.push("general_shift_part");
+            //}
+
             return classList;
+        }
+        let getPartDecorationStyleObj = (participationobj) => {
+            let styleObj = {};
+            let shiftParticipationTypeObj = normalShiftPartTypeObj;
+            if (participationobj.shiftParticipationTypeId != null) {
+                shiftParticipationTypeObj = props.shift_part_types[participationobj.shiftParticipationTypeId][0];
+            }
+            styleObj['color'] = shiftParticipationTypeObj.colorString;
+            return styleObj;
         }
         //console.log(props);
         return (
@@ -49,7 +67,7 @@ class ShiftUICell extends Component {
                         props.shift.shiftParticipations.sort((a, b) => (a.participationSequence > b.participationSequence) ? 1 : ((b.participationSequence > a.participationSequence) ? -1 : 0)).map((participationobj, ind) =>
                             <div key={'participation_display_' + ind} className={classNames('part_disp_row', 'm-1')}>
                                 <button className={classNames('btn', 'btn-outline-info', 'btn-sm', 'part_up_btn')} onClick={() => props.moveShiftParticipation(participationobj, -1)}><i class="fa fa-arrow-circle-o-down"></i></button>
-                                <span className={classNames(...getPartDecorationClasses(participationobj))}>{(participationobj.participationSequence + 1) + ". "}{props.employees_dict[participationobj.employeeId][0]['name']}</span>
+                                <span style={getPartDecorationStyleObj(participationobj)} className={classNames(...getPartDecorationClasses(participationobj))}>{(participationobj.participationSequence + 1) + ". "}{props.employees_dict[participationobj.employeeId][0]['name']}</span>
                                 <button className={classNames('btn', 'btn-outline-info', 'btn-sm', 'part_down_btn')} onClick={() => props.moveShiftParticipation(participationobj, 1)}><i class="fa fa-arrow-circle-o-up"></i></button>
                                 <button className={classNames('btn', 'btn-outline-warning', 'btn-sm', 'part_edit_btn')} onClick={() => props.updateShiftParticipation(participationobj)}><i class="fa fa-pencil"></i></button>
                                 <button className={classNames('btn', 'btn-outline-danger', 'btn-sm', 'part_del_btn')} onClick={() => props.removeShiftParticipation(participationobj)}><i class="fa fa-trash-o"></i></button>

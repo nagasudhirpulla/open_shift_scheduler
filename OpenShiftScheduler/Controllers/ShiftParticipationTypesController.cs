@@ -56,7 +56,7 @@ namespace OpenShiftScheduler.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ShiftParticipationTypeId,Name,IsAbsence")] ShiftParticipationType shiftParticipationType)
+        public async Task<IActionResult> Create([Bind("ShiftParticipationTypeId,Name,IsAbsence,IsBold,ColorString")] ShiftParticipationType shiftParticipationType)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +88,7 @@ namespace OpenShiftScheduler.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ShiftParticipationTypeId,Name,IsAbsence")] ShiftParticipationType shiftParticipationType)
+        public async Task<IActionResult> Edit(int id, [Bind("ShiftParticipationTypeId,Name,IsAbsence,IsBold,ColorString")] ShiftParticipationType shiftParticipationType)
         {
             if (id != shiftParticipationType.ShiftParticipationTypeId)
             {

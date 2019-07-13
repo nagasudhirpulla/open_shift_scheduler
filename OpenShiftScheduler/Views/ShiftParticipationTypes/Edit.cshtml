@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Edit";
 }
+<link rel="stylesheet" media="screen" type="text/css" href="~/css/colorpicker.css" />
 
 <h2>Edit</h2>
 
@@ -26,6 +27,18 @@
                 </div>
             </div>
             <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="IsBold" /> @Html.DisplayNameFor(model => model.IsBold)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="ColorString" class="control-label"></label>
+                <input asp-for="ColorString" class="form-control colorpicker-input" />
+                <span asp-validation-for="ColorString" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </form>
@@ -38,4 +51,6 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript" src="~/js/colorpicker.js"></script>
+    <script type="text/javascript" src="~/js/colorpicker_attach.js"></script>
 }

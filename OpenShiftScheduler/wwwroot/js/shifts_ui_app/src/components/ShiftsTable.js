@@ -201,6 +201,14 @@ class ShiftsTable extends Component {
         let groupedShiftTypes = groupObjBy(props.shift_types, 'shiftTypeId');
         let groupedShiftPartTypes = groupObjBy(props.shift_participation_types, 'shiftParticipationTypeId');
 
+        // derive the participation type object of normal shift type
+        let normalShiftPartTypeObj = null;
+        for (var partTypesIter = 0; partTypesIter < props.shift_participation_types.length; partTypesIter++) {
+            if (props.shift_participation_types[partTypesIter].name.toLowerCase() == "normal") {
+                normalShiftPartTypeObj = props.shift_participation_types[partTypesIter];
+            }
+        }
+
         /*
          Create a base shift matrix w.r.t date and shift type
          We get shift types in the order of shift sequence from the server itself
@@ -252,6 +260,7 @@ class ShiftsTable extends Component {
                                         shift={shiftObj}
                                         shift_type={groupedShiftTypes[shiftObj.shiftTypeId][0]}
                                         shift_part_types={groupedShiftPartTypes}
+                                        normal_shift_part_type={normalShiftPartTypeObj}
                                         col_size={colSize}
                                         employees_dict={groupedEmployees}
                                         createShiftParticipation={this.createShiftParticipation}

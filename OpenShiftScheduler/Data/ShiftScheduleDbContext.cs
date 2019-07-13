@@ -76,6 +76,14 @@ namespace OpenShiftScheduler.Data
             builder.Entity<ShiftParticipationType>()
             .HasIndex(b => b.Name)
             .IsUnique();
+            builder.Entity<ShiftParticipationType>()
+            .Property(b => b.ColorString)
+            .IsRequired()
+            .HasDefaultValue("#FFFFFF");
+            builder.Entity<ShiftParticipationType>()
+            .Property(b => b.IsBold)
+            .IsRequired()
+            .HasDefaultValue(false);
 
             builder.Entity<EmployeeShiftSkill>().HasKey(ess => ess.EmployeeShiftSkillId);
             // setting multiple columns as alternate key - https://stackoverflow.com/questions/18889218/unique-key-constraints-for-multiple-columns-in-entity-framework

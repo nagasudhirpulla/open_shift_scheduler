@@ -177,26 +177,10 @@ export default {
             }
         ],
         shift_participation_types: [
-            {
-                "shiftParticipationTypeId": 1,
-                "name": "Normal",
-                "isAbsence": false
-            },
-            {
-                "shiftParticipationTypeId": 2,
-                "name": "Leave",
-                "isAbsence": true
-            },
-            {
-                "shiftParticipationTypeId": 3,
-                "name": "Training",
-                "isAbsence": true
-            },
-            {
-                "shiftParticipationTypeId": 4,
-                "name": "From General",
-                "isAbsence": false
-            }
+            { "shiftParticipationTypeId": 1, "name": "Normal", "isAbsence": false, "isBold": false, "displayColor": "255, 255, 255", "colorString": "#000000" },
+            { "shiftParticipationTypeId": 2, "name": "Leave", "isAbsence": true, "isBold": true, "displayColor": "232, 18, 86", "colorString": "#E81256" },
+            { "shiftParticipationTypeId": 3, "name": "Training", "isAbsence": true, "isBold": false, "displayColor": "144, 26, 235", "colorString": "#901AEB" },
+            { "shiftParticipationTypeId": 4, "name": "From General", "isAbsence": false, "isBold": true, "displayColor": "29, 51, 222", "colorString": "#1D33DE" }
         ]
     }
 }
