@@ -3,6 +3,7 @@ import { getEmployees } from '../server_mediators/employee';
 import { getShiftTypes } from '../server_mediators/shift_type';
 import { getShiftParticipationTypes } from '../server_mediators/shift_participation_type';
 import { updateServerShiftParticipation } from '../server_mediators/shift_participation';
+import { getShiftsGroups } from '../server_mediators/shift_group';
 import * as types from './actionTypes';
 
 export function updateShiftsInUI(baseAddr, start_date, end_date) {
@@ -53,6 +54,11 @@ export function updateShiftsUIData(baseAddr, start_date, end_date) {
         const shifts = await getShiftsForUI(baseAddr, start_date, end_date);
         // console.log(shifts);
         dispatch(updateShiftsUIShifts(shifts));
+
+        //update shift groups todo
+        const shift_groups = await getShiftsGroups(baseAddr);
+        // console.log(shift_groups);
+        dispatch(updateShiftsUIShiftGroups(shift_groups));
     };
 }
 
@@ -161,6 +167,11 @@ export function updateShiftParticipation(baseAddr, shiftParticipation) {
 export function updateShiftsUIShifts(shifts) {
     //console.log(dashboardCell);
     return { type: types.UPDATE_SHIFTS_UI_SHIFTS, shifts: shifts };
+}
+
+export function updateShiftsUIShiftGroups(shift_groups) {
+    //console.log(shift_groups);
+    return { type: types.UPDATE_SHIFTS_UI_SHIFT_GROUPS, shift_groups: shift_groups };
 }
 
 export function updateShiftsUIShiftTypes(shift_types) {

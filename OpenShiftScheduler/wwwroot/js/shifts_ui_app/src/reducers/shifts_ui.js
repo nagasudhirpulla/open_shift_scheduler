@@ -264,6 +264,11 @@ export default function shiftsUIReducer(state = initialState.shifts_ui, action) 
                 ...state,
                 shift_participation_types: action.shift_participation_types
             };
+        case types.UPDATE_SHIFTS_UI_SHIFT_GROUPS:
+            return {
+                ...state,
+                shift_groups: action.shift_groups
+            };
         default:
             return state;
 

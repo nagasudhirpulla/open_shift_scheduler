@@ -4,7 +4,7 @@ export async function getShiftsGroups(baseAddr) {
             method: 'get'
         });
         const respJSON = await resp.json();
-        console.log(respJSON);
+        // console.log(respJSON);
         return respJSON;
     } catch (e) {
         console.log(e);
