@@ -23,6 +23,7 @@ class ShiftsTable extends Component {
         this.loadShifts = this.loadShifts.bind(this);
         this.setModalShow = this.setModalShow.bind(this);
         this.setShiftGroupModalShow = this.setShiftGroupModalShow.bind(this);
+        this.setEditShiftPartModalShow = this.setEditShiftPartModalShow.bind(this);
         this.createShiftParticipation = this.createShiftParticipation.bind(this);
         this.updateShiftParticipation = this.updateShiftParticipation.bind(this);
         this.createShiftParticipationFromGroup = this.createShiftParticipationFromGroup.bind(this);
@@ -40,12 +41,17 @@ class ShiftsTable extends Component {
         this.state.end_date = "2019-04-25";
         this.state.modalShow = false;
         this.state.modalShowShiftGroup = false;
+        this.state.modalShowEditShiftPart = false;
         this.state.activeShift = null;
+        this.state.activeShiftParticipation = null;
         this.startDateInput = React.createRef();
         this.endDateInput = React.createRef();
         this.employeesComboBox = React.createRef();
-        this.participationTypesComboBox = React.createRef();        
+        this.participationTypesComboBox = React.createRef();
         this.shiftGroupsComboBox = React.createRef();
+        this.employeesForEditComboBox = React.createRef();
+        this.participationTypesForEditComboBox = React.createRef();
+        this.participationSeqForEditInput = React.createRef();
     }
 
     loadShifts = () => {
@@ -74,8 +80,8 @@ class ShiftsTable extends Component {
     }
 
     updateShiftParticipation = (shiftParticipation) => {
-        this.setState({ activeShift: shiftParticipation });
-        this.setModalShow(true);
+        this.setEditShiftPartModalShow(true);
+        this.setState({ activeShiftParticipation: shiftParticipation });
     }
 
     createShiftParticipationFromGroup = (shift) => {
@@ -106,12 +112,29 @@ class ShiftsTable extends Component {
         this.state.props.createShiftParticipationFromGroup(baseAddr, shiftGroupId, this.state.activeShift);
     }
 
+    onShiftPartEditClick = () => {
+        this.setEditShiftPartModalShow(false);
+        let baseAddr = this.state.props.server_base_addr;
+        if (baseAddr == undefined) {
+            baseAddr = essentialProps.shifts_ui.server_base_addr;
+        }
+        let employeeId = this.state.activeShiftParticipation.employeeId;
+        let participationTypeId = this.state.activeShiftParticipation.shiftParticipationTypeId;
+        let shiftPartSeq = this.state.activeShiftParticipation.participationSequence;
+        // console.log(`The selected employee Id for shift participation is ${employeeId}`);
+        this.state.props.updateShiftParticipation(baseAddr, { ...this.state.activeShiftParticipation, "employeeId": employeeId, "shiftParticipationTypeId": participationTypeId, "participationSequence": Number(shiftPartSeq) });
+    }
+
     setModalShow = modalShow => {
         this.setState({ modalShow });
     }
 
     setShiftGroupModalShow = modalShowShiftGroup => {
         this.setState({ modalShowShiftGroup });
+    }
+
+    setEditShiftPartModalShow = (modalShowEditShiftPart) => {
+        this.setState({ modalShowEditShiftPart });
     }
 
     removeShiftParticipation = (shiftParticipation) => {
@@ -167,6 +190,7 @@ class ShiftsTable extends Component {
         const groupedEmployees = groupObjBy(props.employees, 'employeeId');
         const { modalShow } = this.state;
         const { modalShowShiftGroup } = this.state;
+        const { modalShowEditShiftPart } = this.state;
         // group the shift objects by date and shift type
         let groupedShifts = groupObjBy(props.shifts, 'shiftDate');
         for (var dateStr in groupedShifts) {
@@ -231,6 +255,7 @@ class ShiftsTable extends Component {
                                         col_size={colSize}
                                         employees_dict={groupedEmployees}
                                         createShiftParticipation={this.createShiftParticipation}
+                                        updateShiftParticipation={this.updateShiftParticipation}
                                         createShiftParticipationFromGroup={this.createShiftParticipationFromGroup}
                                         removeShiftParticipation={this.removeShiftParticipation}
                                         moveShiftParticipation={this.moveShiftParticipation}
@@ -325,6 +350,36 @@ class ShiftsTable extends Component {
                     </select>
                     <button onClick={this.onShiftGroupSelForPartClick}>Add From Group</button>
                 </PopPop>
+
+                {
+                    this.state.activeShiftParticipation != null &&
+                    <PopPop position="centerCenter"
+                        open={modalShowEditShiftPart}
+                        closeBtn={true}
+                        closeOnEsc={true}
+                        onClose={() => this.setEditShiftPartModalShow(false)}
+                        closeOnOverlay={true}>
+
+                        <h3>Edit Shift Participation</h3>
+                        <select ref={this.employeesForEditComboBox} value={this.state.activeShiftParticipation.employeeId} onChange={(event) => { this.setState({ activeShiftParticipation: { ...this.state.activeShiftParticipation, employeeId: event.target.value } }); }}>
+                            {
+                                props.employees.map((empObj, empInd) => {
+                                    return <option value={empObj.employeeId} key={`empForEditSelOpt_${empInd}`}>{empObj.name}</option>
+                                })
+                            }
+                        </select>
+                        <select ref={this.participationTypesForEditComboBox} value={this.state.activeShiftParticipation.shiftParticipationTypeId} onChange={(event) => { this.setState({ activeShiftParticipation: { ...this.state.activeShiftParticipation, shiftParticipationTypeId: event.target.value } }); }}>
+                            {
+                                props.shift_participation_types.map((typeObj, typeInd) =>
+                                    <option value={typeObj.shiftParticipationTypeId} key={`partTypeForEditSelOpt_${typeInd}`}>{typeObj.name}</option>
+                                )
+                            }
+                        </select>
+                        <input ref={this.participationSeqForEditInput} value={this.state.activeShiftParticipation.participationSequence + 1} onChange={(event) => { if (!isNaN(event.target.value)) { this.setState({ activeShiftParticipation: { ...this.state.activeShiftParticipation, participationSequence: Number(event.target.value) - 1 } }); } }} />
+                        <button onClick={this.onShiftPartEditClick}>Save Changes</button>
+
+                    </PopPop>
+                }
             </div>
 
         );

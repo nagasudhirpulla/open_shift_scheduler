@@ -51,6 +51,7 @@ class ShiftUICell extends Component {
                                 <button className={classNames('btn', 'btn-outline-info', 'btn-sm', 'part_up_btn')} onClick={() => props.moveShiftParticipation(participationobj, -1)}><i class="fa fa-arrow-circle-o-down"></i></button>
                                 <span className={classNames(...getPartDecorationClasses(participationobj))}>{(participationobj.participationSequence + 1) + ". "}{props.employees_dict[participationobj.employeeId][0]['name']}</span>
                                 <button className={classNames('btn', 'btn-outline-info', 'btn-sm', 'part_down_btn')} onClick={() => props.moveShiftParticipation(participationobj, 1)}><i class="fa fa-arrow-circle-o-up"></i></button>
+                                <button className={classNames('btn', 'btn-outline-warning', 'btn-sm', 'part_edit_btn')} onClick={() => props.updateShiftParticipation(participationobj)}><i class="fa fa-pencil"></i></button>
                                 <button className={classNames('btn', 'btn-outline-danger', 'btn-sm', 'part_del_btn')} onClick={() => props.removeShiftParticipation(participationobj)}><i class="fa fa-trash-o"></i></button>
                             </div>
                         )

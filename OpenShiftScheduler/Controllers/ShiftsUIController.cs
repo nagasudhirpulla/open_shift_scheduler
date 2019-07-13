@@ -112,13 +112,31 @@ namespace OpenShiftScheduler.Controllers
                 {
                     if (formModel.Direction == -1 && shiftPart.ParticipationSequence >= interestedShiftPart.ParticipationSequence)
                     {
-                        nextPart = shiftPart;
-                        break;
+                        if (nextPart == null)
+                        {
+                            nextPart = shiftPart;
+                        }
+                        else
+                        {
+                            if (shiftPart.ParticipationSequence < nextPart.ParticipationSequence)
+                            {
+                                nextPart = shiftPart;
+                            }
+                        }
                     }
                     else if (formModel.Direction == 1 && shiftPart.ParticipationSequence <= interestedShiftPart.ParticipationSequence)
                     {
-                        nextPart = shiftPart;
-                        break;
+                        if (nextPart == null)
+                        {
+                            nextPart = shiftPart;
+                        }
+                        else
+                        {
+                            if (shiftPart.ParticipationSequence > nextPart.ParticipationSequence)
+                            {
+                                nextPart = shiftPart;
+                            }
+                        }
                     }
                 }
             }

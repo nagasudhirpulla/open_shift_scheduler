@@ -183,7 +183,7 @@ export function updateShiftUIShiftParticipations(shift_participations) {
 }
 
 export function updateShiftUIShiftParticipation(shift_participation) {
-    //console.log(shift_participation);
+    // console.log(shift_participation);
     return { type: types.UPDATE_SHIFTS_UI_SHIFT_PARTICIPATION, shift_participation: shift_participation };
 }
 

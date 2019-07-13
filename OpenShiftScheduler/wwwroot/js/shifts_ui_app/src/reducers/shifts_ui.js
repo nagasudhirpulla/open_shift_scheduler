@@ -155,7 +155,7 @@ export default function shiftsUIReducer(state = initialState.shifts_ui, action) 
             shiftInd = -1;
             for (let shiftIter = 0; (shiftIter < state.shifts.length) && (shiftInd == -1); shiftIter++) {
                 //console.log(state.shifts[shiftIter].shiftId);
-                if (state.shifts[shiftIter].shiftId == shiftParticipations[0].shiftId) {
+                if (state.shifts[shiftIter].shiftId == shiftParticipation.shiftId) {
                     shiftInd = shiftIter;
                 }
             }
