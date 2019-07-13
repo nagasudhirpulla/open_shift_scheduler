@@ -22,6 +22,7 @@ namespace OpenShiftScheduler.Data
         public DbSet<Shift> Shifts { get; set; }
         public DbSet<ShiftParticipation> ShiftParticipations { get; set; }
         public DbSet<ShiftParticipationType> ShiftParticipationTypes { get; set; }
+        public DbSet<ShiftCycleItem> ShiftCycleItem { get; set; }
 
         public ShiftScheduleDbContext(DbContextOptions<ShiftScheduleDbContext> options, IConfiguration configuration) : base(options)
         {
@@ -105,6 +106,18 @@ namespace OpenShiftScheduler.Data
             .Property(b => b.ParticipationSequence)
             .IsRequired()
             .HasDefaultValue(0);
+
+            builder.Entity<ShiftCycleItem>()
+            .HasKey(sci => sci.ShiftCycleItemId);
+            builder.Entity<ShiftCycleItem>()
+            .HasIndex(sci => sci.ShiftSequence)
+            .IsUnique();
+
+            builder.Entity<ShiftCycleItem>()
+            .HasOne(sci => sci.ShiftType)
+            .WithMany()
+            .HasForeignKey(sci => sci.ShiftTypeId)
+            .OnDelete(DeleteBehavior.Cascade);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
