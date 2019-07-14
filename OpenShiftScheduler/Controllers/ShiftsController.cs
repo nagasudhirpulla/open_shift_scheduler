@@ -240,7 +240,7 @@ namespace OpenShiftScheduler.Controllers
                     List<ShiftParticipation> startDayShiftParticipations = startDayShift.ShiftParticipations.ToList();
                     int currentShiftTypeId = startDayShift.ShiftTypeId;
                     int currentShiftTypeIndex = orderedShiftTypeIds.IndexOf(currentShiftTypeId);
-                    
+
                     // iterate through each shift date for automation
                     for (DateTime shiftDate = startDate.AddDays(1); (shiftDate.Date <= endDate.Date) && (currentShiftTypeIndex != -1); shiftDate = shiftDate.AddDays(1))
                     {
@@ -329,7 +329,7 @@ namespace OpenShiftScheduler.Controllers
                 List<ShiftParticipation> shiftParticipations = await _context.ShiftParticipations.Include(sp => sp.Shift).Include(sp => sp.Employee).Where(sp => sp.Shift.ShiftDate >= vm.StartDate && sp.Shift.ShiftDate <= vm.EndDate).ToListAsync();
 
                 // assign the fetched shift participations to the vm
-                foreach (ShiftParticipation shiftPart in shiftParticipations)
+                foreach (ShiftParticipation shiftPart in shiftParticipations.OrderBy(sp => sp.ParticipationSequence))
                 {
                     DateTime shiftDate = shiftPart.Shift.ShiftDate;
                     ShiftParticipationType participationType = null;
