@@ -22,7 +22,7 @@ namespace OpenShiftScheduler.Controllers
         // GET: ShiftCycleItems
         public async Task<IActionResult> Index()
         {
-            var shiftScheduleDbContext = _context.ShiftCycleItem.Include(s => s.ShiftType);
+            var shiftScheduleDbContext = _context.ShiftCycleItems.Include(s => s.ShiftType).OrderBy(s => s.ShiftSequence);
             return View(await shiftScheduleDbContext.ToListAsync());
         }
 
@@ -34,7 +34,7 @@ namespace OpenShiftScheduler.Controllers
                 return NotFound();
             }
 
-            var shiftCycleItem = await _context.ShiftCycleItem
+            var shiftCycleItem = await _context.ShiftCycleItems
                 .Include(s => s.ShiftType)
                 .FirstOrDefaultAsync(m => m.ShiftCycleItemId == id);
             if (shiftCycleItem == null)
@@ -77,7 +77,7 @@ namespace OpenShiftScheduler.Controllers
                 return NotFound();
             }
 
-            var shiftCycleItem = await _context.ShiftCycleItem.FindAsync(id);
+            var shiftCycleItem = await _context.ShiftCycleItems.FindAsync(id);
             if (shiftCycleItem == null)
             {
                 return NotFound();
@@ -130,7 +130,7 @@ namespace OpenShiftScheduler.Controllers
                 return NotFound();
             }
 
-            var shiftCycleItem = await _context.ShiftCycleItem
+            var shiftCycleItem = await _context.ShiftCycleItems
                 .Include(s => s.ShiftType)
                 .FirstOrDefaultAsync(m => m.ShiftCycleItemId == id);
             if (shiftCycleItem == null)
@@ -146,15 +146,15 @@ namespace OpenShiftScheduler.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var shiftCycleItem = await _context.ShiftCycleItem.FindAsync(id);
-            _context.ShiftCycleItem.Remove(shiftCycleItem);
+            var shiftCycleItem = await _context.ShiftCycleItems.FindAsync(id);
+            _context.ShiftCycleItems.Remove(shiftCycleItem);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ShiftCycleItemExists(int id)
         {
-            return _context.ShiftCycleItem.Any(e => e.ShiftCycleItemId == id);
+            return _context.ShiftCycleItems.Any(e => e.ShiftCycleItemId == id);
         }
     }
 }

@@ -34,16 +34,18 @@ class ShiftUICell extends Component {
             if (participationobj.shiftParticipationTypeId != null) {
                 shiftParticipationTypeObj = props.shift_part_types[participationobj.shiftParticipationTypeId][0];
             }
-            if (shiftParticipationTypeObj.isAbsence == true) {
-                classList.push("absence_shift_part");
-            }
-            if (shiftParticipationTypeObj.isBold == true) {
-                classList.push("font-weight-bold");
-            }
-            //if (shiftParticipationTypeObj.name.toLowerCase() == "from general") {
-            //    classList.push("general_shift_part");
-            //}
 
+            if (shiftParticipationTypeObj != null) {
+                if (shiftParticipationTypeObj.isAbsence == true) {
+                    classList.push("absence_shift_part");
+                }
+                if (shiftParticipationTypeObj.isBold == true) {
+                    classList.push("font-weight-bold");
+                }
+                //if (shiftParticipationTypeObj.name.toLowerCase() == "from general") {
+                //    classList.push("general_shift_part");
+                //}
+            }
             return classList;
         }
         let getPartDecorationStyleObj = (participationobj) => {
@@ -52,7 +54,10 @@ class ShiftUICell extends Component {
             if (participationobj.shiftParticipationTypeId != null) {
                 shiftParticipationTypeObj = props.shift_part_types[participationobj.shiftParticipationTypeId][0];
             }
-            styleObj['color'] = shiftParticipationTypeObj.colorString;
+
+            if (shiftParticipationTypeObj != null) {
+                styleObj['color'] = shiftParticipationTypeObj.colorString;
+            }            
             return styleObj;
         }
         //console.log(props);

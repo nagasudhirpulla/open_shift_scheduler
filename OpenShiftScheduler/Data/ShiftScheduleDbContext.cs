@@ -22,7 +22,7 @@ namespace OpenShiftScheduler.Data
         public DbSet<Shift> Shifts { get; set; }
         public DbSet<ShiftParticipation> ShiftParticipations { get; set; }
         public DbSet<ShiftParticipationType> ShiftParticipationTypes { get; set; }
-        public DbSet<ShiftCycleItem> ShiftCycleItem { get; set; }
+        public DbSet<ShiftCycleItem> ShiftCycleItems { get; set; }
 
         public ShiftScheduleDbContext(DbContextOptions<ShiftScheduleDbContext> options, IConfiguration configuration) : base(options)
         {

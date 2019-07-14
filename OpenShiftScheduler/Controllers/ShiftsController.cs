@@ -184,31 +184,51 @@ namespace OpenShiftScheduler.Controllers
                 DateTime startDate = autoInitParams.StartDate;
                 DateTime endDate = autoInitParams.EndDate;
 
-                // create shift types in the roaster sequence for automated shift 
-                List<ShiftType> shiftTypes = await _context.ShiftTypes.OrderBy(st => st.RoasterSequence).ToListAsync();
-                List<int> orderedShiftTypeIds = shiftTypes.Select(st => st.ShiftTypeId).ToList();
+                // create shift type Ids in the roaster sequence for automated shift 
+                List<int> orderedShiftTypeIds = await _context.ShiftCycleItems.OrderBy(sci => sci.ShiftSequence).Select(sci => sci.ShiftTypeId).ToListAsync();
+
+                // List<ShiftType> shiftTypes = await _context.ShiftTypes.OrderBy(st => st.RoasterSequence).ToListAsync();
+                // List<int> orderedShiftTypeIds_old = shiftTypes.Select(st => st.ShiftTypeId).ToList();
+
+                //Func<int, int, Tuple<int, int>> GetNextShiftTypeInfo = (currentShiftTypeId, numTimesAlreadyOccured) =>
+                //{
+                //    if (numTimesAlreadyOccured == 1)
+                //    {
+                //        return new Tuple<int, int>(currentShiftTypeId, 2);
+                //    }
+                //    int nextShiftTypeId = -1;
+                //    int updatedAlreadyOccured = -1;
+                //    if (orderedShiftTypeIds.Any(sti => sti == currentShiftTypeId))
+                //    {
+                //        int currentShiftTypeIdIndex = orderedShiftTypeIds.FindIndex(sti => sti == currentShiftTypeId);
+                //        int nextShiftTypeIdIndex = currentShiftTypeIdIndex + 1;
+                //        if (nextShiftTypeIdIndex >= orderedShiftTypeIds.Count)
+                //        {
+                //            nextShiftTypeIdIndex = 0;
+                //        }
+                //        nextShiftTypeId = orderedShiftTypeIds[nextShiftTypeIdIndex];
+                //        updatedAlreadyOccured = 1;
+                //    }
+                //    return new Tuple<int, int>(nextShiftTypeId, updatedAlreadyOccured);
+                //};
 
                 // defining function as variable - https://stackoverflow.com/questions/12127020/c-sharp-variable-new-function
-                Func<int, int, Tuple<int, int>> GetNextShiftTypeInfo = (currentShiftTypeId, numTimesAlreadyOccured) =>
+                Func<int, int> GetNextShiftTypeIndex = (currentShiftTypeIndex) =>
                 {
-                    if (numTimesAlreadyOccured == 1)
+                    int nextShiftTypeIndex = -1;
+                    if (currentShiftTypeIndex < 0)
                     {
-                        return new Tuple<int, int>(currentShiftTypeId, 2);
+                        return -1;
                     }
-                    int nextShiftTypeId = -1;
-                    int updatedAlreadyOccured = -1;
-                    if (orderedShiftTypeIds.Any(sti => sti == currentShiftTypeId))
+                    if (currentShiftTypeIndex == orderedShiftTypeIds.Count - 1)
                     {
-                        int currentShiftTypeIdIndex = orderedShiftTypeIds.FindIndex(sti => sti == currentShiftTypeId);
-                        int nextShiftTypeIdIndex = currentShiftTypeIdIndex + 1;
-                        if (nextShiftTypeIdIndex >= orderedShiftTypeIds.Count)
-                        {
-                            nextShiftTypeIdIndex = 0;
-                        }
-                        nextShiftTypeId = orderedShiftTypeIds[nextShiftTypeIdIndex];
-                        updatedAlreadyOccured = 1;
+                        nextShiftTypeIndex = 0;
                     }
-                    return new Tuple<int, int>(nextShiftTypeId, updatedAlreadyOccured);
+                    else
+                    {
+                        nextShiftTypeIndex = currentShiftTypeIndex + 1;
+                    }
+                    return nextShiftTypeIndex;
                 };
 
                 // get the shifts on the start Date
@@ -218,17 +238,15 @@ namespace OpenShiftScheduler.Controllers
                 foreach (Shift startDayShift in startDayShifts)
                 {
                     List<ShiftParticipation> startDayShiftParticipations = startDayShift.ShiftParticipations.ToList();
-                    int numTimesAlreadyOccured = 1;
                     int currentShiftTypeId = startDayShift.ShiftTypeId;
-
+                    int currentShiftTypeIndex = orderedShiftTypeIds.IndexOf(currentShiftTypeId);
+                    
                     // iterate through each shift date for automation
-                    for (DateTime shiftDate = startDate.AddDays(1); shiftDate.Date <= endDate.Date; shiftDate = shiftDate.AddDays(1))
+                    for (DateTime shiftDate = startDate.AddDays(1); (shiftDate.Date <= endDate.Date) && (currentShiftTypeIndex != -1); shiftDate = shiftDate.AddDays(1))
                     {
-
-                        // get the ShiftType information to use for creating the new shift
-                        Tuple<int, int> nextShiftTypeInfo = GetNextShiftTypeInfo(currentShiftTypeId, numTimesAlreadyOccured);
-                        currentShiftTypeId = nextShiftTypeInfo.Item1;
-                        numTimesAlreadyOccured = nextShiftTypeInfo.Item2;
+                        // get the next ShiftType in the shift cycle sequence creating the new shift
+                        currentShiftTypeIndex = GetNextShiftTypeIndex(currentShiftTypeIndex);
+                        currentShiftTypeId = orderedShiftTypeIds[currentShiftTypeIndex];
 
                         // delete all the shifts of the particular shift type on that day if present
                         List<Shift> existingShifts = await _context.Shifts.Where(s => s.ShiftDate == shiftDate && s.ShiftTypeId == currentShiftTypeId).ToListAsync();
@@ -245,7 +263,7 @@ namespace OpenShiftScheduler.Controllers
                         // create the shift participations for the new shift
                         foreach (ShiftParticipation shiftPart in startDayShift.ShiftParticipations)
                         {
-                            ShiftParticipation newShiftPart = new ShiftParticipation { ShiftId = newShift.ShiftId, EmployeeId = shiftPart.EmployeeId };
+                            ShiftParticipation newShiftPart = new ShiftParticipation { ShiftId = newShift.ShiftId, EmployeeId = shiftPart.EmployeeId, ParticipationSequence = shiftPart.ParticipationSequence, ShiftParticipationTypeId = shiftPart.ShiftParticipationTypeId };
                             _context.ShiftParticipations.Add(newShiftPart);
                             await _context.SaveChangesAsync();
                         }
