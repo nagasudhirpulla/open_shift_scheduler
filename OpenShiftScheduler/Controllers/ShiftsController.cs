@@ -477,7 +477,17 @@ namespace OpenShiftScheduler.Controllers
             return View(vm);
         }
 
+        // GET: Shifts/Calendar
+        public IActionResult Calendar()
+        {
+            DateTime dt = DateTime.Now;
+            DateTime monthStart = new DateTime(dt.Year, dt.Month, 1);
+            DateTime monthEnd = monthStart.AddMonths(1).AddDays(-1);
+            EmployeesCalendarPrintViewModel vm = new EmployeesCalendarPrintViewModel { StartDate = monthStart, EndDate = monthEnd };
+            return View(vm);
+        }
     }
+    
 
     public class AutoInitializeParamsViewModel
     {

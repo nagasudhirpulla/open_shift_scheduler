@@ -1,0 +1,95 @@
+﻿
+@{
+    ViewData["Title"] = "Calendar";
+}
+
+<h2>Calendar</h2>
+
+<div id='calendar'></div>
+
+@section Scripts{
+    <link rel="stylesheet" href="https://fullcalendar.io/releases/core/4.2.0/main.min.css"
+          asp-fallback-href="~/lib/fullcalendar/core/main.min.css" />
+    <link rel="stylesheet" href="https://fullcalendar.io/releases/daygrid/4.2.0/main.min.css"
+          asp-fallback-href="~/lib/fullcalendar/daygrid/main.min.css" />
+    <link rel="stylesheet" href="https://fullcalendar.io/releases/timegrid/4.2.0/main.min.css"
+          asp-fallback-href="~/lib/fullcalendar/core/main.min.css" />
+    <script src="https://fullcalendar.io/releases/core/4.2.0/main.min.js"
+            asp-fallback-src="~/lib/fullcalendar/timegrid/main.min.js">
+    </script>
+    <script src="https://fullcalendar.io/releases/interaction/4.2.0/main.min.js"
+            asp-fallback-src="~/lib/fullcalendar/interaction/main.min.js">
+    </script>
+    <script src="https://fullcalendar.io/releases/daygrid/4.2.0/main.min.js"
+            asp-fallback-src="~/lib/fullcalendar/daygrid/main.min.js">
+    </script>
+    <script src="https://fullcalendar.io/releases/timegrid/4.2.0/main.min.js"
+            asp-fallback-src="~/lib/fullcalendar/timegrid/main.min.js">
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                plugins: ['interaction', 'dayGrid', 'timeGrid'],
+                defaultView: 'dayGridMonth',
+                defaultDate: '2019-06-07',
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: [
+                    {
+                        title: 'All Day Event',
+                        start: '2019-06-01'
+                    },
+                    {
+                        title: 'Long Event',
+                        start: '2019-06-07',
+                        end: '2019-06-10'
+                    },
+                    {
+                        groupId: '999',
+                        title: 'Repeating Event',
+                        start: '2019-06-09T16:00:00'
+                    },
+                    {
+                        groupId: '999',
+                        title: 'Repeating Event',
+                        start: '2019-06-16T16:00:00'
+                    },
+                    {
+                        title: 'Conference',
+                        start: '2019-06-11',
+                        end: '2019-06-13'
+                    },
+                    {
+                        title: 'Meeting',
+                        start: '2019-06-12T10:30:00',
+                        end: '2019-06-12T12:30:00'
+                    },
+                    {
+                        title: 'Lunch',
+                        start: '2019-06-12T12:00:00'
+                    },
+                    {
+                        title: 'Meeting',
+                        start: '2019-06-12T14:30:00'
+                    },
+                    {
+                        title: 'Birthday Party',
+                        start: '2019-06-13T07:00:00'
+                    },
+                    {
+                        title: 'Click for Google',
+                        url: 'http://google.com/',
+                        start: '2019-06-28'
+                    }
+                ]
+            });
+
+            calendar.render();
+        });
+    </script>
+}

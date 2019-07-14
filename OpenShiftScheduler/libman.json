@@ -12,6 +12,20 @@
       "provider": "cdnjs",
       "library": "twitter-bootstrap@4.3.1",
       "destination": "wwwroot/lib/bootstrap/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "fullcalendar@4.2.0",
+      "destination": "wwwroot/lib/fullcalendar/",
+      "files": [
+        "core/main.min.js",
+        "interaction/main.min.js",
+        "daygrid/main.min.js",
+        "daygrid/main.min.css",
+        "timegrid/main.min.css",
+        "timegrid/main.min.js",
+        "core/main.min.css"
+      ]
     }
   ]
 }
