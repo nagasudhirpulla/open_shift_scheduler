@@ -483,11 +483,99 @@ namespace OpenShiftScheduler.Controllers
             DateTime dt = DateTime.Now;
             DateTime monthStart = new DateTime(dt.Year, dt.Month, 1);
             DateTime monthEnd = monthStart.AddMonths(1).AddDays(-1);
-            EmployeesCalendarPrintViewModel vm = new EmployeesCalendarPrintViewModel { StartDate = monthStart, EndDate = monthEnd };
+            CalendarPrintViewModel vm = new CalendarPrintViewModel { StartDate = monthStart, EndDate = monthEnd, CalendarEvents = new List<CalendarEventViewModel>() };
+            ViewData["EmployeeId"] = new SelectList(_context.Employees, "EmployeeId", "Name");
+            return View(vm);
+        }
+
+        // Post: Shifts/Calendar
+        [HttpPost]
+        public async Task<IActionResult> Calendar(CalendarPrintViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                // check if start date > end date
+                if (vm.StartDate > vm.EndDate)
+                {
+                    return View(vm);
+                }
+
+                // Get Employee Id
+                int employeeId = vm.EmployeeId;
+
+                //fetch the shift types
+                List<ShiftType> shiftTypes = await _context.ShiftTypes.OrderBy(st => st.RoasterSequence).ToListAsync();
+                List<int> shiftTypeIds = shiftTypes.Select(st => st.ShiftTypeId).ToList();
+
+                //get the shiftParticipationTypes from db
+                List<ShiftParticipationType> shiftParticipationTypes = await _context.ShiftParticipationTypes.ToListAsync();
+                List<int> shiftPartTypeIds = shiftParticipationTypes.Select(spt => spt.ShiftParticipationTypeId).ToList();
+
+                // get the shift participations from db
+                List<ShiftParticipation> empShiftParticipations = await _context.ShiftParticipations.Include(sp => sp.Shift).Where(sp => sp.EmployeeId == employeeId && sp.Shift.ShiftDate >= vm.StartDate && sp.Shift.ShiftDate <= vm.EndDate).ToListAsync();
+
+                // populate the EmployeeShiftParticipations in view model
+                vm.EmployeeShiftParticipations = empShiftParticipations;
+
+                // populate the Shift participation types in view model
+                vm.ShiftParticipationTypes = shiftParticipationTypes;
+
+                // populate the Shift types in view model
+                vm.ShiftTypes = shiftTypes;
+
+                // create calendar events from the fetched server information
+                vm.CalendarEvents = new List<CalendarEventViewModel>();
+                foreach (ShiftParticipation empShiftParticipation in empShiftParticipations)
+                {
+                    CalendarEventViewModel cevm = new CalendarEventViewModel();
+                    ShiftType eventShiftType = shiftTypes[shiftTypeIds.IndexOf(empShiftParticipation.Shift.ShiftTypeId)];
+                    ShiftParticipationType eventShiftParticipationType = null;
+
+                    // derive the shift participation type
+                    if (empShiftParticipation.ShiftParticipationTypeId.HasValue)
+                    {
+                        eventShiftParticipationType = shiftParticipationTypes[shiftPartTypeIds.IndexOf(empShiftParticipation.ShiftParticipationTypeId.Value)];
+                    }
+
+                    // derive the event title based on shift type
+                    cevm.EventTitle = eventShiftType.Name;
+
+                    // derive the event date
+                    cevm.ShiftDate = empShiftParticipation.Shift.ShiftDate;
+
+                    // derive the event title css style
+                    cevm.TitleBgColor = eventShiftType.ColorString;
+                    cevm.EventTextClasses = new List<string> { "default_evnt_title" };
+                    cevm.TooltipText = "participation = Normal";
+                    if (eventShiftParticipationType != null)
+                    {
+                        if (eventShiftParticipationType.IsBold == true)
+                        {
+                            cevm.EventTextClasses.Add("bold_text");
+                        }
+                        if (eventShiftParticipationType.IsAbsence == true)
+                        {
+                            cevm.EventTextClasses.Add("absence_text");
+                        }
+                        cevm.TooltipText = $"participation = {eventShiftParticipationType.Name}";
+                    }
+
+                    // derive the event title text color
+                    cevm.TitleColor = "#000000";
+                    if (eventShiftParticipationType != null)
+                    {
+                        cevm.TitleColor = eventShiftParticipationType.ColorString;
+                    }
+
+                    // add the calendar event to the view model
+                    vm.CalendarEvents.Add(cevm);
+                }
+            }
+            ViewData["EmployeeId"] = new SelectList(_context.Employees, "EmployeeId", "Name");
             return View(vm);
         }
     }
-    
+
 
     public class AutoInitializeParamsViewModel
     {
