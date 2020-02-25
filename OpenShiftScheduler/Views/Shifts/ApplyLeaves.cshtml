@@ -1,0 +1,33 @@
+﻿@model OpenShiftScheduler.Models.AppModels.LeaveApplyViewModel
+@{
+    ViewData["Title"] = "ApplyLeaves";
+    Layout = "_Layout";
+}
+
+<h2>Apply for Leave</h2>
+
+<form asp-controller="Shifts" asp-action="ApplyLeaves" method="post">
+    <table>
+        <tr>
+            <td><label>Employee Name</label></td>
+            <td><select asp-for="EmployeeId" asp-items="ViewBag.EmployeeId"></select></td>
+
+        </tr>
+        <tr>
+            <td><label asp-for="StartDate"></label></td>
+            <td><input asp-for="StartDate" /></td>
+
+        </tr>
+        <tr>
+            <td><label asp-for="EndDate"></label></td>
+            <td><input asp-for="EndDate" /></td>
+
+        </tr>
+        <tr>
+            <td><label asp-for="RequesterRemarks"></label></td>
+            <td><textarea asp-for="RequesterRemarks"></textarea></td>
+        </tr>
+    </table>
+    <br />
+    <button type="submit">Submit</button>
+</form>

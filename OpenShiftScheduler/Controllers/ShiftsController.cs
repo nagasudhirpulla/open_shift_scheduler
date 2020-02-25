@@ -574,8 +574,32 @@ namespace OpenShiftScheduler.Controllers
             ViewData["EmployeeId"] = new SelectList(_context.Employees, "EmployeeId", "Name");
             return View(vm);
         }
-    }
 
+        // GET: Shifts/ApplyLeaves
+        [Authorize(Roles = "Administrator, GuestUser")]
+        public IActionResult ApplyLeaves()
+        {
+            ViewData["EmployeeId"] = new SelectList(_context.Employees, "EmployeeId", "Name");
+            return View();
+        }
+
+        // POST: Shifts/ApplyLeaves
+        [HttpPost]
+        [Authorize(Roles = "Administrator, GuestUser")]
+        public IActionResult ApplyLeaves(LeaveApplyViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                // check if start date > end date
+                if (vm.StartDate > vm.EndDate)
+                {
+                    return View(vm);
+                }
+            }
+            ViewData["EmployeeId"] = new SelectList(_context.Employees, "EmployeeId", "Name");
+            return View(vm);
+        }
+    }
 
     public class AutoInitializeParamsViewModel
     {

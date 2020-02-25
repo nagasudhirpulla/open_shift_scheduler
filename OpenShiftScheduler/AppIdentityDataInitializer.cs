@@ -6,8 +6,8 @@ namespace OpenShiftScheduler
 {
     public static class AppIdentityDataInitializer
     {
-        private static readonly string GuestUserRoleString = "GuestUser";
-        private static readonly string AdministratorRoleString = "Administrator";
+        public static readonly string GuestUserRoleString = "GuestUser";
+        public static readonly string AdministratorRoleString = "Administrator";
 
         public static void SeedData(UserManager<ApplicationUser> userManager, RoleManager<AppIdentityRole> roleManager, IConfiguration Configuration)
         {
