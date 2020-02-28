@@ -10,7 +10,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using OSS.Domain.Entities;
 using AutoMapper;
-using UsersMgmt.App.Security;
 
 namespace OSS.App.Security.Queries.GetAppUsers
 {

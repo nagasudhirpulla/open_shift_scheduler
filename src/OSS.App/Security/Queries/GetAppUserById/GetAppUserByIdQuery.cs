@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using OSS.App.Security.Queries.GetAppUsers;
 using OSS.Domain.Entities;
 
-namespace UsersMgmt.App.Security.Queries.GetAppUserById
+namespace OSS.App.Security.Queries.GetAppUserById
 {
     public class GetAppUserByIdQuery : IRequest<UserDTO>
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace UsersMgmt.App.Security
+namespace OSS.App.Security
 {
     public static class SecurityConstants
     {

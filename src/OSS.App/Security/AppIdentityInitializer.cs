@@ -4,7 +4,7 @@ using System;
 using System.Text;
 using OSS.Domain.Interfaces.Security;
 
-namespace UsersMgmt.App.Security
+namespace OSS.App.Security
 {
     public class AppIdentityInitializer : IAppIdentityInitializer
     {

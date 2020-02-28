@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using OSS.Domain.Entities;
-using UsersMgmt.App.Security;
 
 namespace OSS.App.Security.Commands.EditAppUser
 {

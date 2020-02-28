@@ -9,7 +9,6 @@ using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using OSS.Domain.Entities;
-using UsersMgmt.App.Security;
 
 namespace OSS.App.Security.Commands.CreateAppUser
 {

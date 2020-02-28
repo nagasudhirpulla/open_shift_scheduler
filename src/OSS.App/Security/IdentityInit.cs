@@ -1,4 +1,4 @@
-﻿namespace UsersMgmt.App.Security
+﻿namespace OSS.App.Security
 {
     public class IdentityInit
     {
