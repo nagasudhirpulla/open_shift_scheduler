@@ -11,6 +11,7 @@ using OSS.Infra.Email;
 using OSS.Infra.Identity;
 using OSS.Infra.Identity.TokenProviders;
 using OSS.App.Security;
+using OSS.App.Data;
 
 namespace OSS.Infra
 {

@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.Extensions.Configuration;
-using OSS.App.Security.Interfaces;
 using OSS.Domain.Entities;
 using System;
 using System.Reflection;
@@ -11,17 +9,15 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OSS.Infra.Identity
+namespace OSS.App.Data
 {
-    public class AppIdentityDbContext : IdentityDbContext<ApplicationUser>, IAppIdentityDbContext
+    public class AppIdentityDbContext : IdentityDbContext<ApplicationUser>
     {
-        public IConfiguration Configuration { get; }
-        public AppIdentityDbContext(DbContextOptions<AppIdentityDbContext> options, IConfiguration configuration)
+        public AppIdentityDbContext(DbContextOptions<AppIdentityDbContext> options)
             : base(options)
         {
-            // set seeds if required
-            Configuration = configuration;
         }
+
         public DbSet<ShiftType> ShiftTypes { get; set; }
         public DbSet<ShiftRole> ShiftRoles { get; set; }
         public DbSet<ShiftSkill> ShiftSkills { get; set; }

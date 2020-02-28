@@ -9,7 +9,7 @@ using OSS.App.Security;
 using OSS.Domain.Entities;
 using OSS.App;
 using FluentValidation.AspNetCore;
-using OSS.App.Security.Interfaces;
+using OSS.App.Data;
 
 namespace OSS.Web
 {
@@ -31,7 +31,7 @@ namespace OSS.Web
             services.AddApplication();
             services
                 .AddControllersWithViews()
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<IAppIdentityDbContext>())
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AppIdentityDbContext>())
                 .AddRazorRuntimeCompilation();
 
             services.AddRazorPages();

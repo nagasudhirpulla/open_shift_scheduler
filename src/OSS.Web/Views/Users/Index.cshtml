@@ -6,38 +6,53 @@
 @if (Model != null && Model.Users != null)
 {
     <div class="row justify-content-center align-items-center">
-        <div class="col col-md-10 col-lg-6">
+        <div class="col col-md-12">
             <h2>@ViewData["Title"]</h2>
             <hr />
             <table class="table table-bordered table-hover display" id="users_table">
                 <thead>
                     <tr>
                         <th>Username</th>
+                        <th>ShiftRole</th>
+                        <th>ShiftGroup</th>
                         <th>Email</th>
-                        <th>Role</th>
-                        <th>Actions</th>
+                        <th>PhoneNumber</th>
+                        <th>OfficeId</th>
+                        <th>Gender</th>
+                        <th>IsActive?</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var user in Model.Users)
                     {
-                        <tr>
-                            <td>@user.Username</td>
-                            <td>@user.Email</td>
-                            <td>@user.UserRole</td>
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@user.UserId">Edit</a> |
-                                <a asp-action="Delete" asp-route-id="@user.UserId">Delete</a>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td>@user.Username</td>
+                        <td>@user.ShiftRole</td>
+                        <td>@user.ShiftGroup</td>
+                        <td>@user.Email</td>
+                        <td>@user.PhoneNumber</td>
+                        <td>@user.OfficeId</td>
+                        <td>@user.Gender</td>
+                        <td>@Html.DisplayFor(modelItem => user.IsActive)</td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@user.UserId">Edit</a> |
+                            <a asp-action="Delete" asp-route-id="@user.UserId">Delete</a>
+                        </td>
+                    </tr>
                     }
 
                 </tbody>
                 <tfoot>
                     <tr>
                         <th>Username</th>
+                        <th>ShiftRole</th>
+                        <th>ShiftGroup</th>
                         <th>Email</th>
-                        <th>Role</th>
+                        <th>PhoneNumber</th>
+                        <th>OfficeId</th>
+                        <th>Gender</th>
+                        <th>DOB</th>
+                        <th>IsActive?</th>
                     </tr>
                 </tfoot>
             </table>

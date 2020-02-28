@@ -8,12 +8,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using OSS.App.Genders.Queries.GetGenders;
 using OSS.App.Security;
 using OSS.App.Security.Commands.CreateAppUser;
 using OSS.App.Security.Commands.DeleteAppUser;
 using OSS.App.Security.Commands.EditAppUser;
 using OSS.App.Security.Queries.GetAppUserById;
 using OSS.App.Security.Queries.GetAppUsers;
+using OSS.App.ShiftGroups.Queries.GetShiftGroups;
+using OSS.App.ShiftRoles.Queries.GetShiftRoles;
 using OSS.Web.Extensions;
 
 namespace OSS.Web.Controllers
@@ -39,9 +42,11 @@ namespace OSS.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["UserRole"] = new SelectList(SecurityConstants.GetRoles());
+            ViewData["GenderId"] = new SelectList(await _mediator.Send(new GetGendersQuery()), "Id", "Name");
+            ViewData["ShiftRoleId"] = new SelectList(await _mediator.Send(new GetShiftGroupsQuery()), "Id", "Name");
+            ViewData["ShiftGroupId"] = new SelectList(await _mediator.Send(new GetShiftRolesQuery()), "Id", "RoleName");
             return View();
         }
 
@@ -59,7 +64,9 @@ namespace OSS.Web.Controllers
             AddErrors(result);
 
             // If we got this far, something failed, redisplay form
-            ViewData["UserRole"] = new SelectList(SecurityConstants.GetRoles());
+            ViewData["GenderId"] = new SelectList(await _mediator.Send(new GetGendersQuery()), "Id", "Name");
+            ViewData["ShiftRoleId"] = new SelectList(await _mediator.Send(new GetShiftGroupsQuery()), "Id", "Name");
+            ViewData["ShiftGroupId"] = new SelectList(await _mediator.Send(new GetShiftRolesQuery()), "Id", "RoleName");
             return View(vm);
         }
 

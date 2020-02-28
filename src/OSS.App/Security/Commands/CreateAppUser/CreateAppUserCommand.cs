@@ -9,7 +9,12 @@ namespace OSS.App.Security.Commands.CreateAppUser
         public string Email { get; set; }
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
-        public string UserRole { get; set; }
+        public string UserRole { get; set; } = SecurityConstants.GuestRoleString;
+        public string OfficeId { get; set; }
+        public int GenderId { get; set; }
+        public bool IsActive { get; set; } = true;
+        public int ShiftRoleId { get; set; }
+        public int ShiftGroupId { get; set; }
         public string BaseUrl { get; set; }
     }
 }
