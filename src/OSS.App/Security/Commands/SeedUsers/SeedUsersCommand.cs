@@ -1,9 +1,11 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using OSS.App.Data;
 using OSS.Domain.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,23 +16,25 @@ namespace OSS.App.Security.Commands.SeedUsers
     {
         public class SeedUsersCommandHandler : IRequestHandler<SeedUsersCommand, bool>
         {
-            private readonly UserManager<ApplicationUser> UserManager;
-            private readonly RoleManager<IdentityRole> RoleManager;
-            private readonly IdentityInit IdentityInit;
+            private readonly UserManager<ApplicationUser> _userManager;
+            private readonly RoleManager<IdentityRole> _roleManager;
+            private readonly IdentityInit _identityInit;
+            private readonly AppIdentityDbContext _context;
 
-            public SeedUsersCommandHandler(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IdentityInit identityInit)
+            public SeedUsersCommandHandler(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IdentityInit identityInit, AppIdentityDbContext context)
             {
-                UserManager = userManager;
-                RoleManager = roleManager;
-                IdentityInit = identityInit;
+                _userManager = userManager;
+                _roleManager = roleManager;
+                _identityInit = identityInit;
+                _context = context;
             }
 
             public async Task<bool> Handle(SeedUsersCommand request, CancellationToken cancellationToken)
             {
                 // seed roles
-                await SeedUserRoles(RoleManager);
+                await SeedUserRoles(_roleManager);
                 // seed admin user
-                await SeedAdminUser(UserManager);
+                await SeedAdminUser(_userManager);
                 return true;
             }
 
@@ -39,18 +43,25 @@ namespace OSS.App.Security.Commands.SeedUsers
              * **/
             public async Task SeedAdminUser(UserManager<ApplicationUser> userManager)
             {
-                string AdminUserName = IdentityInit.AdminUserName;
-                string AdminEmail = IdentityInit.AdminEmail;
-                string AdminPassword = IdentityInit.AdminPassword;
+                string AdminUserName = _identityInit.AdminUserName;
+                string AdminEmail = _identityInit.AdminEmail;
+                string AdminPassword = _identityInit.AdminPassword;
 
                 // check if admin user doesn't exist
                 if ((await userManager.FindByNameAsync(AdminUserName)) == null)
                 {
+                    // get gender by name "Male"
+                    Gender gender = await _context.Genders.Where(b => b.Name.ToLower() == "male")
+                                                          .FirstOrDefaultAsync();
+                    ShiftGroup shiftGrp = await _context.ShiftGroups.Where(b => b.Name.ToLower() == "general")
+                                                          .FirstOrDefaultAsync();
                     // create desired admin user object
                     ApplicationUser user = new ApplicationUser
                     {
                         UserName = AdminUserName,
-                        Email = AdminEmail
+                        Email = AdminEmail,
+                        Gender = gender,
+                        ShiftGroup = shiftGrp
                     };
 
                     // push desired admin user object to DB

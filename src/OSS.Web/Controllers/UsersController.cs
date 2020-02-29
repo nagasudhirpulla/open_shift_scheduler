@@ -47,7 +47,7 @@ namespace OSS.Web.Controllers
             ViewData["GenderId"] = new SelectList(await _mediator.Send(new GetGendersQuery()), "Id", "Name");
             ViewData["ShiftGroupId"] = new SelectList(await _mediator.Send(new GetShiftGroupsQuery()), "Id", "Name");
             ViewData["ShiftRoleId"] = new SelectList(await _mediator.Send(new GetShiftRolesQuery()), "Id", "RoleName");
-            return View();
+            return View(new CreateAppUserCommand());
         }
 
         [HttpPost]

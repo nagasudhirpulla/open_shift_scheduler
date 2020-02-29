@@ -21,10 +21,10 @@ namespace OSS.Domain.Entities
         public bool IsActive { get; set; } = true;
 
         public ShiftRole ShiftRole { get; set; }
-        public int ShiftRoleId { get; set; }
+        public int? ShiftRoleId { get; set; }
 
         public ShiftGroup ShiftGroup { get; set; }
-        public int? ShiftGroupId { get; set; }
+        public int ShiftGroupId { get; set; }
 
         public ICollection<EmployeeShiftSkill> EmployeeShiftSkills { get; private set; }
 
