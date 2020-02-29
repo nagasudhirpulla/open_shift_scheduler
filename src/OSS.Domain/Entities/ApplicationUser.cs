@@ -24,7 +24,7 @@ namespace OSS.Domain.Entities
         public int ShiftRoleId { get; set; }
 
         public ShiftGroup ShiftGroup { get; set; }
-        public int ShiftGroupId { get; set; }
+        public int? ShiftGroupId { get; set; }
 
         public ICollection<EmployeeShiftSkill> EmployeeShiftSkills { get; private set; }
 

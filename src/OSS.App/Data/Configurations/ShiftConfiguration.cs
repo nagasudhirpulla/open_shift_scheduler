@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using OSS.Domain.Entities;
 
-namespace OSS.Infra.Persistence.Configurations
+namespace OSS.App.Data.Configurations
 {
     public class ShiftConfiguration : IEntityTypeConfiguration<Shift>
     {
@@ -13,7 +13,4 @@ namespace OSS.Infra.Persistence.Configurations
                 .IsUnique();
         }
     }
-
-
-
 }

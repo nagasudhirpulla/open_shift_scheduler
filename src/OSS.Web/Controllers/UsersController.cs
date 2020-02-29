@@ -45,8 +45,8 @@ namespace OSS.Web.Controllers
         public async Task<IActionResult> Create()
         {
             ViewData["GenderId"] = new SelectList(await _mediator.Send(new GetGendersQuery()), "Id", "Name");
-            ViewData["ShiftRoleId"] = new SelectList(await _mediator.Send(new GetShiftGroupsQuery()), "Id", "Name");
-            ViewData["ShiftGroupId"] = new SelectList(await _mediator.Send(new GetShiftRolesQuery()), "Id", "RoleName");
+            ViewData["ShiftGroupId"] = new SelectList(await _mediator.Send(new GetShiftGroupsQuery()), "Id", "Name");
+            ViewData["ShiftRoleId"] = new SelectList(await _mediator.Send(new GetShiftRolesQuery()), "Id", "RoleName");
             return View();
         }
 

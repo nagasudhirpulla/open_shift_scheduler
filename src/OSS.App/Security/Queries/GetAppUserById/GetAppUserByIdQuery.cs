@@ -19,14 +19,10 @@ namespace OSS.App.Security.Queries.GetAppUserById
         public class GetAppUserByIdQueryHandler : IRequestHandler<GetAppUserByIdQuery, UserDTO>
         {
             private readonly UserManager<ApplicationUser> _userManager;
-            private readonly IdentityInit _identityInit;
-            private readonly IMapper _mapper;
 
-            public GetAppUserByIdQueryHandler(UserManager<ApplicationUser> userManager, IdentityInit identityInit, IMapper mapper)
+            public GetAppUserByIdQueryHandler(UserManager<ApplicationUser> userManager)
             {
                 _userManager = userManager;
-                _identityInit = identityInit;
-                _mapper = mapper;
             }
 
             public async Task<UserDTO> Handle(GetAppUserByIdQuery request, CancellationToken cancellationToken)

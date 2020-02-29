@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace OSS.Infra.Persistence.Configurations
+namespace OSS.App.Data.Configurations
 {
     public class ShiftRoleConfiguration : IEntityTypeConfiguration<ShiftRole>
     {

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using OSS.Domain.Entities;
 
-namespace OSS.Infra.Persistence.Configurations
+namespace OSS.App.Data.Configurations
 {
     public class ShiftCycleItemConfiguration : IEntityTypeConfiguration<ShiftCycleItem>
     {
