@@ -1,0 +1,59 @@
+﻿@page
+@model OSS.Web.Pages.ShiftTypes.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>ShiftType</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ShiftType.Name" class="control-label"></label>
+                <input asp-for="ShiftType.Name" class="form-control" />
+                <span asp-validation-for="ShiftType.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShiftType.StartOffsetHrs" class="control-label"></label>
+                <input asp-for="ShiftType.StartOffsetHrs" class="form-control" />
+                <span asp-validation-for="ShiftType.StartOffsetHrs" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShiftType.StartOffsetMins" class="control-label"></label>
+                <input asp-for="ShiftType.StartOffsetMins" class="form-control" />
+                <span asp-validation-for="ShiftType.StartOffsetMins" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShiftType.RoasterSequence" class="control-label"></label>
+                <input asp-for="ShiftType.RoasterSequence" class="form-control" />
+                <span asp-validation-for="ShiftType.RoasterSequence" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShiftType.ShiftSequence" class="control-label"></label>
+                <input asp-for="ShiftType.ShiftSequence" class="form-control" />
+                <span asp-validation-for="ShiftType.ShiftSequence" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShiftType.ColorString" class="control-label"></label>
+                <input asp-for="ShiftType.ColorString" class="form-control" />
+                <span asp-validation-for="ShiftType.ColorString" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

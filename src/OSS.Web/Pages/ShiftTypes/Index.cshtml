@@ -1,0 +1,66 @@
+﻿@page
+@model OSS.Web.Pages.ShiftTypes.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ShiftType[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShiftType[0].StartOffsetHrs)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShiftType[0].StartOffsetMins)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShiftType[0].RoasterSequence)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShiftType[0].ShiftSequence)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShiftType[0].ColorString)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.ShiftType) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartOffsetHrs)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartOffsetMins)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoasterSequence)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShiftSequence)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ColorString)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
