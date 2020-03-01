@@ -1,0 +1,54 @@
+﻿@page
+@model OSS.Web.Pages.ShiftParticipationTypes.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ShiftParticipationType[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShiftParticipationType[0].IsAbsence)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShiftParticipationType[0].IsBold)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShiftParticipationType[0].ColorString)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.ShiftParticipationType) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsAbsence)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsBold)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ColorString)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
