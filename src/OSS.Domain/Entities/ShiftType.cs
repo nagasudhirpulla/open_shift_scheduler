@@ -9,7 +9,6 @@ namespace OSS.Domain.Entities
         public string Name { get; set; }
         public int StartOffsetHrs { get; set; }
         public int StartOffsetMins { get; set; }
-        public int RoasterSequence { get; set; }
         public int ShiftSequence { get; set; }
         // TODO implement this via fluent validation
         [NotMapped]
