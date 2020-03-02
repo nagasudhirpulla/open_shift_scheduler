@@ -14,7 +14,7 @@
         * Currently, there is no constraint that limits the employee to participation in only one shift per day.
         * **/
         public ApplicationUser Employee { get; set; }
-        public int EmployeeId { get; set; }
+        public string EmployeeId { get; set; }
 
         public Shift Shift { get; set; }
         public int ShiftId { get; set; }
