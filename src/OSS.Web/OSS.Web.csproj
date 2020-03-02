@@ -5,6 +5,13 @@
     <UserSecretsId>aspnet-OSS.Web-20166FD8-CA5C-4D61-BD86-B71B10E5A82D</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\ActionType.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\components\shiftsEditApp.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\shifts_edit_ui.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\type_defs\IAction.tsx" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="FluentValidation.AspNetCore" Version="8.6.1" />
@@ -23,6 +30,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
+    <PackageReference Include="Microsoft.TypeScript.Compiler" Version="3.1.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
   </ItemGroup>
 
@@ -31,6 +42,14 @@
     <ProjectReference Include="..\OSS.App\OSS.App.csproj" />
     <ProjectReference Include="..\OSS.Domain\OSS.Domain.csproj" />
     <ProjectReference Include="..\OSS.Infra\OSS.Infra.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\ActionType.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\components\shiftsEditApp.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\shifts_edit_ui.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\type_defs\IAction.tsx" />
   </ItemGroup>
 
 </Project>
