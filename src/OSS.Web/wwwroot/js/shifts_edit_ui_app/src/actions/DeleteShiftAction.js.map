@@ -1,1 +1,0 @@
-{"version":3,"file":"DeleteShiftAction.js","sourceRoot":"","sources":["DeleteShiftAction.tsx"],"names":[],"mappings":"AACA,OAAO,EAAE,UAAU,EAAE,MAAM,cAAc,CAAC;AAY1C,MAAM,UAAU,iBAAiB,CAAC,KAAa;IAC3C,OAAO;QACH,IAAI,EAAE,UAAU,CAAC,YAAY;QAC7B,OAAO,EAAE,EAAE,KAAK,EAAE;KACrB,CAAC;AACN,CAAC"}

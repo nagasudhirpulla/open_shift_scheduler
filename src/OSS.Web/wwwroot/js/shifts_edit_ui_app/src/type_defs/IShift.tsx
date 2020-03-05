@@ -5,5 +5,5 @@ export interface IShift {
     shiftTypeId: number;
     shiftDate: Date;
     comments: string;
-    shiftParticipations?: IShiftParticipation
+    shiftParticipations?: IShiftParticipation[]
 }

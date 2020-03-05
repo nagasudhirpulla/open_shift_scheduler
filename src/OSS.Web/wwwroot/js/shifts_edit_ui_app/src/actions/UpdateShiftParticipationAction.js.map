@@ -1,1 +1,0 @@
-{"version":3,"file":"UpdateShiftParticipationAction.js","sourceRoot":"","sources":["UpdateShiftParticipationAction.tsx"],"names":[],"mappings":"AACA,OAAO,EAAE,UAAU,EAAE,MAAM,cAAc,CAAC;AAY1C,MAAM,UAAU,8BAA8B,CAAC,kBAAuC;IAClF,OAAO;QACH,IAAI,EAAE,UAAU,CAAC,0BAA0B;QAC3C,OAAO,EAAE,EAAE,kBAAkB,EAAE,kBAAkB,EAAE;KACtD,CAAC;AACN,CAAC"}

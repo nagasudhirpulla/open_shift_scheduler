@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\SetEmployeesAction.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\SetEndTimeAction.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\SetShiftsAction.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\SetStartTimeAction.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\initial_states\shiftEditUIInitState.tsx" />
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\ActionType.tsx" />
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\CreateShiftAction.tsx" />
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\CreateShiftParticipationAction.tsx" />
@@ -22,6 +27,7 @@
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\UpdateShiftCommentsAction.tsx" />
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\UpdateShiftParticipationAction.tsx" />
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\components\shiftsEditApp.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\reducers\shiftsEditUIReducer.tsx" />
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\server_mediators\employees.tsx" />
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\server_mediators\shiftGroups.tsx" />
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\server_mediators\shiftParticipationTypes.tsx" />
@@ -29,7 +35,19 @@
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\server_mediators\shiftTypes.tsx" />
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\shifts_edit_ui.tsx" />
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\type_defs\IAction.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\type_defs\IShiftsEditUIState.tsx" />
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\utils\timeUtils.tsx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="wwwroot\js\shifts_edit_ui_app\node_modules\%40fortawesome\fontawesome-free\css\all.min.css" />
+    <Content Include="wwwroot\js\shifts_edit_ui_app\node_modules\react-datetime\css\react-datetime.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\js\shifts_edit_ui_app\node_modules\react-dom\umd\react-dom.production.min.js" />
+    <None Include="wwwroot\js\shifts_edit_ui_app\node_modules\react\umd\react.production.min.js" />
+    <None Include="wwwroot\js\shifts_edit_ui_app\node_modules\toastr\build\toastr.min.js" />
   </ItemGroup>
 
 
@@ -67,6 +85,19 @@
 
 
   <ItemGroup>
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\SetShiftsAction.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\SetEndTimeAction.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\SetStartTimeAction.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\SetEmployeesAction.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\initial_states\shiftEditUIInitState.tsx" />
     <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\ActionType.tsx" />
     <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\DeleteShiftAction.tsx">
       <SubType>Code</SubType>
@@ -106,6 +137,7 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\GetEmployeesAction.tsx" />
     <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\components\shiftsEditApp.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\reducers\shiftsEditUIReducer.tsx" />
     <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\server_mediators\employees.tsx" />
     <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\server_mediators\shifts.tsx">
       <SubType>Code</SubType>
@@ -119,6 +151,7 @@
     <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\server_mediators\shiftGroups.tsx" />
     <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\shifts_edit_ui.tsx" />
     <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\type_defs\IAction.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\type_defs\IShiftsEditUIState.tsx" />
     <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\utils\timeUtils.tsx" />
   </ItemGroup>
 

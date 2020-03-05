@@ -2,8 +2,6 @@
 import { ActionType } from "./ActionType";
 
 export interface IGetShiftsBetweenDatesPayload {
-    startDate: Date;
-    endDate: Date;
 }
 
 export interface IGetShiftsBetweenDatesAction extends IAction {
@@ -11,9 +9,9 @@ export interface IGetShiftsBetweenDatesAction extends IAction {
     payload: IGetShiftsBetweenDatesPayload
 }
 
-export function getShiftsBetweenDatesAction(startDate: Date, endDate: Date): IGetShiftsBetweenDatesAction {
+export function getShiftsBetweenDatesAction(): IGetShiftsBetweenDatesAction {
     return {
         type: ActionType.GET_SHIFTS_BETWEEN_DATES,
-        payload: { startDate, endDate }
+        payload: {}
     };
 }

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace OSS.App.ShiftTypes.Queries.GetShiftTypes
 {
@@ -23,7 +24,7 @@ namespace OSS.App.ShiftTypes.Queries.GetShiftTypes
 
             public async Task<List<ShiftType>> Handle(GetShiftTypesQuery request, CancellationToken cancellationToken)
             {
-                List<ShiftType> res = await _context.ShiftTypes.ToListAsync();
+                List<ShiftType> res = (await _context.ShiftTypes.ToListAsync()).OrderBy(s => s.ShiftSequence).ToList();
                 return res;
             }
         }

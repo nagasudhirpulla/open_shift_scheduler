@@ -1,1 +1,0 @@
-{"version":3,"file":"MoveShiftParticipationAction.js","sourceRoot":"","sources":["MoveShiftParticipationAction.tsx"],"names":[],"mappings":"AACA,OAAO,EAAE,UAAU,EAAE,MAAM,cAAc,CAAC;AAa1C,MAAM,UAAU,kBAAkB,CAAC,kBAAuC,EAAE,SAAiB;IACzF,OAAO;QACH,IAAI,EAAE,UAAU,CAAC,wBAAwB;QACzC,OAAO,EAAE,EAAE,kBAAkB,EAAE,SAAS,EAAE;KAC7C,CAAC;AACN,CAAC"}

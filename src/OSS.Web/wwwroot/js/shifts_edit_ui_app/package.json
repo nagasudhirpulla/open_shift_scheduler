@@ -40,6 +40,7 @@
   "dependencies": {
     "react-datetime": "^2.16.3",
     "source-loader": "^1.0.0",
-    "source-map-loader": "^0.2.4"
+    "source-map-loader": "^0.2.4",
+    "@fortawesome/fontawesome-free": "^5.12.0"
   }
 }

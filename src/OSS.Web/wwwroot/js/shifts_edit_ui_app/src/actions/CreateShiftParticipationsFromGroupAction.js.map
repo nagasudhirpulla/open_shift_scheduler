@@ -1,1 +1,0 @@
-{"version":3,"file":"CreateShiftParticipationsFromGroupAction.js","sourceRoot":"","sources":["CreateShiftParticipationsFromGroupAction.tsx"],"names":[],"mappings":"AACA,OAAO,EAAE,UAAU,EAAE,MAAM,cAAc,CAAC;AAY1C,MAAM,UAAU,mBAAmB,CAAC,OAAe,EAAE,YAAoB;IACrE,OAAO;QACH,IAAI,EAAE,UAAU,CAAC,sCAAsC;QACvD,OAAO,EAAE,EAAE,OAAO,EAAE,YAAY,EAAE;KACrC,CAAC;AACN,CAAC"}

@@ -1,0 +1,29 @@
+﻿@page
+@model OSS.Web.Pages.Shifts.EditModel
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div id="root"></div>
+
+@section Scripts {
+    <link href="~/js/shifts_edit_ui_app/node_modules/react-datetime/css/react-datetime.css" rel="stylesheet" />
+    <script src="~/js/shifts_edit_ui_app/node_modules/toastr/build/toastr.min.js"></script>
+    <script src="~/js/shifts_edit_ui_app/node_modules/react/umd/react.production.min.js"></script>
+    <script src="~/js/shifts_edit_ui_app/node_modules/react-dom/umd/react-dom.production.min.js"></script>
+    <script src="~/js/shifts_edit_ui_app/dist/bundle.shifts_edit_ui.js"></script>
+    <style>
+        .timePicker {
+            display: inline-block
+        }
+
+        .datePickerDiv {
+            display: inline-block
+        }
+
+        .loadBtn {
+            margin-left: 0.5em
+        }
+    </style>
+}
+

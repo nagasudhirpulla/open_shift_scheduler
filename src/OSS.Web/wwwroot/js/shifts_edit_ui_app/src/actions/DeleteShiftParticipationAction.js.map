@@ -1,1 +1,0 @@
-{"version":3,"file":"DeleteShiftParticipationAction.js","sourceRoot":"","sources":["DeleteShiftParticipationAction.tsx"],"names":[],"mappings":"AACA,OAAO,EAAE,UAAU,EAAE,MAAM,cAAc,CAAC;AAY1C,MAAM,UAAU,8BAA8B,CAAC,kBAAkB;IAC7D,OAAO;QACH,IAAI,EAAE,UAAU,CAAC,0BAA0B;QAC3C,OAAO,EAAE,EAAE,kBAAkB,EAAE;KAClC,CAAC;AACN,CAAC"}
