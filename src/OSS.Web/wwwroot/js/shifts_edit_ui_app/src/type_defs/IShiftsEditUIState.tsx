@@ -10,7 +10,7 @@ export interface IShiftsEditUIState {
         employees: IEmployee[],
         shiftTypes: IShiftType[],
         shiftGroups: IShiftGroup[],
-        shiftParticipation_types: IShiftParticipationType[],
+        shiftParticipationTypes: IShiftParticipationType[],
         startDate: Date,
         endDate: Date
     },

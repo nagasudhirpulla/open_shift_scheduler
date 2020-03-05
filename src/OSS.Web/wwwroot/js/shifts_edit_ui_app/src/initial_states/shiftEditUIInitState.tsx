@@ -10,7 +10,7 @@ const initState: IShiftsEditUIState = {
         employees: [],
         shiftTypes: [],
         shiftGroups: [],
-        shiftParticipation_types: [],
+        shiftParticipationTypes: [],
         startDate: startDate,
         endDate: endDate
     },

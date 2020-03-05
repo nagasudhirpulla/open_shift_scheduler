@@ -10,6 +10,12 @@ import { getShiftsBetweenDatesAction } from '../actions/GetShiftsBetweenDatesAct
 import { dateToKeyString } from '../utils/timeUtils';
 import { groupObjBy, convertShiftsToMatrix } from '../utils/objUtils'
 import { IShift } from '../type_defs/IShift';
+import { IShiftType } from '../type_defs/IShiftType';
+import { IShiftParticipationType } from '../type_defs/IShiftParticipationType';
+import { IGroupedShiftType } from '../type_defs/IGroupedShiftType';
+import { IGetShiftGroupsPayload } from '../actions/GetShiftGroupsAction';
+import { IGroupedShiftParticipationType } from '../type_defs/IGroupedShiftParticipationType';
+import { IGroupedEmployee } from '../type_defs/IGroupedEmployee';
 
 function ShiftsEditApp() {
     let [pageState, pageStateDispatch] = useShiftsEditUIReducer(pageInitState);
@@ -29,6 +35,11 @@ function ShiftsEditApp() {
         pageStateDispatch(getShiftsBetweenDatesAction())
     }
     const shiftMatrix = convertShiftsToMatrix(pageState.ui.startDate, pageState.ui.endDate, pageState.ui.shifts, pageState.ui.shiftTypes);
+
+    // group the shift types by shiftTypeId
+    let groupedEmployees = groupObjBy(pageState.ui.shiftTypes, 'shiftTypeId') as IGroupedEmployee;
+    let groupedShiftTypes = groupObjBy(pageState.ui.shiftTypes, 'shiftTypeId') as IGroupedShiftType;
+    let groupedShiftPartTypes = groupObjBy(pageState.ui.shiftParticipationTypes, 'shiftParticipationTypeId') as IGroupedShiftParticipationType;
 
     return (
         <>
