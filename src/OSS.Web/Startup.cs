@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 using OSS.App.Genders.Commands.SeedGenders;
 using OSS.App.ShiftRoles.Commands.SeedShiftRoles;
 using OSS.App.ShiftGroups.Commands.SeedShiftGroups;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace OSS.Web
 {
@@ -35,7 +37,13 @@ namespace OSS.Web
             services
                 .AddControllersWithViews()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AppIdentityDbContext>())
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                })
                 .AddRazorRuntimeCompilation();
+
 
             services.AddRazorPages();
         }

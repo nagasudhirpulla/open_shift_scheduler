@@ -27,7 +27,7 @@ namespace OSS.App.Shifts.Queries.GetShiftBetweenDates
             public async Task<List<Shift>> Handle(GetShiftsBetweenDatesQuery request, CancellationToken cancellationToken)
             {
                 List<Shift> res = await _context.Shifts.Include(s => s.ShiftParticipations).ToListAsync();
-                return await _context.Shifts.Where(s => s.ShiftDate >= request.StartDate && s.ShiftDate <= request.EndDate).Include(s => s.ShiftParticipations).ToListAsync();
+                return await _context.Shifts.Where(s => s.ShiftDate >= request.StartDate && s.ShiftDate <= request.EndDate).Include(s => s.ShiftType).Include(s => s.ShiftParticipations).ToListAsync();
             }
         }
     }

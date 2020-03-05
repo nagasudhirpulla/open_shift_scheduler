@@ -11,4 +11,3 @@
     shiftGroup: string;
     phoneNumber: string;
 }
-

@@ -19,7 +19,7 @@ namespace OSS.Infra
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
         {
-            if (environment.IsEnvironment("Testing") || environment.IsDevelopment())
+            if (environment.IsEnvironment("Testing"))
             {
                 // Add Identity Infra
                 services.AddDbContext<AppIdentityDbContext>(options =>
@@ -29,8 +29,10 @@ namespace OSS.Infra
             {
                 // Add Identity Persistence Infra 
                 services.AddDbContext<AppIdentityDbContext>(options =>
-                    options.UseNpgsql(
-                        configuration.GetConnectionString("DefaultConnection")));
+                        options.UseNpgsql(
+                          configuration.GetConnectionString("DefaultConnection"), 
+                          b => b.MigrationsAssembly("OSS.Web"))
+                    );
             }
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>

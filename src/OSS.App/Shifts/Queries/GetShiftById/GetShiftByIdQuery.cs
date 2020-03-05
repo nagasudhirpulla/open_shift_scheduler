@@ -24,7 +24,7 @@ namespace OSS.App.Shifts.Queries.GetShiftById
 
             public async Task<Shift> Handle(GetShiftByIdQuery request, CancellationToken cancellationToken)
             {
-                var shift = await _context.Shifts.FindAsync(request.Id);
+                var shift = await _context.Shifts.Include(s => s.ShiftType).FirstOrDefaultAsync(s => s.Id == request.Id);
                 return shift;
             }
         }

@@ -1,7 +1,7 @@
 ﻿export interface IShiftParticipationType {
+    id: number;
     name: string;
     isAbsence: boolean;
     isBold: boolean;
-    displayColor: string;
     colorString: string;
 }

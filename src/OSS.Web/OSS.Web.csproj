@@ -2,14 +2,34 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <UserSecretsId>aspnet-OSS.Web-20166FD8-CA5C-4D61-BD86-B71B10E5A82D</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\ActionType.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\CreateShiftAction.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\CreateShiftParticipationAction.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\CreateShiftParticipationsFromGroupAction.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\DeleteShiftAction.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\DeleteShiftParticipationAction.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\GetEmployeesAction.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\GetShiftGroupsAction.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\GetShiftParticipationTypesAction.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\GetShiftsBetweenDatesAction.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\GetShiftTypesAction.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\MoveShiftParticipationAction.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\UpdateShiftCommentsAction.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\UpdateShiftParticipationAction.tsx" />
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\components\shiftsEditApp.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\server_mediators\employees.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\server_mediators\shiftGroups.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\server_mediators\shiftParticipationTypes.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\server_mediators\shifts.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\server_mediators\shiftTypes.tsx" />
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\shifts_edit_ui.tsx" />
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\type_defs\IAction.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\utils\timeUtils.tsx" />
   </ItemGroup>
 
 
@@ -18,6 +38,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.2">
       <PrivateAssets>all</PrivateAssets>
@@ -47,9 +68,98 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\ActionType.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\DeleteShiftAction.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\UpdateShiftCommentsAction.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\MoveShiftParticipationAction.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\GetShiftsBetweenDatesAction.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\CreateShiftAction.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\CreateShiftParticipationAction.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\CreateShiftParticipationsFromGroupAction.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\DeleteShiftParticipationAction.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\GetShiftTypesAction.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\GetShiftParticipationTypesAction.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\UpdateShiftParticipationAction.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\GetShiftGroupsAction.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\GetEmployeesAction.tsx" />
     <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\components\shiftsEditApp.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\server_mediators\employees.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\server_mediators\shifts.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\server_mediators\shiftTypes.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\server_mediators\shiftParticipationTypes.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\server_mediators\shiftGroups.tsx" />
     <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\shifts_edit_ui.tsx" />
     <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\type_defs\IAction.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\utils\timeUtils.tsx" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Content Update="wwwroot\js\shifts_edit_ui_app\src\actions\CreateShiftAction.js">
+      <DependentUpon>CreateShiftAction.tsx</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\js\shifts_edit_ui_app\src\actions\CreateShiftAction.js.map">
+      <DependentUpon>CreateShiftAction.js</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\js\shifts_edit_ui_app\src\actions\CreateShiftParticipationAction.js">
+      <DependentUpon>CreateShiftParticipationAction.tsx</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\js\shifts_edit_ui_app\src\actions\CreateShiftParticipationAction.js.map">
+      <DependentUpon>CreateShiftParticipationAction.js</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\js\shifts_edit_ui_app\src\actions\CreateShiftParticipationsFromGroupAction.js">
+      <DependentUpon>CreateShiftParticipationsFromGroupAction.tsx</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\js\shifts_edit_ui_app\src\actions\CreateShiftParticipationsFromGroupAction.js.map">
+      <DependentUpon>CreateShiftParticipationsFromGroupAction.js</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\js\shifts_edit_ui_app\src\actions\DeleteShiftParticipationAction.js">
+      <DependentUpon>DeleteShiftParticipationAction.tsx</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\js\shifts_edit_ui_app\src\actions\DeleteShiftParticipationAction.js.map">
+      <DependentUpon>DeleteShiftParticipationAction.js</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\js\shifts_edit_ui_app\src\actions\DeleteShiftAction.js">
+      <DependentUpon>DeleteShiftAction.tsx</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\js\shifts_edit_ui_app\src\actions\UpdateShiftCommentsAction.js">
+      <DependentUpon>UpdateShiftCommentsAction.tsx</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\js\shifts_edit_ui_app\src\actions\UpdateShiftCommentsAction.js.map">
+      <DependentUpon>UpdateShiftCommentsAction.js</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\js\shifts_edit_ui_app\src\actions\MoveShiftParticipationAction.js">
+      <DependentUpon>MoveShiftParticipationAction.tsx</DependentUpon>
+    </Content>
   </ItemGroup>
 
 </Project>

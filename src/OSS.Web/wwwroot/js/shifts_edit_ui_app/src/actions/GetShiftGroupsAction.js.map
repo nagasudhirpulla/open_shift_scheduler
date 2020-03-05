@@ -1,0 +1,1 @@
+{"version":3,"file":"GetShiftGroupsAction.js","sourceRoot":"","sources":["GetShiftGroupsAction.tsx"],"names":[],"mappings":"AACA,OAAO,EAAE,UAAU,EAAE,MAAM,cAAc,CAAC;AAW1C,MAAM,UAAU,oBAAoB;IAChC,OAAO;QACH,IAAI,EAAE,UAAU,CAAC,gBAAgB;QACjC,OAAO,EAAE,EAAE;KACd,CAAC;AACN,CAAC"}

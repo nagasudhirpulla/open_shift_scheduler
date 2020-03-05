@@ -9,6 +9,7 @@ using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using OSS.Domain.Entities;
+using AutoMapper;
 
 namespace OSS.App.Security.Commands.CreateAppUser
 {
@@ -25,7 +26,16 @@ namespace OSS.App.Security.Commands.CreateAppUser
 
         public async Task<IdentityResult> Handle(CreateAppUserCommand request, CancellationToken cancellationToken)
         {
-            ApplicationUser user = new ApplicationUser { UserName = request.Username, Email = request.Email };
+            ApplicationUser user = new ApplicationUser
+            {
+                UserName = request.Username,
+                Email = request.Email,
+                GenderId = request.GenderId,
+                ShiftRoleId = request.ShiftRoleId,
+                ShiftGroupId = request.ShiftGroupId,
+                OfficeId = request.OfficeId,
+                IsActive = request.IsActive
+            };
             IdentityResult result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
             {

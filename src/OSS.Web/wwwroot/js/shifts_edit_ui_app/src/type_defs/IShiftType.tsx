@@ -1,7 +1,8 @@
 ﻿export interface IShiftType {
+    id: number;
     name: string;
     startOffsetHrs: number;
     startOffsetMins: number;
-    displayColor: string;
+    shiftSequence: number;
     colorString: string;
 }

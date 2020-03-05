@@ -1,5 +1,8 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
+using OSS.App.Mappings;
+using OSS.Domain.Entities;
 
 namespace OSS.App.Security.Commands.CreateAppUser
 {

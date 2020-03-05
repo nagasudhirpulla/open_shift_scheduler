@@ -33,7 +33,7 @@ namespace OSS.App.Security.Queries.GetAppUsers
                 UserListVM vm = new UserListVM();
                 vm.Users = new List<UserDTO>();
                 // get the list of users
-                List<ApplicationUser> users = await _userManager.Users.OrderBy(u => u.UserName).ToListAsync();
+                List<ApplicationUser> users = await _userManager.Users.OrderBy(u => u.UserName).Include(u => u.ShiftGroup).Include(u => u.ShiftRole).Include(u => u.Gender).ToListAsync();
                 foreach (ApplicationUser user in users)
                 {
                     // get user is of admin role

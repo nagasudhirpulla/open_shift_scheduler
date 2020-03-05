@@ -91,7 +91,7 @@ namespace OSS.Web.Controllers.api
 
         // POST: api/Shifts
         [HttpPost]
-        public async Task<IActionResult> PostShift([FromBody] Shift shift)
+        public async Task<IActionResult> CreateShift([FromBody] Shift shift)
         {
             Shift s = await _mediator.Send(new CreateShiftCommand() { Shift = shift });
 

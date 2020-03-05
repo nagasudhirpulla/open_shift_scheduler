@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 import { render } from 'react-dom';
-import DashboardPage from './components/shiftsEditApp';
+import ShiftsEditApp from './components/shiftsEditApp';
 
 render(
     <ShiftsEditApp></ShiftsEditApp>,
