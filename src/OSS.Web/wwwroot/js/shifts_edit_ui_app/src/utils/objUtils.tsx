@@ -10,14 +10,14 @@ export const groupObjBy = (xs, key) => {
     }, {});
 };
 
-export const convertShiftsToMatrix = (startDate: Date, endDate: Date, shifts: IShift[], shiftTypes: IShiftType[]) => {
+export const convertShiftsToMatrix = (startDate: Date, endDate: Date, shifts: IShift[], shiftTypes: IShiftType[]): IShift[][] => {
     // group the shift objects by date and shift type
     let groupedShifts = groupObjBy(shifts, 'shiftDate');
     for (var dateStr in groupedShifts) {
         groupedShifts[dateStr] = groupObjBy(groupedShifts[dateStr], 'shiftTypeId');
     }
 
-    const shiftsMatrix = [];
+    const shiftsMatrix: IShift[][] = [];
     for (let dateIter = 0; dateIter <= ((endDate as any) - (startDate as any)) / 86400000; dateIter++) {
         // create row for each shift date
         const shiftDate = new Date(startDate.getTime() + 86400000 * dateIter)
@@ -29,6 +29,7 @@ export const convertShiftsToMatrix = (startDate: Date, endDate: Date, shifts: IS
         for (let shiftTypeIter = 0; shiftTypeIter < shiftTypes.length; shiftTypeIter++) {
             const shiftType = shiftTypes[shiftTypeIter];
             let shiftObj: IShift = {
+                id: null,
                 shiftType: shiftType,
                 shiftTypeId: shiftType.id,
                 shiftDate: shiftDate,

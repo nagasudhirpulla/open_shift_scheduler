@@ -12,7 +12,7 @@ export interface IMoveShiftParticipationAction extends IAction {
     payload: IMoveShiftParticipationPayload
 }
 
-export function getEmployeesAction(shiftParticipation: IShiftParticipation, direction: 1 | -1): IMoveShiftParticipationAction {
+export function moveShiftParticipationAction(shiftParticipation: IShiftParticipation, direction: 1 | -1): IMoveShiftParticipationAction {
     return {
         type: ActionType.MOVE_SHIFT_PARTICIPATION,
         payload: { shiftParticipation, direction }

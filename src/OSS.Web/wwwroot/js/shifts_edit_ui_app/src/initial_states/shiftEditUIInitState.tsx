@@ -2,7 +2,8 @@
 
 const nowDate: Date = new Date()
 const startDate: Date = new Date(nowDate.getFullYear(), nowDate.getMonth(), 1)
-const endDate = new Date(nowDate.setMonth(nowDate.getMonth() + 1))
+let endDate: Date = new Date(startDate.getTime())
+endDate = new Date(endDate.setMonth(endDate.getMonth() + 1))
 
 const initState: IShiftsEditUIState = {
     ui: {
@@ -12,7 +13,8 @@ const initState: IShiftsEditUIState = {
         shiftGroups: [],
         shiftParticipationTypes: [],
         startDate: startDate,
-        endDate: endDate
+        endDate: endDate,
+        activeShift: null
     },
     urls: {
         serverBaseAddress: ".."

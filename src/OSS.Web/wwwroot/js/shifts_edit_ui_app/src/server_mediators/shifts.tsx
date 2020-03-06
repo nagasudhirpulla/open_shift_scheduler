@@ -50,6 +50,10 @@ export const createShift = async (baseAddr: string, shift: IShift): Promise<IShi
 
 export const createShiftParticipation = async (baseAddr: string, shiftParticipation: IShiftParticipation): Promise<IShiftParticipation> => {
     try {
+        let shiftId: number = shiftParticipation.shiftId
+        if (shiftId == null) {
+            return null;
+        }
         // console.log("shift object for shift participation creation is " + JSON.stringify(shift));
         const resp = await fetch(`${baseAddr}/api/ShiftParticipations`, {
             method: 'post',
@@ -62,7 +66,7 @@ export const createShiftParticipation = async (baseAddr: string, shiftParticipat
             },
             body: JSON.stringify({
                 "EmployeeId": shiftParticipation.employeeId,
-                "ShiftId": shiftParticipation.shiftId,
+                "ShiftId": shiftId,
                 "ShiftParticipationTypeId": shiftParticipation.shiftParticipationTypeId
             })
         });

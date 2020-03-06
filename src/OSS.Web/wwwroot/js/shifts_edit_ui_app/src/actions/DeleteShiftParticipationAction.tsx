@@ -11,7 +11,7 @@ export interface IDeleteShiftParticipationAction extends IAction {
     payload: IDeleteShiftParticipationPayload
 }
 
-export function deleteShiftParticipationAction(shiftParticipation): IDeleteShiftParticipationAction {
+export function deleteShiftParticipationAction(shiftParticipation: IShiftParticipation): IDeleteShiftParticipationAction {
     return {
         type: ActionType.DELETE_SHIFT_PARTICIPATION,
         payload: { shiftParticipation }

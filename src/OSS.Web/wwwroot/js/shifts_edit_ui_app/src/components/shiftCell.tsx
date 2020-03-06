@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { IShiftCellProps } from "../type_defs/ShiftCellProps";
+import { IShiftCellProps } from "../type_defs/IShiftCellProps";
 import { IShiftParticipation } from "../type_defs/IShiftParticipation";
 import { IShiftType } from '../type_defs/IShiftType';
 import { IEmployee } from '../type_defs/IEmployee';

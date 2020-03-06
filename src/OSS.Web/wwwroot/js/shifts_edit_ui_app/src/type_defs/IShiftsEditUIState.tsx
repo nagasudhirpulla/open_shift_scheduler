@@ -12,7 +12,8 @@ export interface IShiftsEditUIState {
         shiftGroups: IShiftGroup[],
         shiftParticipationTypes: IShiftParticipationType[],
         startDate: Date,
-        endDate: Date
+        endDate: Date,
+        activeShift: IShift
     },
     urls: {
         serverBaseAddress: string
