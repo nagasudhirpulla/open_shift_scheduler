@@ -6,7 +6,7 @@ import { useReducer, useEffect, useCallback } from "react";
 import { getEmployees } from "../server_mediators/employees";
 import { ISetStartTimeAction } from "../actions/SetStartTimeAction";
 import { ISetEndTimeAction } from "../actions/SetEndTimeAction";
-import { getShiftsBetweenDates, createShiftParticipation } from "../server_mediators/shifts";
+import { getShiftsBetweenDates, createShiftParticipation, createShift } from "../server_mediators/shifts";
 import { setShiftsAction, ISetShiftsAction } from "../actions/SetShiftsAction";
 import { getShiftTypes } from "../server_mediators/shiftTypes";
 import { setShiftTypesAction, ISetShiftTypesPayload, ISetShiftTypesAction } from "../actions/SetShiftTypesAction";
@@ -15,7 +15,7 @@ import { setShiftParticipationTypesAction, ISetShiftParticipationTypesAction } f
 import { ISetActiveShiftAction } from "../actions/SetActiveShiftAction";
 import { ICreateShiftParticipationAction } from "../actions/CreateShiftParticipationAction";
 import { IAddParticipationToUiAction, addParticipationToUiAction } from "../actions/AddParticipationToUiAction";
-import { createShiftAction } from "../actions/CreateShiftAction";
+import { addShiftToUiAction, IAddShiftToUiAction } from "../actions/AddShiftToUiAction";
 
 export const useShiftsEditUIReducer = (initState: IShiftsEditUIState): [IShiftsEditUIState, React.Dispatch<IAction>] => {
     // create the reducer function
@@ -110,6 +110,21 @@ export const useShiftsEditUIReducer = (initState: IShiftsEditUIState): [IShiftsE
                     console.log('Could not find shift to add the shift participation');
                     return state;
                 }
+            case ActionType.ADD_SHIFT_TO_UI:
+                // console.log(`shift that is to be created in reducer is ${JSON.stringify(action.shift)}`);
+                const shift = (action as IAddShiftToUiAction).payload.shift;
+                if (shift.shiftParticipations == null) {
+                    shift.shiftParticipations = [];
+                }
+                const newState = {
+                    ...state,
+                    shifts:
+                        [
+                            ...state.ui.shifts,
+                            shift
+                        ]
+                }
+                return newState as IShiftsEditUIState;
             default:
                 console.log("unwanted action detected");
                 console.log(JSON.stringify(action));
@@ -154,12 +169,18 @@ export const useShiftsEditUIReducer = (initState: IShiftsEditUIState): [IShiftsE
             }
             case ActionType.CREATE_SHIFT_PARTICIPATION: {
                 //TODO resolve this
-                const shiftParticipation = (action as ICreateShiftParticipationAction).payload.shiftParticipation
+                let shiftParticipation = (action as ICreateShiftParticipationAction).payload.shiftParticipation
+                let shift = shiftParticipation.shift;
                 if (shiftParticipation.shiftId == null) {
-                    pageStateDispatch(createShiftAction(shiftParticipation.shift));
-                }
-                const sp = await createShiftParticipation(pageState.urls.serverBaseAddress, shiftParticipation)
-                pageStateDispatch(addParticipationToUiAction(sp));
+                    //create a shift
+                    shift = await createShift(pageState.urls.serverBaseAddress, shiftParticipation.shift)
+                    const sp = await createShiftParticipation(pageState.urls.serverBaseAddress, shiftParticipation)
+                    shift.shiftParticipations.push(sp)
+                    pageStateDispatch(addShiftToUiAction(shift));
+                } else {
+                    const sp = await createShiftParticipation(pageState.urls.serverBaseAddress, shiftParticipation)
+                    pageStateDispatch(addParticipationToUiAction(sp));
+                }                
                 break;
             }
             default:

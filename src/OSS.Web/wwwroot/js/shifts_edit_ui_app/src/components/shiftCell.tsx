@@ -2,7 +2,6 @@
 import { IShiftCellProps } from "../type_defs/IShiftCellProps";
 import { IShiftParticipation } from "../type_defs/IShiftParticipation";
 import { IShiftType } from '../type_defs/IShiftType';
-import { IEmployee } from '../type_defs/IEmployee';
 
 function ShiftCell(props: IShiftCellProps) {
     const getPartDecorationStyleObj = (participationobj: IShiftParticipation): {} => {
@@ -37,8 +36,8 @@ function ShiftCell(props: IShiftCellProps) {
         return props.groupedShiftTypes[props.shift.shiftTypeId][0];
     }
 
-    const getEmployee = (empId: string): IEmployee => {
-        return props.groupedEmployees[empId][0];
+    const getEmployeeUsername = (empId: string): string => {
+        return props.groupedEmployees[empId][0].username
     }
 
     return (
@@ -52,7 +51,7 @@ function ShiftCell(props: IShiftCellProps) {
                     props.shift.shiftParticipations.sort((a, b) => (a.participationSequence > b.participationSequence) ? 1 : ((b.participationSequence > a.participationSequence) ? -1 : 0)).map((participationobj, ind) =>
                         <div key={'participation_display_' + ind} className={'part_disp_row m-1'}>
                             <button className={'btn btn-outline-info btn-sm part_up_btn'} onClick={() => props.moveShiftParticipation(participationobj, -1)}><i className="fa fa-arrow-circle-o-down"></i></button>
-                            <span style={getPartDecorationStyleObj(participationobj)} className={getPartDecorationClasses(participationobj).join(' ')}>{(participationobj.participationSequence + 1) + ". "}{getEmployee(participationobj.employeeId).username}</span>
+                            <span style={getPartDecorationStyleObj(participationobj)} className={getPartDecorationClasses(participationobj).join(' ')}>{(participationobj.participationSequence + 1) + ". "}{getEmployeeUsername(participationobj.employeeId)}</span>
                             <button className={'btn btn-outline-info btn-sm part_down_btn'} onClick={() => props.moveShiftParticipation(participationobj, 1)}><i className="fa fa-arrow-circle-o-up"></i></button>
                             <button className={'btn btn-outline-warning btn-sm part_edit_btn'} onClick={() => props.updateShiftParticipation(participationobj)}><i className="fa fa-pencil"></i></button>
                             <button className={'btn btn-outline-danger btn-sm part_del_btn'} onClick={() => props.removeShiftParticipation(participationobj)}><i className="fa fa-trash-o"></i></button>

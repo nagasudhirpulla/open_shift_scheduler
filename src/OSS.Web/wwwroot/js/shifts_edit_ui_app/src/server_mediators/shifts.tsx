@@ -1,5 +1,5 @@
 ﻿import { IShift } from "../type_defs/IShift";
-import { dateToApiStr } from "../utils/timeUtils";
+import { dateToApiStr, dateTimeToApiStr } from "../utils/timeUtils";
 import { IShiftParticipation } from "../type_defs/IShiftParticipation";
 
 // using postman to test apis - https://www.youtube.com/watch?v=u9iBjM-x5Jc
@@ -35,7 +35,7 @@ export const createShift = async (baseAddr: string, shift: IShift): Promise<IShi
             },
             body: JSON.stringify({
                 "ShiftTypeId": shift.shiftTypeId,
-                "ShiftDate": shift.shiftDate
+                "ShiftDate": dateTimeToApiStr(shift.shiftDate)
             })
         });
         // console.log(resp);

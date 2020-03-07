@@ -23,3 +23,7 @@ export const dateToDayOfWeek = (dateObj: Date) => {
 export const dateToApiStr = (dateObj: Date): string => {
     return dateObj.getFullYear() + "-" + ensureTwoDigits(dateObj.getMonth() + 1) + "-" + ensureTwoDigits(dateObj.getDate());
 };
+
+export const dateTimeToApiStr = (dateObj: Date): string => {
+    return `${dateToApiStr(dateObj)}T${ensureTwoDigits(dateObj.getHours())}:${ensureTwoDigits(dateObj.getMinutes())}:${ensureTwoDigits(dateObj.getSeconds())}`;
+};

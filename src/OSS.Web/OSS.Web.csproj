@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\AddParticipationToUiAction.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\AddShiftToUiAction.tsx" />
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\SetActiveShiftAction.tsx" />
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\SetEmployeesAction.tsx" />
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\SetEndTimeAction.tsx" />
@@ -96,6 +97,7 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\AddParticipationToUiAction.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\AddShiftToUiAction.tsx" />
     <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\SetShiftParticipationTypesAction.tsx">
       <SubType>Code</SubType>
     </TypeScriptCompile>

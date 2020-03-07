@@ -27,6 +27,7 @@ function ShiftsEditApp() {
     const onStartTimeChanged = (timeObj) => {
         if (timeObj instanceof moment) {
             let dateObj = moment(timeObj).toDate();
+            console.log(dateObj)
             pageStateDispatch(setStartTimeAction(dateObj))
         }
     }

@@ -10,7 +10,7 @@ import { IShiftCellsMatrixProps } from "../type_defs/IShiftCellsMatrixProps";
 function ShiftCellsMatrix(props: IShiftCellsMatrixProps) {
     const shiftMatrix = convertShiftsToMatrix(props.startDate, props.endDate, props.shifts, props.shiftTypes);
     // group the employees, shiftTypes, shiftParticipationTypes by Id
-    const groupedEmployees = groupObjBy(props.employees, 'id') as IGroupedEmployee;
+    const groupedEmployees = groupObjBy(props.employees, 'userId') as IGroupedEmployee;
     const groupedShiftTypes = groupObjBy(props.shiftTypes, 'id') as IGroupedShiftType;
     const groupedShiftPartTypes = groupObjBy(props.shiftParticipationTypes, 'id') as IGroupedShiftParticipationType;
     const colSize = Math.floor((100 / (props.shiftTypes.length)));
