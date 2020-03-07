@@ -14,7 +14,8 @@ const initState: IShiftsEditUIState = {
         shiftParticipationTypes: [],
         startDate: startDate,
         endDate: endDate,
-        activeShift: null
+        activeShift: null,
+        activeShiftParticipation: null
     },
     urls: {
         serverBaseAddress: ".."

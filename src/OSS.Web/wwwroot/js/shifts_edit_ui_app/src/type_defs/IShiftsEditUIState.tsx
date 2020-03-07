@@ -3,6 +3,7 @@ import { IEmployee } from "./IEmployee";
 import { IShiftType } from "./IShiftType";
 import { IShiftGroup } from "./IShiftGroup";
 import { IShiftParticipationType } from "./IShiftParticipationType";
+import { IShiftParticipation } from "./IShiftParticipation";
 
 export interface IShiftsEditUIState {
     ui: {
@@ -13,7 +14,8 @@ export interface IShiftsEditUIState {
         shiftParticipationTypes: IShiftParticipationType[],
         startDate: Date,
         endDate: Date,
-        activeShift: IShift
+        activeShift: IShift,
+        activeShiftParticipation: IShiftParticipation
     },
     urls: {
         serverBaseAddress: string

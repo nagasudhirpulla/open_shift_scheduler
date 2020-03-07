@@ -2,13 +2,13 @@
 import { IShiftParticipationType } from "./IShiftParticipationType";
 import { IShift } from "./IShift";
 import { IShiftParticipation } from "./IShiftParticipation";
-
-export interface IAddEmployeeModalProps {
+import { IGroupedEmployee } from "./IGroupedEmployee";
+import { IGroupedShiftParticipationType } from "./IGroupedShiftParticipationType";
+export interface IEditParticipationModalProps {
     show: boolean;
     setShow: (x: boolean) => void;
-    shift: IShift;
+    participation: IShiftParticipation;
     employees: IEmployee[];
     shiftParticipationTypes: IShiftParticipationType[];
-    onParticipationSubmit: (p: IShiftParticipation) => void;
+    onParticipationSubmit: (sp: IShiftParticipation) => void;
 }
-

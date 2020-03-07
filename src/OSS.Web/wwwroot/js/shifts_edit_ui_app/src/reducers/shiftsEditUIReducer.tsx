@@ -24,6 +24,10 @@ import { ISetShiftParticipationsAction, setShiftParticipationsReducer } from "..
 import { createShiftParticipationsFromGroupDispatch, ICreateShiftParticipationsFromGroupAction } from "../actions/CreateShiftParticipationsFromGroupAction";
 import { setShiftGroupsReducer, ISetShiftGroupsAction, setShiftGroupsAction } from "../actions/SetShiftGroupsAction";
 import { getShiftGroups } from "../server_mediators/shiftGroups";
+import { editShiftParticipation } from "../server_mediators/shiftParticipation";
+import { editShiftParticipationDispatch, IEditShiftParticipationAction } from "../actions/EditShiftParticipationAction";
+import { updateShiftParticipationReducer, IUpdateShiftParticipationAction } from "../actions/UpdateShiftParticipationAction";
+import { setActiveShiftParticipationReducer, ISetActiveShiftParticipationAction } from "../actions/SetActiveShiftParticipationAction";
 
 export const useShiftsEditUIReducer = (initState: IShiftsEditUIState): [IShiftsEditUIState, React.Dispatch<IAction>] => {
     // create the reducer function
@@ -45,6 +49,8 @@ export const useShiftsEditUIReducer = (initState: IShiftsEditUIState): [IShiftsE
                 return setShiftsReducer(state, action as ISetShiftsAction)
             case ActionType.SET_ACTIVE_SHIFT:
                 return setActiveShiftReducer(state, action as ISetActiveShiftAction)
+            case ActionType.SET_ACTIVE_SHIFT_PARTICIPATION:
+                return setActiveShiftParticipationReducer(state, action as ISetActiveShiftParticipationAction)
             case ActionType.ADD_SHIFT_TO_UI:
                 return addShiftToUiReducer(state, action as IAddShiftToUiAction)
             case ActionType.ADD_PARTICIPATION_TO_UI:
@@ -53,6 +59,8 @@ export const useShiftsEditUIReducer = (initState: IShiftsEditUIState): [IShiftsE
                 return deleteParticipationFromUiReducer(state, action as IDeleteParticipationFromUiAction)
             case ActionType.SET_SHIFT_PARTICIPATIONS:
                 return setShiftParticipationsReducer(state, action as ISetShiftParticipationsAction)
+            case ActionType.UPDATE_SHIFT_PARTICIPATION:
+                return updateShiftParticipationReducer(state, action as IUpdateShiftParticipationAction)
             default:
                 console.log("unwanted action detected");
                 console.log(JSON.stringify(action));
@@ -106,6 +114,10 @@ export const useShiftsEditUIReducer = (initState: IShiftsEditUIState): [IShiftsE
             }
             case ActionType.CREATE_SHIFT_PARTICIPATIONS_FROM_GROUP: {
                 await createShiftParticipationsFromGroupDispatch(action as ICreateShiftParticipationsFromGroupAction, pageState, pageStateDispatch)
+                break;
+            }
+            case ActionType.EDIT_SHIFT_PARTICIPATION: {
+                await editShiftParticipationDispatch(action as IEditShiftParticipationAction, pageState, pageStateDispatch)
                 break;
             }
             default:
