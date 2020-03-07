@@ -1,130 +1,58 @@
 ﻿import { ActionType } from "../actions/ActionType";
 import { IShiftsEditUIState } from "../type_defs/IShiftsEditUIState";
 import { IAction } from "../type_defs/IAction";
-import { ISetEmployeesAction, setEmployeesAction } from "../actions/SetEmployeesAction";
+import { ISetEmployeesAction, setEmployeesAction, setEmployeesReducer } from "../actions/SetEmployeesAction";
 import { useReducer, useEffect, useCallback } from "react";
 import { getEmployees } from "../server_mediators/employees";
-import { ISetStartTimeAction } from "../actions/SetStartTimeAction";
-import { ISetEndTimeAction } from "../actions/SetEndTimeAction";
-import { getShiftsBetweenDates, createShiftParticipation, createShift } from "../server_mediators/shifts";
-import { setShiftsAction, ISetShiftsAction } from "../actions/SetShiftsAction";
+import { ISetStartTimeAction, setStartTimeReducer } from "../actions/SetStartTimeAction";
+import { ISetEndTimeAction, setEndTimeReducer } from "../actions/SetEndTimeAction";
+import { getShiftsBetweenDates } from "../server_mediators/shifts";
+import { setShiftsAction, ISetShiftsAction, setShiftsReducer } from "../actions/SetShiftsAction";
 import { getShiftTypes } from "../server_mediators/shiftTypes";
-import { setShiftTypesAction, ISetShiftTypesPayload, ISetShiftTypesAction } from "../actions/SetShiftTypesAction";
+import { setShiftTypesAction, ISetShiftTypesAction, setShiftTypesReducer } from "../actions/SetShiftTypesAction";
 import { getShiftParticipationTypes } from "../server_mediators/shiftParticipationTypes";
-import { setShiftParticipationTypesAction, ISetShiftParticipationTypesAction } from "../actions/SetShiftParticipationTypesAction";
-import { ISetActiveShiftAction } from "../actions/SetActiveShiftAction";
-import { ICreateShiftParticipationAction } from "../actions/CreateShiftParticipationAction";
-import { IAddParticipationToUiAction, addParticipationToUiAction } from "../actions/AddParticipationToUiAction";
-import { addShiftToUiAction, IAddShiftToUiAction } from "../actions/AddShiftToUiAction";
+import { setShiftParticipationTypesAction, ISetShiftParticipationTypesAction, setShiftParticipationTypesReducer } from "../actions/SetShiftParticipationTypesAction";
+import { ISetActiveShiftAction, setActiveShiftReducer } from "../actions/SetActiveShiftAction";
+import { ICreateShiftParticipationAction, createShiftParticipationDispatch } from "../actions/CreateShiftParticipationAction";
+import { IAddParticipationToUiAction, addParticipationToUiReducer } from "../actions/AddParticipationToUiAction";
+import { addShiftToUiAction, IAddShiftToUiAction, addShiftToUiReducer } from "../actions/AddShiftToUiAction";
+import { getShiftsForUiAction } from "../actions/GetShiftsForUiAction";
+import { getEmployeesAction } from "../actions/GetEmployeesAction";
+import { deleteShiftParticipationDispatch, IDeleteShiftParticipationAction } from "../actions/DeleteShiftParticipationAction";
+import { IDeleteParticipationFromUiAction, deleteParticipationFromUiReducer } from "../actions/deleteParticipationFromUiAction";
+import { ISetShiftParticipationsAction, setShiftParticipationsReducer } from "../actions/setShiftParticipationsAction";
+import { createShiftParticipationsFromGroupDispatch, ICreateShiftParticipationsFromGroupAction } from "../actions/CreateShiftParticipationsFromGroupAction";
+import { setShiftGroupsReducer, ISetShiftGroupsAction, setShiftGroupsAction } from "../actions/SetShiftGroupsAction";
+import { getShiftGroups } from "../server_mediators/shiftGroups";
 
 export const useShiftsEditUIReducer = (initState: IShiftsEditUIState): [IShiftsEditUIState, React.Dispatch<IAction>] => {
     // create the reducer function
-    const reducer = (state: IShiftsEditUIState, action: IAction) => {
+    const reducer = (state: IShiftsEditUIState, action: IAction): IShiftsEditUIState => {
         switch (action.type) {
             case ActionType.SET_START_TIME:
-                return {
-                    ...state,
-                    ui: {
-                        ...state.ui,
-                        startDate: (action as ISetStartTimeAction).payload.timeObj
-                    }
-                } as IShiftsEditUIState;
+                return setStartTimeReducer(state, action as ISetStartTimeAction)
             case ActionType.SET_END_TIME:
-                return {
-                    ...state,
-                    ui: {
-                        ...state.ui,
-                        endDate: (action as ISetEndTimeAction).payload.timeObj
-                    }
-                } as IShiftsEditUIState;
+                return setEndTimeReducer(state, action as ISetEndTimeAction)
             case ActionType.SET_EMPLOYEES:
-                return {
-                    ...state,
-                    ui: {
-                        ...state.ui,
-                        employees: (action as ISetEmployeesAction).payload.employees
-                    }
-                } as IShiftsEditUIState;
-            case ActionType.SET_SHIFTS:
-                return {
-                    ...state,
-                    ui: {
-                        ...state.ui,
-                        shifts: (action as ISetShiftsAction).payload.shifts
-                    }
-                } as IShiftsEditUIState;
+                return setEmployeesReducer(state, action as ISetEmployeesAction)
             case ActionType.SET_SHIFT_TYPES:
-                return {
-                    ...state,
-                    ui: {
-                        ...state.ui,
-                        shiftTypes: (action as ISetShiftTypesAction).payload.shiftTypes
-                    }
-                } as IShiftsEditUIState;
+                return setShiftTypesReducer(state, action as ISetShiftTypesAction)
             case ActionType.SET_SHIFT_PARTICIPATION_TYPES:
-                return {
-                    ...state,
-                    ui: {
-                        ...state.ui,
-                        shiftParticipationTypes: (action as ISetShiftParticipationTypesAction).payload.shiftParticipationTypes
-                    }
-                } as IShiftsEditUIState;
+                return setShiftParticipationTypesReducer(state, action as ISetShiftParticipationTypesAction)
+            case ActionType.SET_SHIFT_GROUPS:
+                return setShiftGroupsReducer(state, action as ISetShiftGroupsAction)
+            case ActionType.SET_SHIFTS:
+                return setShiftsReducer(state, action as ISetShiftsAction)
             case ActionType.SET_ACTIVE_SHIFT:
-                return {
-                    ...state,
-                    ui: {
-                        ...state.ui,
-                        activeShift: (action as ISetActiveShiftAction).payload.shift
-                    }
-                } as IShiftsEditUIState;
-            case ActionType.ADD_PARTICIPATION_TO_UI:
-                // find the relavent shift and add the participation object to it
-                let shiftParticipation = (action as IAddParticipationToUiAction).payload.shiftParticipation;
-                // console.log(shiftParticipation);
-                let shiftInd = -1;
-                for (let shiftIter = 0; (shiftIter < state.ui.shifts.length) && (shiftInd == -1); shiftIter++) {
-                    //console.log(state.shifts[shiftIter].shiftId);
-                    if (state.ui.shifts[shiftIter].id == shiftParticipation.shiftId) {
-                        shiftInd = shiftIter;
-                    }
-                }
-                if (shiftInd != -1) {
-                    const newState = {
-                        ...state,
-                        shifts: [
-                            ...state.ui.shifts.slice(0, shiftInd),
-                            {
-                                ...state.ui.shifts[shiftInd],
-                                shiftParticipations: [
-                                    ...state.ui.shifts[shiftInd].shiftParticipations,
-                                    shiftParticipation
-                                ]
-                            },
-                            ...state.ui.shifts.slice(shiftInd + 1)
-                        ]
-                    };
-                    // console.log(newState);
-                    return newState as IShiftsEditUIState;
-                }
-                else {
-                    console.log('Could not find shift to add the shift participation');
-                    return state;
-                }
+                return setActiveShiftReducer(state, action as ISetActiveShiftAction)
             case ActionType.ADD_SHIFT_TO_UI:
-                // console.log(`shift that is to be created in reducer is ${JSON.stringify(action.shift)}`);
-                const shift = (action as IAddShiftToUiAction).payload.shift;
-                if (shift.shiftParticipations == null) {
-                    shift.shiftParticipations = [];
-                }
-                const newState = {
-                    ...state,
-                    shifts:
-                        [
-                            ...state.ui.shifts,
-                            shift
-                        ]
-                }
-                return newState as IShiftsEditUIState;
+                return addShiftToUiReducer(state, action as IAddShiftToUiAction)
+            case ActionType.ADD_PARTICIPATION_TO_UI:
+                return addParticipationToUiReducer(state, action as IAddParticipationToUiAction)
+            case ActionType.DELETE_SHIFT_PARTICIPATION_FROM_UI:
+                return deleteParticipationFromUiReducer(state, action as IDeleteParticipationFromUiAction)
+            case ActionType.SET_SHIFT_PARTICIPATIONS:
+                return setShiftParticipationsReducer(state, action as ISetShiftParticipationsAction)
             default:
                 console.log("unwanted action detected");
                 console.log(JSON.stringify(action));
@@ -140,8 +68,7 @@ export const useShiftsEditUIReducer = (initState: IShiftsEditUIState): [IShiftsE
     // update employees from server
     useEffect(() => {
         (async function () {
-            const employees = await getEmployees(pageState.urls.serverBaseAddress);
-            pageStateDispatch(setEmployeesAction(employees));
+            asyncDispatch(getEmployeesAction())
 
             const shiftTypes = await getShiftTypes(pageState.urls.serverBaseAddress);
             pageStateDispatch(setShiftTypesAction(shiftTypes));
@@ -149,8 +76,10 @@ export const useShiftsEditUIReducer = (initState: IShiftsEditUIState): [IShiftsE
             const shiftPartTypes = await getShiftParticipationTypes(pageState.urls.serverBaseAddress);
             pageStateDispatch(setShiftParticipationTypesAction(shiftPartTypes));
 
-            const shifts = await getShiftsBetweenDates(pageState.urls.serverBaseAddress, pageState.ui.startDate, pageState.ui.endDate);
-            pageStateDispatch(setShiftsAction(shifts));
+            const shiftGroups = await getShiftGroups(pageState.urls.serverBaseAddress);
+            pageStateDispatch(setShiftGroupsAction(shiftGroups));
+
+            asyncDispatch(getShiftsForUiAction())
         })();
     }, [pageState.urls.serverBaseAddress]);
 
@@ -162,25 +91,21 @@ export const useShiftsEditUIReducer = (initState: IShiftsEditUIState): [IShiftsE
                 pageStateDispatch(setEmployeesAction(employees));
                 break;
             }
-            case ActionType.GET_SHIFTS_BETWEEN_DATES: {
+            case ActionType.GET_SHIFTS_FOR_UI: {
                 const shifts = await getShiftsBetweenDates(pageState.urls.serverBaseAddress, pageState.ui.startDate, pageState.ui.endDate)
                 pageStateDispatch(setShiftsAction(shifts));
                 break;
             }
             case ActionType.CREATE_SHIFT_PARTICIPATION: {
-                //TODO resolve this
-                let shiftParticipation = (action as ICreateShiftParticipationAction).payload.shiftParticipation
-                let shift = shiftParticipation.shift;
-                if (shiftParticipation.shiftId == null) {
-                    //create a shift
-                    shift = await createShift(pageState.urls.serverBaseAddress, shiftParticipation.shift)
-                    const sp = await createShiftParticipation(pageState.urls.serverBaseAddress, shiftParticipation)
-                    shift.shiftParticipations.push(sp)
-                    pageStateDispatch(addShiftToUiAction(shift));
-                } else {
-                    const sp = await createShiftParticipation(pageState.urls.serverBaseAddress, shiftParticipation)
-                    pageStateDispatch(addParticipationToUiAction(sp));
-                }                
+                await createShiftParticipationDispatch(action as ICreateShiftParticipationAction, pageState, pageStateDispatch)
+                break;
+            }
+            case ActionType.DELETE_SHIFT_PARTICIPATION: {
+                await deleteShiftParticipationDispatch(action as IDeleteShiftParticipationAction, pageState, pageStateDispatch)
+                break;
+            }
+            case ActionType.CREATE_SHIFT_PARTICIPATIONS_FROM_GROUP: {
+                await createShiftParticipationsFromGroupDispatch(action as ICreateShiftParticipationsFromGroupAction, pageState, pageStateDispatch)
                 break;
             }
             default:

@@ -26,7 +26,7 @@ namespace OSS.App.ShiftGroups.Commands.SeedShiftGroups
                 List<string> seedShiftGroups = new List<string>() { "General" };
                 foreach (var shiftGrp in seedShiftGroups)
                 {
-                    bool isShiftGrpPres = await _context.ShiftGroups.AnyAsync(g => g.Name.Equals(shiftGrp));
+                    bool isShiftGrpPres = await _context.ShiftGroups.AnyAsync(g => g.Name.ToLower().Equals(shiftGrp.ToLower()));
                     if (!isShiftGrpPres)
                     {
                         _context.ShiftGroups.Add(new ShiftGroup() { Name = shiftGrp });

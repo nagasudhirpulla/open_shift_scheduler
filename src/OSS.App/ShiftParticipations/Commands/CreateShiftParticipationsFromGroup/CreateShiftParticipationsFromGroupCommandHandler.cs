@@ -21,6 +21,8 @@ namespace OSS.App.ShiftParticipations.Commands.CreateShiftParticipationsFromGrou
 
         public async Task<List<ShiftParticipation>> Handle(CreateShiftParticipationsFromGroupCommand request, CancellationToken cancellationToken)
         {
+            // Get the shift participation type named normal
+            ShiftParticipationType shiftParticipationType = await _context.ShiftParticipationTypes.Where(spt => spt.Name.ToLower() == "normal").FirstOrDefaultAsync();
             // get the employees in the shiftGroup
             ShiftGroup shiftGroup = await _context.ShiftGroups.Include(sg => sg.Employees).FirstOrDefaultAsync(sg => sg.Id == request.ShiftGroupId);
             List<string> empIds = shiftGroup.Employees.Select(empl => empl.Id).ToList();
@@ -33,7 +35,7 @@ namespace OSS.App.ShiftParticipations.Commands.CreateShiftParticipationsFromGrou
                     {
                         continue;
                     }
-                    _context.ShiftParticipations.Add(new ShiftParticipation { EmployeeId = empId, ShiftId = request.ShiftId });
+                    _context.ShiftParticipations.Add(new ShiftParticipation { EmployeeId = empId, ShiftId = request.ShiftId, ShiftParticipationTypeId = shiftParticipationType.Id });
                     await _context.SaveChangesAsync();
                 }
                 catch (Exception ex)

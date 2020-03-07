@@ -26,7 +26,7 @@ namespace OSS.App.Genders.Commands.SeedGenders
                 List<string> seedGenders = new List<string>() { "Male", "Female" };
                 foreach (var gend in seedGenders)
                 {
-                    bool isGendPres = await _context.Genders.AnyAsync(g => g.Name.Equals(gend));
+                    bool isGendPres = await _context.Genders.AnyAsync(g => g.Name.ToLower().Equals(gend.ToLower()));
                     if (!isGendPres)
                     {
                         _context.Genders.Add(new Gender() { Name = gend });

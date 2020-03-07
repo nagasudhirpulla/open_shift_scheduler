@@ -6,7 +6,7 @@ import { useShiftsEditUIReducer } from '../reducers/shiftsEditUIReducer';
 import moment from 'moment';
 import { setStartTimeAction } from '../actions/SetStartTimeAction';
 import { setEndTimeAction } from '../actions/SetEndTimeAction';
-import { getShiftsBetweenDatesAction } from '../actions/GetShiftsBetweenDatesAction';
+import { getShiftsForUiAction } from '../actions/GetShiftsForUiAction';
 import ShiftCellsMatrix from './ShiftCellsMatrix';
 import CommentsElement from './CommentsElement';
 import { IShift } from '../type_defs/IShift';
@@ -19,32 +19,43 @@ import { deleteShiftAction } from '../actions/DeleteShiftAction';
 import AddEmployeeModal from './AddEmployeeModal';
 import { createShiftParticipationAction } from '../actions/CreateShiftParticipationAction';
 import { setActiveShiftAction } from '../actions/SetActiveShiftAction';
+import AddFromShiftGroupModal from './AddFromShiftGroupModal';
+import { setShiftParticipationsAction } from '../actions/setShiftParticipationsAction';
+import { createShiftParticipationsFromGroupAction } from '../actions/CreateShiftParticipationsFromGroupAction';
 
 function ShiftsEditApp() {
     let [pageState, pageStateDispatch] = useShiftsEditUIReducer(pageInitState);
     const [showAddEmpModal, setAddEmpModalShow] = useState(false);
+    const [showAddFromGroupModal, setAddFromGroupModalShow] = useState(false);
+    const [startDate, setStartDate] = useState(pageState.ui.startDate);
+    const [endDate, setEndDate] = useState(pageState.ui.endDate);
 
     const onStartTimeChanged = (timeObj) => {
         if (timeObj instanceof moment) {
             let dateObj = moment(timeObj).toDate();
-            console.log(dateObj)
-            pageStateDispatch(setStartTimeAction(dateObj))
+            setStartDate(dateObj)
         }
     }
     const onEndTimeChanged = (timeObj) => {
         if (timeObj instanceof moment) {
             let dateObj = moment(timeObj).toDate();
-            pageStateDispatch(setEndTimeAction(dateObj))
+            setEndDate(dateObj)
         }
     }
-    //console.log(pageState.ui.shiftTypes)
+
+    const onLoadBtnClicked = () => {
+        pageStateDispatch(setStartTimeAction(startDate));
+        pageStateDispatch(setEndTimeAction(endDate));
+        pageStateDispatch(getShiftsForUiAction())
+    }
+
     return (
         <>
             <h3>Edit Shifts</h3>
             <div className={"datePickerDiv"}>
                 <span>Start Time{" "}</span>
                 <DateTime
-                    value={pageState.ui.startDate}
+                    value={startDate}
                     dateFormat={'DD-MM-YYYY'}
                     timeFormat={false}
                     onChange={onStartTimeChanged}
@@ -54,14 +65,14 @@ function ShiftsEditApp() {
             <div style={{ marginLeft: "0.5em" }} className={"datePickerDiv"}>
                 <span>End Time{"  "}</span>
                 <DateTime
-                    value={pageState.ui.endDate}
+                    value={endDate}
                     dateFormat={'DD-MM-YYYY'}
                     timeFormat={false}
                     onChange={onEndTimeChanged}
                     className={"timePicker"}
                 />
             </div>
-            <button onClick={() => { pageStateDispatch(getShiftsBetweenDatesAction()) }} className={"btn btn-success btn-sm btn-icon-split loadBtn"}>
+            <button onClick={onLoadBtnClicked} className={"btn btn-success btn-sm btn-icon-split loadBtn"}>
                 <span className={"icon text-white-50"}>
                     <i className={"fas fa-sync"}></i>
                 </span>
@@ -81,7 +92,7 @@ function ShiftsEditApp() {
                 updateShiftParticipation={(sp: IShiftParticipation) => { pageStateDispatch(updateShiftParticipationAction(sp)) }}
                 removeShiftParticipation={(sp: IShiftParticipation) => { pageStateDispatch(deleteShiftParticipationAction(sp)) }}
                 createShiftParticipation={(s: IShift) => { pageStateDispatch(setActiveShiftAction(s)); setAddEmpModalShow(true); }}
-                createShiftParticipationFromGroup={(s: IShift) => { /*TODO show modal here*/ }}
+                createShiftParticipationFromGroup={(s: IShift) => { pageStateDispatch(setActiveShiftAction(s)); setAddFromGroupModalShow(true); }}
                 removeAllShiftParticipations={(s: IShift) => { pageStateDispatch(deleteShiftAction(s)) }}
             />
             <br />
@@ -97,6 +108,13 @@ function ShiftsEditApp() {
                 employees={pageState.ui.employees}
                 shiftParticipationTypes={pageState.ui.shiftParticipationTypes}
                 onParticipationSubmit={(sp: IShiftParticipation) => { pageStateDispatch(createShiftParticipationAction(sp)) }}
+            />
+            <AddFromShiftGroupModal
+                show={showAddFromGroupModal}
+                setShow={setAddFromGroupModalShow}
+                shift={pageState.ui.activeShift}
+                shiftGroups={pageState.ui.shiftGroups}
+                onShiftGroupSubmit={(shift: IShift, shiftGroupId: number) => { pageStateDispatch(createShiftParticipationsFromGroupAction(shift, shiftGroupId)) }}
             />
             <pre>{JSON.stringify(pageState, null, 2)}</pre>
         </>

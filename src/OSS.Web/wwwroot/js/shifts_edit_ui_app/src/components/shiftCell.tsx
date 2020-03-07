@@ -37,24 +37,24 @@ function ShiftCell(props: IShiftCellProps) {
     }
 
     const getEmployeeUsername = (empId: string): string => {
-        return props.groupedEmployees[empId][0].username
+        return props.groupedEmployees[empId] == undefined ? "" : props.groupedEmployees[empId][0].username
     }
 
     return (
         <div className={'shift_cell col-md-auto d-flex align-items-stretch flex-column'} style={{ backgroundColor: getShiftType().colorString, border: '1px dashed #aaa' }}>
             <div className={'d-flex flex-row-reverse'}>
                 <h6 className={'shift_cell_type_name small'}>{getShiftType().name}</h6>
-                <button className={'btn btn-outline btn-sm shift_comm_btn'} onClick={() => props.editShiftComments(props.shift)}><i className={(props.shift.comments != "" && props.shift.comments != null) ? "fa fa-commenting-o" : "fa fa-comment-o"}></i></button>
+                <button className={'btn btn-outline btn-sm shift_comm_btn'} onClick={() => props.editShiftComments(props.shift)}><i className={(props.shift.comments != "" && props.shift.comments != null) ? "far fa-comment-dots" : "far fa-comment-o"}></i></button>
             </div>
             <div>
                 {props.shift.shiftParticipations != null &&
                     props.shift.shiftParticipations.sort((a, b) => (a.participationSequence > b.participationSequence) ? 1 : ((b.participationSequence > a.participationSequence) ? -1 : 0)).map((participationobj, ind) =>
                         <div key={'participation_display_' + ind} className={'part_disp_row m-1'}>
-                            <button className={'btn btn-outline-info btn-sm part_up_btn'} onClick={() => props.moveShiftParticipation(participationobj, -1)}><i className="fa fa-arrow-circle-o-down"></i></button>
+                            <button className={'btn btn-outline-info btn-sm part_up_btn'} onClick={() => props.moveShiftParticipation(participationobj, -1)}><i className="fas fa-arrow-alt-circle-down"></i></button>
                             <span style={getPartDecorationStyleObj(participationobj)} className={getPartDecorationClasses(participationobj).join(' ')}>{(participationobj.participationSequence + 1) + ". "}{getEmployeeUsername(participationobj.employeeId)}</span>
-                            <button className={'btn btn-outline-info btn-sm part_down_btn'} onClick={() => props.moveShiftParticipation(participationobj, 1)}><i className="fa fa-arrow-circle-o-up"></i></button>
-                            <button className={'btn btn-outline-warning btn-sm part_edit_btn'} onClick={() => props.updateShiftParticipation(participationobj)}><i className="fa fa-pencil"></i></button>
-                            <button className={'btn btn-outline-danger btn-sm part_del_btn'} onClick={() => props.removeShiftParticipation(participationobj)}><i className="fa fa-trash-o"></i></button>
+                            <button className={'btn btn-outline-info btn-sm part_down_btn'} onClick={() => props.moveShiftParticipation(participationobj, 1)}><i className="fas fa-arrow-alt-circle-up"></i></button>
+                            <button className={'btn btn-outline-warning btn-sm part_edit_btn'} onClick={() => props.updateShiftParticipation(participationobj)}><i className="fas fa-pencil-alt"></i></button>
+                            <button className={'btn btn-outline-danger btn-sm part_del_btn'} onClick={() => props.removeShiftParticipation(participationobj)}><i className="fas fa-trash-alt"></i></button>
                         </div>
                     )
                 }

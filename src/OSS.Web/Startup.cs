@@ -15,6 +15,7 @@ using OSS.App.ShiftRoles.Commands.SeedShiftRoles;
 using OSS.App.ShiftGroups.Commands.SeedShiftGroups;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
+using OSS.App.ShiftParticipationTypes.Commands.SeedShiftParticipationTypes;
 
 namespace OSS.Web
 {
@@ -87,6 +88,7 @@ namespace OSS.Web
             bool shiftRolesSeeded = await mediator.Send(new SeedShiftRolesCommand());
             bool shiftGroupsSeeded = await mediator.Send(new SeedShiftGroupsCommand());
             bool usersSeeded = await mediator.Send(new SeedUsersCommand());
+            bool partTypesSeeded = await mediator.Send(new SeedShiftParticipationTypesCommand());
         }
     }
 }
