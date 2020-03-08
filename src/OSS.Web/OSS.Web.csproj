@@ -10,6 +10,7 @@
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\AddParticipationToUiAction.tsx" />
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\AddShiftToUiAction.tsx" />
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\deleteParticipationFromUiAction.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\EditShiftCommentAction.tsx" />
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\EditShiftParticipationAction.tsx" />
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\GetShiftsForUiAction.tsx" />
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\SetActiveShiftAction.tsx" />
@@ -24,6 +25,7 @@
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\SetStartTimeAction.tsx" />
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\components\AddEmployeeModal.tsx" />
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\components\AddFromShiftGroupModal.tsx" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\components\CommentEditModal.tsx" />
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\components\EditParticipationModal.tsx" />
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\components\shiftCell.tsx" />
     <Content Remove="wwwroot\js\shifts_edit_ui_app\src\initial_states\shiftEditUIInitState.tsx" />
@@ -107,6 +109,9 @@
     <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\AddParticipationToUiAction.tsx" />
     <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\AddShiftToUiAction.tsx" />
     <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\deleteParticipationFromUiAction.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\EditShiftCommentAction.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\SetActiveShiftParticipationAction.tsx">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -138,6 +143,7 @@
     <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\EditShiftParticipationAction.tsx">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\components\CommentEditModal.tsx" />
     <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\components\EditParticipationModal.tsx" />
     <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\components\AddFromShiftGroupModal.tsx" />
     <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\components\AddEmployeeModal.tsx" />

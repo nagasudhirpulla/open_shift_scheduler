@@ -4,7 +4,7 @@ import { groupObjBy } from "../utils/objUtils";
 import { IGroupedShiftType } from "../type_defs/IGroupedShiftType";
 import { ICommentsElementProps } from "../type_defs/ICommentsElementProps";
 function CommentsElement(props: ICommentsElementProps) {
-    const groupedShiftTypes = groupObjBy(props.shiftTypes, 'shiftTypeId') as IGroupedShiftType;
+    const groupedShiftTypes = groupObjBy(props.shiftTypes, 'id') as IGroupedShiftType;
     const commentsList =
         <div className={'row'}>
             <table className={['table', 'table-bordered', 'table-striped', 'table-hover'].join(' ')}>

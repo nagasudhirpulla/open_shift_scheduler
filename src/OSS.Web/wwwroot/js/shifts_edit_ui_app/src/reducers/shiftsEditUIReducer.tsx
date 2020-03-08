@@ -28,6 +28,8 @@ import { editShiftParticipation } from "../server_mediators/shiftParticipation";
 import { editShiftParticipationDispatch, IEditShiftParticipationAction } from "../actions/EditShiftParticipationAction";
 import { updateShiftParticipationReducer, IUpdateShiftParticipationAction } from "../actions/UpdateShiftParticipationAction";
 import { setActiveShiftParticipationReducer, ISetActiveShiftParticipationAction } from "../actions/SetActiveShiftParticipationAction";
+import { editShiftCommentDispatch, IEditShiftCommentAction } from "../actions/EditShiftCommentAction";
+import { updateShiftCommentsReducer, IUpdateShiftCommentsAction } from "../actions/UpdateShiftCommentsAction";
 
 export const useShiftsEditUIReducer = (initState: IShiftsEditUIState): [IShiftsEditUIState, React.Dispatch<IAction>] => {
     // create the reducer function
@@ -61,6 +63,8 @@ export const useShiftsEditUIReducer = (initState: IShiftsEditUIState): [IShiftsE
                 return setShiftParticipationsReducer(state, action as ISetShiftParticipationsAction)
             case ActionType.UPDATE_SHIFT_PARTICIPATION:
                 return updateShiftParticipationReducer(state, action as IUpdateShiftParticipationAction)
+            case ActionType.UPDATE_SHIFT_COMMENTS:
+                return updateShiftCommentsReducer(state, action as IUpdateShiftCommentsAction)
             default:
                 console.log("unwanted action detected");
                 console.log(JSON.stringify(action));
@@ -118,6 +122,10 @@ export const useShiftsEditUIReducer = (initState: IShiftsEditUIState): [IShiftsE
             }
             case ActionType.EDIT_SHIFT_PARTICIPATION: {
                 await editShiftParticipationDispatch(action as IEditShiftParticipationAction, pageState, pageStateDispatch)
+                break;
+            }
+            case ActionType.EDIT_SHIFT_COMMENT: {
+                await editShiftCommentDispatch(action as IEditShiftCommentAction, pageState, pageStateDispatch)
                 break;
             }
             default:

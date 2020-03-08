@@ -34,13 +34,44 @@ export const createShift = async (baseAddr: string, shift: IShift): Promise<IShi
                 "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) advanced-rest-client/12.1.3 Chrome/58.0.3029.110 Electron/1.7.12 Safari/537.36"
             },
             body: JSON.stringify({
-                "ShiftTypeId": shift.shiftTypeId,
-                "ShiftDate": dateTimeToApiStr(shift.shiftDate)
+                ShiftTypeId: shift.shiftTypeId,
+                ShiftDate: dateTimeToApiStr(shift.shiftDate)
             })
         });
         // console.log(resp);
         const respJSON = await resp.json();
         return respJSON as IShift;
+    } catch (e) {
+        console.log(e);
+        //return { success: false, message: `Could not create shift, due to error ${JSON.stringify(e)}` };
+        //return null;
+        throw e;
+    }
+}
+
+export const editShiftComment = async (baseAddr: string, comment: string, shift: IShift): Promise<boolean> => {
+    try {
+        // console.log("shift object for shift creation is " + JSON.stringify(shift));
+        const resp = await fetch(`${baseAddr}/api/Shifts/Comments`, {
+            method: 'put',
+            headers: {
+                "accept": "application/json",
+                "accept-encoding": "gzip, deflate",
+                "accept-language": "en-US,en;q=0.8",
+                "content-type": "application/json",
+                "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) advanced-rest-client/12.1.3 Chrome/58.0.3029.110 Electron/1.7.12 Safari/537.36"
+            },
+            body: JSON.stringify({
+                ShiftId: shift.id,
+                Comments: comment
+            })
+        });
+        // console.log(resp);
+        if (resp.status != 204) {
+            //return { success: false, message: `Status code received was ${resp.status}` };
+            return false;
+        }
+        return true;
     } catch (e) {
         console.log(e);
         //return { success: false, message: `Could not create shift, due to error ${JSON.stringify(e)}` };

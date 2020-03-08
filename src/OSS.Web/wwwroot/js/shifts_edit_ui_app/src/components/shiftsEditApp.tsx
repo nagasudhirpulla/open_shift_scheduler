@@ -25,12 +25,15 @@ import { createShiftParticipationsFromGroupAction } from '../actions/CreateShift
 import { setActiveShiftParticipationAction } from '../actions/SetActiveShiftParticipationAction';
 import EditParticipationModal from './EditParticipationModal';
 import { editShiftParticipationAction } from '../actions/EditShiftParticipationAction';
+import CommentEditModal from './CommentEditModal';
+import { editShiftCommentAction } from '../actions/EditShiftCommentAction';
 
 function ShiftsEditApp() {
     let [pageState, pageStateDispatch] = useShiftsEditUIReducer(pageInitState);
     const [showAddEmpModal, setAddEmpModalShow] = useState(false);
     const [showAddFromGroupModal, setAddFromGroupModalShow] = useState(false);
     const [showEditParticipationModal, setEditParticipationModalShow] = useState(false);
+    const [showCommentEditModal, setCommentEditModalShow] = useState(false);
     const [startDate, setStartDate] = useState(pageState.ui.startDate);
     const [endDate, setEndDate] = useState(pageState.ui.endDate);
 
@@ -51,6 +54,11 @@ function ShiftsEditApp() {
         pageStateDispatch(setStartTimeAction(startDate));
         pageStateDispatch(setEndTimeAction(endDate));
         pageStateDispatch(getShiftsForUiAction())
+    }
+
+    const onEditShiftCommentsClicked = (s: IShift) => {
+        pageStateDispatch(setActiveShiftAction(s))
+        setCommentEditModalShow(true)
     }
 
     return (
@@ -91,7 +99,7 @@ function ShiftsEditApp() {
                 shiftTypes={pageState.ui.shiftTypes}
                 employees={pageState.ui.employees}
                 shiftParticipationTypes={pageState.ui.shiftParticipationTypes}
-                editShiftComments={(shift: IShift) => { pageStateDispatch(updateShiftCommentsAction(shift)) }}
+                editShiftComments={(s: IShift) => { onEditShiftCommentsClicked(s) }}
                 moveShiftParticipation={(sp: IShiftParticipation, dir: -1 | 1) => { pageStateDispatch(moveShiftParticipationAction(sp, dir)) }}
                 updateShiftParticipation={(sp: IShiftParticipation) => { pageStateDispatch(setActiveShiftParticipationAction(sp)); setEditParticipationModalShow(true); }}
                 removeShiftParticipation={(sp: IShiftParticipation) => { pageStateDispatch(deleteShiftParticipationAction(sp)) }}
@@ -103,7 +111,7 @@ function ShiftsEditApp() {
             <CommentsElement
                 shifts={pageState.ui.shifts}
                 shiftTypes={pageState.ui.shiftTypes}
-                editShiftComments={(shift: IShift) => { pageStateDispatch(updateShiftCommentsAction(shift)) }}
+                editShiftComments={(s: IShift) => { onEditShiftCommentsClicked(s) }}
             />
             <AddEmployeeModal
                 show={showAddEmpModal}
@@ -113,13 +121,14 @@ function ShiftsEditApp() {
                 shiftParticipationTypes={pageState.ui.shiftParticipationTypes}
                 onParticipationSubmit={(sp: IShiftParticipation) => { pageStateDispatch(createShiftParticipationAction(sp)) }}
             />
-            <AddFromShiftGroupModal
-                show={showAddFromGroupModal}
-                setShow={setAddFromGroupModalShow}
-                shift={pageState.ui.activeShift}
-                shiftGroups={pageState.ui.shiftGroups}
-                onShiftGroupSubmit={(shift: IShift, shiftGroupId: number) => { pageStateDispatch(createShiftParticipationsFromGroupAction(shift, shiftGroupId)) }}
-            />
+            {pageState.ui.activeShift &&
+                <AddFromShiftGroupModal
+                    show={showAddFromGroupModal}
+                    setShow={setAddFromGroupModalShow}
+                    shift={pageState.ui.activeShift}
+                    shiftGroups={pageState.ui.shiftGroups}
+                    onShiftGroupSubmit={(shift: IShift, shiftGroupId: number) => { pageStateDispatch(createShiftParticipationsFromGroupAction(shift, shiftGroupId)) }}
+                />}
             <EditParticipationModal
                 show={showEditParticipationModal}
                 setShow={setEditParticipationModalShow}
@@ -128,6 +137,14 @@ function ShiftsEditApp() {
                 shiftParticipationTypes={pageState.ui.shiftParticipationTypes}
                 onParticipationSubmit={(sp: IShiftParticipation) => { pageStateDispatch(editShiftParticipationAction(sp)) }}
             />
+            {pageState.ui.activeShift &&
+                <CommentEditModal
+                    show={showCommentEditModal}
+                    setShow={setCommentEditModalShow}
+                    shift={pageState.ui.activeShift}
+                    comment={pageState.ui.activeShift.comments}
+                    onCommentSubmit={(comm: string, s: IShift) => { pageStateDispatch(editShiftCommentAction(s, comm)) }}
+                />}
             <pre>{JSON.stringify(pageState, null, 2)}</pre>
         </>
     );
