@@ -145,7 +145,7 @@ function ShiftsEditApp() {
                     comment={pageState.ui.activeShift.comments}
                     onCommentSubmit={(comm: string, s: IShift) => { pageStateDispatch(editShiftCommentAction(s, comm)) }}
                 />}
-            <pre>{JSON.stringify(pageState, null, 2)}</pre>
+            {/*<pre>{JSON.stringify(pageState, null, 2)}</pre>*/}
         </>
     );
 }

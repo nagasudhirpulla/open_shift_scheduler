@@ -62,7 +62,7 @@ function EditParticipationModal(props: IEditParticipationModalProps) {
                 getOptionLabel={option => option.name}
                 getOptionValue={option => `${option.id}`} />
 
-            <label>{" "}Sequence - {" "}</label>
+            <label>{" "}Sequence {" "}</label>
             <input type="number" value={selSeq} onChange={(e) => setSelSeq(+e.target.value)} />
         </Modal.Body>
         <Modal.Footer>

@@ -15,7 +15,7 @@ import { setShiftParticipationTypesAction, ISetShiftParticipationTypesAction, se
 import { ISetActiveShiftAction, setActiveShiftReducer } from "../actions/SetActiveShiftAction";
 import { ICreateShiftParticipationAction, createShiftParticipationDispatch } from "../actions/CreateShiftParticipationAction";
 import { IAddParticipationToUiAction, addParticipationToUiReducer } from "../actions/AddParticipationToUiAction";
-import { addShiftToUiAction, IAddShiftToUiAction, addShiftToUiReducer } from "../actions/AddShiftToUiAction";
+import { IAddShiftToUiAction, addShiftToUiReducer } from "../actions/AddShiftToUiAction";
 import { getShiftsForUiAction } from "../actions/GetShiftsForUiAction";
 import { getEmployeesAction } from "../actions/GetEmployeesAction";
 import { deleteShiftParticipationDispatch, IDeleteShiftParticipationAction } from "../actions/DeleteShiftParticipationAction";
@@ -30,6 +30,8 @@ import { updateShiftParticipationReducer, IUpdateShiftParticipationAction } from
 import { setActiveShiftParticipationReducer, ISetActiveShiftParticipationAction } from "../actions/SetActiveShiftParticipationAction";
 import { editShiftCommentDispatch, IEditShiftCommentAction } from "../actions/EditShiftCommentAction";
 import { updateShiftCommentsReducer, IUpdateShiftCommentsAction } from "../actions/UpdateShiftCommentsAction";
+import { updateShiftReducer, IUpdateShiftAction } from "../actions/UpdateShiftAction";
+import { moveShiftParticipationDispatch, IMoveShiftParticipationAction } from "../actions/MoveShiftParticipationAction";
 
 export const useShiftsEditUIReducer = (initState: IShiftsEditUIState): [IShiftsEditUIState, React.Dispatch<IAction>] => {
     // create the reducer function
@@ -65,6 +67,8 @@ export const useShiftsEditUIReducer = (initState: IShiftsEditUIState): [IShiftsE
                 return updateShiftParticipationReducer(state, action as IUpdateShiftParticipationAction)
             case ActionType.UPDATE_SHIFT_COMMENTS:
                 return updateShiftCommentsReducer(state, action as IUpdateShiftCommentsAction)
+            case ActionType.UPDATE_SHIFT:
+                return updateShiftReducer(state, action as IUpdateShiftAction)
             default:
                 console.log("unwanted action detected");
                 console.log(JSON.stringify(action));
@@ -126,6 +130,10 @@ export const useShiftsEditUIReducer = (initState: IShiftsEditUIState): [IShiftsE
             }
             case ActionType.EDIT_SHIFT_COMMENT: {
                 await editShiftCommentDispatch(action as IEditShiftCommentAction, pageState, pageStateDispatch)
+                break;
+            }
+            case ActionType.MOVE_SHIFT_PARTICIPATION: {
+                await moveShiftParticipationDispatch(action as IMoveShiftParticipationAction, pageState, pageStateDispatch)
                 break;
             }
             default:
