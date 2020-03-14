@@ -19,12 +19,12 @@ namespace OSS.Web.Pages.ShiftCycleItems
             _context = context;
         }
 
-        public IList<ShiftCycleItem> ShiftCycleItem { get;set; }
+        public IList<ShiftCycleItem> ShiftCycleItem { get; set; }
 
         public async Task OnGetAsync()
         {
             ShiftCycleItem = await _context.ShiftCycleItems
-                .Include(s => s.ShiftType).ToListAsync();
+                .Include(s => s.ShiftType).OrderBy(sc => sc.ShiftSequence).ToListAsync();
         }
     }
 }

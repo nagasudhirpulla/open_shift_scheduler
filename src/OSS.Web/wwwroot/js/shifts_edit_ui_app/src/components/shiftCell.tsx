@@ -41,7 +41,7 @@ function ShiftCell(props: IShiftCellProps) {
     }
 
     return (
-        <div className={'shift_cell col-md-auto d-flex align-items-stretch flex-column'} style={{ backgroundColor: getShiftType().colorString, border: '1px dashed #aaa' }}>
+        <div className={`shift_cell col-md-${props.colSize} d-flex align-items-stretch flex-column`} style={{ backgroundColor: getShiftType().colorString, border: '1px dashed #aaa' }}>
             <div className={'d-flex flex-row-reverse'}>
                 <h6 className={'shift_cell_type_name small'}>{getShiftType().name}</h6>
                 <button className={'btn btn-outline btn-sm shift_comm_btn'} onClick={() => props.editShiftComments(props.shift)}><i className={(props.shift.comments != "" && props.shift.comments != null) ? "far fa-comment-dots" : "far fa-comment"}></i></button>

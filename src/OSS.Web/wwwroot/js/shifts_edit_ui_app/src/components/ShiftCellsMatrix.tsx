@@ -13,7 +13,7 @@ function ShiftCellsMatrix(props: IShiftCellsMatrixProps) {
     const groupedEmployees = groupObjBy(props.employees, 'userId') as IGroupedEmployee;
     const groupedShiftTypes = groupObjBy(props.shiftTypes, 'id') as IGroupedShiftType;
     const groupedShiftPartTypes = groupObjBy(props.shiftParticipationTypes, 'id') as IGroupedShiftParticipationType;
-    const colSize = Math.floor((100 / (props.shiftTypes.length)));
+    const colSize = Math.floor((12 / (props.shiftTypes.length)));
     //console.log(groupedShiftTypes)
     // create shiftmatrix Rows with cells that contain Shift Cells
     let shiftMatrixRows: JSX.Element[] = [];
@@ -21,7 +21,7 @@ function ShiftCellsMatrix(props: IShiftCellsMatrixProps) {
         let dateShifts = shiftMatrix[dateIter];
         let shiftDate = new Date(dateShifts[0]['shiftDate']);
         const matrixRow =
-            <div className={'row'} key={'row_' + dateIter}>
+            <div className={'row ml-md-5 mr-md-5'} key={'row_' + dateIter}>
                 <div className={['shift_date_display', 'col-md-auto', 'col-sm-12'].join(' ')} key={'date_display_' + dateIter}>
                     <span className={'h6'}>{dateToDisplayDate(shiftDate)}</span><br />
                     <span className={'h6'}>{dateToDayOfWeek(shiftDate)}</span>

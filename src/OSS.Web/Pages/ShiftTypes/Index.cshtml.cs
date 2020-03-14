@@ -19,11 +19,11 @@ namespace OSS.Web.Pages.ShiftTypes
             _context = context;
         }
 
-        public IList<ShiftType> ShiftType { get;set; }
+        public IList<ShiftType> ShiftType { get; set; }
 
         public async Task OnGetAsync()
         {
-            ShiftType = await _context.ShiftTypes.ToListAsync();
+            ShiftType = await _context.ShiftTypes.OrderBy(st => st.ShiftSequence).ToListAsync();
         }
     }
 }
