@@ -28,6 +28,8 @@ namespace OSS.App.Data
         public DbSet<ShiftParticipation> ShiftParticipations { get; set; }
         public DbSet<ShiftParticipationType> ShiftParticipationTypes { get; set; }
         public DbSet<ShiftCycleItem> ShiftCycleItems { get; set; }
+        public DbSet<LeaveRequest> LeaveRequests { get; set; }
+        public DbSet<LeaveRequestComment> LeaveRequestComment  { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

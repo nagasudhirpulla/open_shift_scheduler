@@ -262,4 +262,9 @@
     </Content>
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="Pages\LeaveRequests\" />
+  </ItemGroup>
+
 </Project>
