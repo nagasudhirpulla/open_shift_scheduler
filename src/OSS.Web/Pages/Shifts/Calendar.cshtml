@@ -1,0 +1,97 @@
+﻿@page
+@model OSS.Web.CalendarModel
+@{
+    ViewData["Title"] = "Calendar";
+}
+
+<div>
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <label>Start Date</label>
+        <input asp-for="Query.StartDate" type="date" />
+        <label style="margin-left:3em">End Date</label>
+        <input asp-for="Query.EndDate" type="date" />
+        <input asp-for="Query.EmployeeId" type="hidden" />
+        <input style="margin-left:3em" type="submit" value="Load" class="btn btn-primary" />
+    </form>
+</div>
+
+<div id='calendar'></div>
+
+@section Scripts{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/main.min.css"
+          asp-fallback-href="~/lib/fullcalendar/core/main.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/daygrid/main.min.css"
+          asp-fallback-href="~/lib/fullcalendar/daygrid/main.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.css"
+          asp-fallback-href="~/lib/fullcalendar/core/main.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/main.min.js"
+            asp-fallback-src="~/lib/fullcalendar/timegrid/main.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/interaction/main.min.js"
+            asp-fallback-src="~/lib/fullcalendar/interaction/main.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/daygrid/main.min.js"
+            asp-fallback-src="~/lib/fullcalendar/daygrid/main.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.js"
+            asp-fallback-src="~/lib/fullcalendar/timegrid/main.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js"
+            asp-fallback-src="~/lib/popper/popper.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tooltip.js/1.3.2/umd/tooltip.min.js"
+            asp-fallback-src="~/lib/tooltip/tooltip.min.js">
+    </script>
+
+    <style>
+        .bold_text {
+            font-weight: bold;
+        }
+
+        .absence_text {
+            text-decoration: underline;
+        }
+
+        .default_evnt_title {
+            font-size: 1em;
+        }
+
+        .tooltip {
+            opacity: 0.7;
+        }
+    </style>
+    <script>
+        var serverEvnts = @Html.Raw(Json.Serialize(Model.Calendar.CalendarEvents));
+        var events = [];
+        for (var evntIter = 0; evntIter < serverEvnts.length; evntIter++) {
+            var evntObj = serverEvnts[evntIter];
+            events.push({ "backgroundColor": evntObj["titleBgColor"], "borderColor": "#FFFFFF", 'start': evntObj["shiftDate"].slice(0, 10), 'title': evntObj["eventTitle"], 'textColor': evntObj["titleColor"], 'classNames': evntObj["eventTextClasses"], 'description': evntObj["tooltipText"] });
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                plugins: ['interaction', 'dayGrid', 'timeGrid'],
+                defaultView: 'dayGridMonth',
+                defaultDate: '@Model.Query.StartDate.ToString("yyyy-MM-dd")',
+                events: events,
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth'
+                },
+                eventRender: function (info) {
+                    var tooltip = new Tooltip(info.el, {
+                        title: info.event.extendedProps.description,
+                        placement: 'top',
+                        trigger: 'hover',
+                        container: 'body'
+                    });
+                }
+            });
+
+            calendar.render();
+        });
+    </script>
+}
