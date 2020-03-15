@@ -62,11 +62,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="wwwroot\js\packages\node_modules\%40fullcalendar\core\main.min.css" />
+    <Content Include="wwwroot\js\packages\node_modules\%40fullcalendar\daygrid\main.min.css" />
+    <Content Include="wwwroot\js\packages\node_modules\%40fullcalendar\timegrid\main.min.css" />
     <Content Include="wwwroot\js\shifts_edit_ui_app\node_modules\%40fortawesome\fontawesome-free\css\all.min.css" />
     <Content Include="wwwroot\js\shifts_edit_ui_app\node_modules\react-datetime\css\react-datetime.css" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\js\packages\node_modules\%40fullcalendar\core\main.min.js" />
+    <None Include="wwwroot\js\packages\node_modules\%40fullcalendar\daygrid\main.min.js" />
+    <None Include="wwwroot\js\packages\node_modules\%40fullcalendar\interaction\main.min.js" />
+    <None Include="wwwroot\js\packages\node_modules\%40fullcalendar\timegrid\main.min.js" />
     <None Include="wwwroot\js\shifts_edit_ui_app\node_modules\react-dom\umd\react-dom.production.min.js" />
     <None Include="wwwroot\js\shifts_edit_ui_app\node_modules\react\umd\react.production.min.js" />
     <None Include="wwwroot\js\shifts_edit_ui_app\node_modules\toastr\build\toastr.min.js" />
