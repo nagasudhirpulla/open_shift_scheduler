@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using OSS.App.LeaveRequests.Commands.AddCommentToLeaveRequest;
+using OSS.App.LeaveRequests.Commands.ExecuteLeaveRequest;
 using OSS.App.LeaveRequests.Commands.ToggleLeaveRequestApproval;
 using OSS.App.LeaveRequests.Queries.GetLeaveRequestById;
 using OSS.Domain.Entities;
@@ -84,6 +85,24 @@ namespace OSS.Web.Pages.LeaveRequests
             }
 
             LeaveRequest lr = await _mediator.Send(new ToggleLeaveRequestApprovalCommand() { Id = id.Value });
+            return RedirectToPage("./Details", new { Id = id });
+        }
+
+        public async Task<IActionResult> OnPostExecuteRequestAsync(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            LeaveRequest = await _mediator.Send(new GetLeaveRequestByIdQuery() { Id = id.Value });
+
+            if (LeaveRequest == null)
+            {
+                return NotFound();
+            }
+
+            LeaveRequest lr = await _mediator.Send(new ExecuteLeaveRequestCommand() { Id = id.Value });
             return RedirectToPage("./Details", new { Id = id });
         }
     }

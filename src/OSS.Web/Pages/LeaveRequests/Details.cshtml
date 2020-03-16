@@ -57,15 +57,26 @@
     {
         <dl class="row">
             <dd class="col-sm-12">
-                This requested is executed
+                This request is executed
             </dd>
         </dl>
     }
+    else if (User.IsInRole(SecurityConstants.AdminRoleString))
+    {
+        <dl class="row">
+            <dd class="col-sm-12">
+                <form method="post">
+                    <input type="submit" value="Execute Request" class="btn btn-primary" asp-page-handler="ExecuteRequest" asp-route-id="@Model.LeaveRequest.Id" />
+                </form>
+            </dd>
+        </dl>
+    }
+
     @if (Model.LeaveRequest.IsApproved)
     {
         <dl class="row">
             <dd class="col-sm-12">
-                This requested is approved
+                This request is approved
             </dd>
         </dl>
     }
