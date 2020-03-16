@@ -1,7 +1,13 @@
 ﻿@page
 @model OSS.Web.Pages.LeaveRequests.DetailsModel
+@using OSS.App.Security;
+@using OSS.Domain.Entities;
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<ApplicationUser> userManager
+
 @{
     ViewData["Title"] = "Details";
+    string loggedInUserId = userManager.GetUserId(User);
 }
 
 <div>
@@ -55,17 +61,42 @@
             </dd>
         </dl>
     }
+    @if (Model.LeaveRequest.IsApproved)
+    {
+        <dl class="row">
+            <dd class="col-sm-12">
+                This requested is approved
+            </dd>
+        </dl>
+    }
+
+    @if (User.IsInRole(SecurityConstants.AdminRoleString))
+    {
+        <dl class="row">
+            <dd class="col-sm-12">
+                <form method="post">
+                    <input type="submit" value="@(Model.LeaveRequest.IsApproved?"Mark Unapproved":"Mark Approved")" class="btn @(Model.LeaveRequest.IsApproved?"btn-danger":"btn-success")" asp-page-handler="ToggleApproval" asp-route-id="@Model.LeaveRequest.Id" />
+                </form>
+            </dd>
+        </dl>
+    }
 
     @if (Model.LeaveRequest.LeaveRequestComments.Count > 0)
     {
+        <h4>Comments</h4>
         @foreach (var item in Model.LeaveRequest.LeaveRequestComments)
         {
             <div>
                 <label class="commenterName">@item.CreatedBy.UserName</label>
-                <label class="commentTime">@($" - {item.Created.ToString("dd MMM yyyy")}")</label>
+                <label class="commentTime">@($" - {item.Created.ToString("dd MMM yyyy HH:mm")}")</label>
+                @if (User.IsInRole(SecurityConstants.AdminRoleString) || item.CreatedById.Equals(loggedInUserId))
+                {
+                    <a asp-page="/LeaveRequestComments/Delete" asp-route-id="@item.Id" style="color:darkred;font-size:small">delete</a>
+                }
                 <p class="commentBody">
                     @item.Comment
                 </p>
+                <hr />
             </div>
         }
     }
@@ -79,3 +110,26 @@
     }
 </div>
 
+<div>
+    <form method="post">
+        <textarea placeholder="Enter New Comment here..." asp-for="Comment"></textarea>
+        <br />
+        <input type="submit" value="Add Comment" class="btn btn-outline-success" />
+        <br />
+        <span asp-validation-for="Comment" class="text-danger"></span>
+    </form>
+    <p><a asp-page="./Index">Back to Leave Requests List</a></p>
+</div>
+
+@section Scripts{
+    <style>
+        .commenterName {
+            color: darkgoldenrod
+        }
+
+        .commentTime {
+            color: gray;
+            font-size: small;
+        }
+    </style>
+}

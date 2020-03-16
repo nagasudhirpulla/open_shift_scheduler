@@ -10,9 +10,6 @@
 {
     @if (User.IsInRole(SecurityConstants.AdminRoleString))
     {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Users" asp-action="Index">Users</a>
-        </li>
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Shifts
@@ -23,23 +20,19 @@
                 <a class="dropdown-item" asp-page="/Shifts/Roster">Roster</a>
             </div>
         </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-page="/Genders/Index">Genders</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-page="/ShiftRoles/Index">ShiftRoles</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-page="/ShiftGroups/Index">ShiftGroups</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-page="/ShiftTypes/Index">ShiftTypes</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-page="/ShiftCycleItems/Index">ShiftCycle</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-page="/ShiftParticipationTypes/Index">ShiftParticipationTypes</a>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Manage
+            </a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" asp-controller="Users" asp-action="Index">Users</a>
+                <a class="dropdown-item" asp-page="/ShiftGroups/Index">ShiftGroups</a>
+                <a class="dropdown-item" asp-page="/Genders/Index">Genders</a>
+                <a class="dropdown-item" asp-page="/ShiftRoles/Index">ShiftRoles</a>
+                <a class="dropdown-item" asp-page="/ShiftTypes/Index">ShiftTypes</a>
+                <a class="dropdown-item" asp-page="/ShiftCycleItems/Index">ShiftCycle</a>
+                <a class="dropdown-item" asp-page="/ShiftParticipationTypes/Index">ShiftParticipationTypes</a>
+            </div>
         </li>
     }
     else if (User.IsInRole(SecurityConstants.GuestRoleString))
@@ -50,8 +43,9 @@
         <li class="nav-item">
             <a class="nav-link text-dark" asp-page="/Shifts/Roster">Roster</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-page="/LeaveRequests/Index">LeaveRequests</a>
-        </li>
     }
+
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-page="/LeaveRequests/Index">LeaveRequests</a>
+    </li>
 }

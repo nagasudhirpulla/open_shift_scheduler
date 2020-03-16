@@ -28,6 +28,9 @@
             <th>
                 Executed
             </th>
+            <th>
+                Approved
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -52,6 +55,9 @@
                 </td>
                 <td>
                     @(item.IsExecuted ? "Yes" : "No")
+                </td>
+                <td>
+                    @(item.IsApproved ? "Yes" : "No")
                 </td>
                 <td>
                     <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |

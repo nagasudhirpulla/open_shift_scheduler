@@ -11,6 +11,11 @@ namespace OSS.App.Data.Configurations
             builder
             .HasIndex(lr => new { lr.EmployeeId, lr.StartDate, lr.EndDate })
             .IsUnique();
+
+            builder
+                .HasMany(lr => lr.LeaveRequestComments)
+                .WithOne(lrc => lrc.LeaveRequest)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 

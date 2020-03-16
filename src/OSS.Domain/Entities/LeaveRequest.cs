@@ -19,6 +19,7 @@ namespace OSS.Domain.Entities
         public string Remarks { get; set; }
 
         public bool IsExecuted { get; set; }
+        public bool IsApproved { get; set; }
         public DateTime? ExecutedAt { get; set; }
 
         public ICollection<LeaveRequestComment> LeaveRequestComments { get; private set; }

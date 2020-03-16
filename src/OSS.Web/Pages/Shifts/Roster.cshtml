@@ -9,7 +9,7 @@
     <label asp-for="Query.StartDate"></label>
     <input asp-for="Query.StartDate" type="date" />
     <label asp-for="Query.EndDate" style="margin-left:3em"></label>
-    <input asp-for="Query.EndDate" type="date"/>
+    <input asp-for="Query.EndDate" type="date" />
     <button type="submit" class="btn btn-primary" style="margin-left:3em">Load</button>
 
     @if (Model.Roster.ShiftTypes != null && Model.Roster.ShiftParticipations != null)
@@ -29,7 +29,7 @@
                 {
                     <tr>
                         <td>
-                            @day_parts.Key.ToString("yyyy-MM-dd") (@day_parts.Key.ToString("dd-MMM-yy"))
+                            <label class="hiddenDate">@day_parts.Key.ToString("yyyy-MM-dd")</label> @day_parts.Key.ToString("dd-MMM-yy")
                         </td>
                         @foreach (List<Tuple<string, ShiftParticipationType>> day_shift_parts in day_parts.Value)
                         {
@@ -69,6 +69,7 @@
 
     @if (Model.Roster.ShiftTypes != null && Model.Roster.ShiftComments != null)
     {
+        <hr />
         <h3>Remarks</h3>
         <table id="com_table" class="table table-striped table-bordered table-hover" style="width:100%">
             <thead>
@@ -148,5 +149,9 @@
         /*.general_part {
             color: blue;
         }*/
+        .hiddenDate {
+            color: transparent;
+            font-size: 0.1em
+        }
     </style>
 }
