@@ -1,0 +1,31 @@
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
+using OSS.App.Data;
+using OSS.Domain.Entities;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace OSS.App.LeaveRequests.Queries.GetLeaveRequestById
+{
+    public class GetLeaveRequestByIdQueryHandler : IRequestHandler<GetLeaveRequestByIdQuery, LeaveRequest>
+    {
+        private readonly AppIdentityDbContext _context;
+
+        public GetLeaveRequestByIdQueryHandler(AppIdentityDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<LeaveRequest> Handle(GetLeaveRequestByIdQuery request, CancellationToken cancellationToken)
+        {
+            LeaveRequest res = await _context.LeaveRequests
+                                            .Where(r => r.Id == request.Id)
+                                            .Include(r => r.Employee)
+                                            .Include(r => r.LeaveRequestComments)
+                                            .ThenInclude(c=>c.CreatedBy)
+                                            .FirstOrDefaultAsync();
+            return res;
+        }
+    }
+}

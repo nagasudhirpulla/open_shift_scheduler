@@ -26,6 +26,7 @@ namespace OSS.App.LeaveRequests.Queries.GetLeaveRequests
             {
                 List<LeaveRequest> res = await _context.LeaveRequests
                                                 .Include(r => r.LeaveRequestComments)
+                                                .Include(r => r.Employee)
                                                 .OrderByDescending(r => r.Created)
                                                 .ToListAsync();
                 return res;

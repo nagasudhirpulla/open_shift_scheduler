@@ -4,13 +4,14 @@ using OSS.Domain.Entities;
 
 namespace OSS.App.Data.Configurations
 {
-    public class ShiftTypeConfiguration : IEntityTypeConfiguration<ShiftType>
+    public class LeaveRequestConfiguration : IEntityTypeConfiguration<LeaveRequest>
     {
-        public void Configure(EntityTypeBuilder<ShiftType> builder)
+        public void Configure(EntityTypeBuilder<LeaveRequest> builder)
         {
             builder
-            .HasIndex(st => st.Name)
+            .HasIndex(lr => new { lr.EmployeeId, lr.StartDate, lr.EndDate })
             .IsUnique();
         }
     }
+
 }

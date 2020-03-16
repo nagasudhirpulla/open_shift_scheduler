@@ -37,7 +37,7 @@ namespace OSS.Web
             services.AddApplication();
             services
                 .AddControllersWithViews()
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AppIdentityDbContext>())
+                .AddFluentValidation(fv => { fv.RegisterValidatorsFromAssemblyContaining<AppIdentityDbContext>(); })
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();

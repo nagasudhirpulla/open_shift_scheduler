@@ -1,0 +1,81 @@
+﻿@page
+@model OSS.Web.Pages.LeaveRequests.DetailsModel
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div>
+    <h4>Leave Request</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Created At
+        </dt>
+        <dd class="col-sm-10">
+            @Model.LeaveRequest.Created.ToString("dd MMM yyyy HH:mm")
+        </dd>
+    </dl>
+    <dl class="row">
+        <dt class="col-sm-2">
+            From
+        </dt>
+        <dd class="col-sm-10">
+            @Model.LeaveRequest.StartDate.ToString("dd MMM yyyy HH:mm")
+        </dd>
+    </dl>
+    <dl class="row">
+        <dt class="col-sm-2">
+            To
+        </dt>
+        <dd class="col-sm-10">
+            @Model.LeaveRequest.EndDate.ToString("dd MMM yyyy HH:mm")
+        </dd>
+    </dl>
+    <dl class="row">
+        <dt class="col-sm-2">
+            Requester
+        </dt>
+        <dd class="col-sm-10">
+            @Model.LeaveRequest.Employee.UserName
+        </dd>
+    </dl>
+    <dl class="row">
+        <dt class="col-sm-2">
+            Remarks
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LeaveRequest.Remarks)
+        </dd>
+    </dl>
+    @if (Model.LeaveRequest.IsExecuted)
+    {
+        <dl class="row">
+            <dd class="col-sm-12">
+                This requested is executed
+            </dd>
+        </dl>
+    }
+
+    @if (Model.LeaveRequest.LeaveRequestComments.Count > 0)
+    {
+        @foreach (var item in Model.LeaveRequest.LeaveRequestComments)
+        {
+            <div>
+                <label class="commenterName">@item.CreatedBy.UserName</label>
+                <label class="commentTime">@($" - {item.Created.ToString("dd MMM yyyy")}")</label>
+                <p class="commentBody">
+                    @item.Comment
+                </p>
+            </div>
+        }
+    }
+    else
+    {
+        <dl class="row">
+            <dd class="col-sm-12">
+                No comments recieved yet...
+            </dd>
+        </dl>
+    }
+</div>
+
