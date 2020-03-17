@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using OSS.App.Security;
 using OSS.Web.Models;
 
 namespace OSS.Web.Controllers
@@ -20,6 +21,17 @@ namespace OSS.Web.Controllers
 
         public IActionResult Index()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole(SecurityConstants.AdminRoleString))
+                {
+                    return RedirectToPage("/Shifts/Edit");
+                }
+                else
+                {
+                    return RedirectToPage("/Shifts/Calendar");
+                }
+            }
             return View();
         }
 

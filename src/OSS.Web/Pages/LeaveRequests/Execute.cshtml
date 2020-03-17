@@ -1,0 +1,17 @@
+﻿@page
+@model OSS.Web.Pages.LeaveRequests.ExecuteModel
+@{
+    ViewData["Title"] = "Execute";
+}
+
+<div>
+    <h4>Execute leave request of <b>@Model.LeaveRequest.Employee.UserName</b> from @Model.LeaveRequest.StartDate.ToString("dd-MMM-yyyy") to @Model.LeaveRequest.EndDate.ToString("dd-MMM-yyyy") ?</h4>
+    <dl class="row">
+        <dd class="col-sm-12">
+            <form method="post">
+                <input type="submit" value="Execute Request" class="btn btn-outline-primary" />
+                <a class="btn btn-outline-danger" asp-page="/LeaveRequests/Details" asp-route-id="@Model.LeaveRequest.Id">Back</a>
+            </form>
+        </dd>
+    </dl>
+</div>

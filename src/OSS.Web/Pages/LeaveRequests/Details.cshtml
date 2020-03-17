@@ -65,9 +65,7 @@
     {
         <dl class="row">
             <dd class="col-sm-12">
-                <form method="post">
-                    <input type="submit" value="Execute Request" class="btn btn-primary" asp-page-handler="ExecuteRequest" asp-route-id="@Model.LeaveRequest.Id" />
-                </form>
+                <a class="btn btn-primary" asp-page="/LeaveRequests/Execute" asp-route-id="@Model.LeaveRequest.Id">Execute Request</a>
             </dd>
         </dl>
     }
