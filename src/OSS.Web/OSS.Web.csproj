@@ -229,41 +229,23 @@
 
 
   <ItemGroup>
-    <Content Update="wwwroot\js\shifts_edit_ui_app\src\actions\CreateShiftAction.js">
-      <DependentUpon>CreateShiftAction.tsx</DependentUpon>
+    <Content Update="wwwroot\css\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="wwwroot\js\shifts_edit_ui_app\src\actions\CreateShiftAction.js.map">
-      <DependentUpon>CreateShiftAction.js</DependentUpon>
+    <Content Update="wwwroot\lib\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="wwwroot\js\shifts_edit_ui_app\src\actions\CreateShiftParticipationAction.js">
-      <DependentUpon>CreateShiftParticipationAction.tsx</DependentUpon>
+    <Content Update="wwwroot\js\packages\package.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="wwwroot\js\shifts_edit_ui_app\src\actions\CreateShiftParticipationAction.js.map">
-      <DependentUpon>CreateShiftParticipationAction.js</DependentUpon>
+    <Content Update="wwwroot\favicon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="wwwroot\js\shifts_edit_ui_app\src\actions\CreateShiftParticipationsFromGroupAction.js">
-      <DependentUpon>CreateShiftParticipationsFromGroupAction.tsx</DependentUpon>
+    <Content Update="wwwroot\js\shifts_edit_ui_app\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="wwwroot\js\shifts_edit_ui_app\src\actions\CreateShiftParticipationsFromGroupAction.js.map">
-      <DependentUpon>CreateShiftParticipationsFromGroupAction.js</DependentUpon>
-    </Content>
-    <Content Update="wwwroot\js\shifts_edit_ui_app\src\actions\DeleteShiftParticipationAction.js">
-      <DependentUpon>DeleteShiftParticipationAction.tsx</DependentUpon>
-    </Content>
-    <Content Update="wwwroot\js\shifts_edit_ui_app\src\actions\DeleteShiftParticipationAction.js.map">
-      <DependentUpon>DeleteShiftParticipationAction.js</DependentUpon>
-    </Content>
-    <Content Update="wwwroot\js\shifts_edit_ui_app\src\actions\DeleteShiftAction.js">
-      <DependentUpon>DeleteShiftAction.tsx</DependentUpon>
-    </Content>
-    <Content Update="wwwroot\js\shifts_edit_ui_app\src\actions\UpdateShiftCommentsAction.js">
-      <DependentUpon>UpdateShiftCommentsAction.tsx</DependentUpon>
-    </Content>
-    <Content Update="wwwroot\js\shifts_edit_ui_app\src\actions\UpdateShiftCommentsAction.js.map">
-      <DependentUpon>UpdateShiftCommentsAction.js</DependentUpon>
-    </Content>
-    <Content Update="wwwroot\js\shifts_edit_ui_app\src\actions\MoveShiftParticipationAction.js">
-      <DependentUpon>MoveShiftParticipationAction.tsx</DependentUpon>
+    <Content Update="wwwroot\js\shifts_edit_ui_app\node_modules\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
