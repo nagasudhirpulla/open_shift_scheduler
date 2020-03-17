@@ -93,10 +93,11 @@
         $(document).ready(function () {
             $('#dis_table').DataTable({
                 fixedColumns: true,
+                "order": [[ 0, 'desc' ]],
                 scrollX: true,
                 columnDefs: [{
                     targets: [0],
-                    orderData: [0, 'desc']
+                    orderData: [0]
                 }],
                 scrollCollapse: true,
                 paging: false,
