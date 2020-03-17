@@ -55,10 +55,10 @@ namespace OSS.App.Security.Commands.CreateAppUser
                 {
                     await _emailSender.SendEmailAsync(
                     user.Email,
-                    "Confirm your email",
-                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    "Please confirm your email for WRLDC Shift Roster web app",
+                    $"Please confirm your account of WRLDC Shift Roster web app by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>");
 
-                    Console.WriteLine($"Confirmation email sent to ${user.UserName}");
+                    Console.WriteLine($"Email address Confirmation mail sent to ${user.UserName}");
                 }
                 catch (Exception ex)
                 {

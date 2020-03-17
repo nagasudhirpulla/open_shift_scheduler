@@ -56,7 +56,7 @@ namespace OSS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateAppUserCommand vm)
         {
-            vm.BaseUrl = new Uri(new Uri(Request.Scheme + "://" + Request.Host.Value), "Identity/Account/ConfirmEmail").ToString();
+            vm.BaseUrl = new Uri(new Uri(Request.Scheme + "://" + Request.Host), "roster/Identity/Account/ConfirmEmail").ToString();
             IdentityResult result = await _mediator.Send(vm);
             if (result.Succeeded)
             {

@@ -61,7 +61,7 @@
                 </td>
                 <td>
                     <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                    @if (!item.IsExecuted && !item.IsApproved)
+                    @if (!item.IsApproved)
                     {
                         <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
                     }
