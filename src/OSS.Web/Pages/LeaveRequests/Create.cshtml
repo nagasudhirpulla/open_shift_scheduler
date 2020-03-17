@@ -1,5 +1,6 @@
 ﻿@page
 @model OSS.Web.Pages.LeaveRequests.CreateModel
+@using OSS.App.Security;
 @{
     ViewData["Title"] = "Create";
 }
@@ -27,7 +28,18 @@
                 <input asp-for="LeaveRequest.Remarks" class="form-control" />
                 <span asp-validation-for="LeaveRequest.Remarks" class="text-danger"></span>
             </div>
-            <input asp-for="LeaveRequest.EmployeeId" type="hidden"/>
+            @if (User.IsInRole(SecurityConstants.AdminRoleString))
+            {
+                <div class="form-group">
+                    <label>Select Employee</label>
+                    <select asp-for="LeaveRequest.EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId"></select>
+                    <span asp-validation-for="LeaveRequest.EmployeeId" class="text-danger"></span>
+                </div>
+            }
+            else
+            {
+                <input asp-for="LeaveRequest.EmployeeId" type="hidden" />
+            }
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

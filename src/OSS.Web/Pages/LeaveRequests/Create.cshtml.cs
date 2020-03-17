@@ -9,13 +9,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using OSS.App.LeaveRequests.Commands.CreateLeaveRequest;
 using OSS.App.Security;
+using OSS.App.Security.Queries.GetAppUsers;
 using OSS.Domain.Entities;
 
 namespace OSS.Web.Pages.LeaveRequests
 {
-    [Authorize(Roles = SecurityConstants.GuestRoleString)]
+    [Authorize]
     public class CreateModel : PageModel
     {
         private readonly IMediator _mediator;
@@ -28,20 +30,27 @@ namespace OSS.Web.Pages.LeaveRequests
 
         [BindProperty]
         public LeaveRequest LeaveRequest { get; set; }
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGet()
         {
             LeaveRequest = new LeaveRequest
             {
                 StartDate = DateTime.Now.Date,
                 EndDate = DateTime.Now.Date,
-                EmployeeId = _userManager.GetUserId(User)
             };
+            if (!User.IsInRole(SecurityConstants.AdminRoleString))
+            {
+                LeaveRequest.EmployeeId = _userManager.GetUserId(User);
+            }
+            else
+            {
+                ViewData["EmployeeId"] = new SelectList((await _mediator.Send(new GetAppUsersListQuery())).Users, "UserId", "Username");
+            }
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            //validate request
+            // validate request
             CreateLeaveRequestCommand command = new CreateLeaveRequestCommand { LeaveRequest = LeaveRequest, UserId = _userManager.GetUserId(User), IsUserAdmin = User.IsInRole(SecurityConstants.AdminRoleString) };
             var validator = new CreateLeaveRequestCommandValidator();
             var validationResult = validator.Validate(command);
