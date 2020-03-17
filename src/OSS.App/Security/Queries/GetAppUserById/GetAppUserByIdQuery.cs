@@ -19,10 +19,12 @@ namespace OSS.App.Security.Queries.GetAppUserById
         public class GetAppUserByIdQueryHandler : IRequestHandler<GetAppUserByIdQuery, UserDTO>
         {
             private readonly UserManager<ApplicationUser> _userManager;
+            private readonly IMapper _mapper;
 
-            public GetAppUserByIdQueryHandler(UserManager<ApplicationUser> userManager)
+            public GetAppUserByIdQueryHandler(UserManager<ApplicationUser> userManager, IMapper mapper)
             {
                 _userManager = userManager;
+                _mapper = mapper;
             }
 
             public async Task<UserDTO> Handle(GetAppUserByIdQuery request, CancellationToken cancellationToken)
@@ -44,13 +46,15 @@ namespace OSS.App.Security.Queries.GetAppUserById
                 {
                     userRole = existingUserRoles.ElementAt(0);
                 }
-                UserDTO vm = new UserDTO()
-                {
-                    Email = user.Email,
-                    Username = user.UserName,
-                    UserRole = userRole,
-                    UserId = user.Id
-                };
+                //UserDTO vm = new UserDTO()
+                //{
+                //    Email = user.Email,
+                //    Username = user.UserName,
+                //    UserRole = userRole,
+                //    UserId = user.Id
+                //};
+                UserDTO vm = _mapper.Map<UserDTO>(user);
+                vm.UserRole = userRole;
                 return vm;
             }
         }

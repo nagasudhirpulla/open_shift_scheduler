@@ -88,6 +88,42 @@ namespace OSS.App.Security.Commands.EditAppUser
                     await _userManager.AddToRoleAsync(user, request.UserRole);
                 }
             }
+
+            // update OfficeId
+            if (user.OfficeId != request.OfficeId)
+            {
+                user.OfficeId = request.OfficeId;
+                await _userManager.UpdateAsync(user);
+            }
+
+            // update GenderId
+            if (user.GenderId != request.GenderId)
+            {
+                user.GenderId = request.GenderId;
+                await _userManager.UpdateAsync(user);
+            }
+
+            // update IsActive
+            if (user.IsActive != request.IsActive)
+            {
+                user.IsActive = request.IsActive;
+                await _userManager.UpdateAsync(user);
+            }
+
+            // update ShiftRoleId
+            if (user.ShiftRoleId != request.ShiftRoleId)
+            {
+                user.ShiftRoleId = request.ShiftRoleId;
+                await _userManager.UpdateAsync(user);
+            }
+
+            // update ShiftGroupId
+            if (user.ShiftGroupId != request.ShiftGroupId)
+            {
+                user.ShiftGroupId = request.ShiftGroupId;
+                await _userManager.UpdateAsync(user);
+            }
+
             foreach (IdentityError iError in identityErrors)
             {
                 errors.Add(iError.Description);

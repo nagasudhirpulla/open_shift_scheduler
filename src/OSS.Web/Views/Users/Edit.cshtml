@@ -1,4 +1,4 @@
-﻿@model  OSS.App.Security.Commands.EditAppUser.EditAppUserCommand
+﻿@model OSS.App.Security.Commands.EditAppUser.EditAppUserCommand
 @{
     ViewData["Title"] = "Edit User";
 }
@@ -21,11 +21,6 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UserRole"></label>
-                <select asp-for="UserRole" class="form-control" asp-items="ViewBag.UserRole"></select>
-                <span asp-validation-for="UserRole" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Password"></label>
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
@@ -35,6 +30,36 @@
                 <input asp-for="ConfirmPassword" class="form-control" />
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="OfficeId"></label>
+                <input asp-for="OfficeId" class="form-control" />
+                <span asp-validation-for="OfficeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Gender</label>
+                <select asp-for="GenderId" class="form-control" asp-items="ViewBag.GenderId"></select>
+                <span asp-validation-for="GenderId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IsActive"></label>
+                <input asp-for="IsActive" class="form-control" />
+                <span asp-validation-for="IsActive" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Shift Role</label>
+                <select asp-for="ShiftRoleId" class="form-control" asp-items="ViewBag.ShiftRoleId"></select>
+                <span asp-validation-for="ShiftRoleId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>ShiftGroup</label>
+                <select asp-for="ShiftGroupId" class="form-control" asp-items="ViewBag.ShiftGroupId"></select>
+                <span asp-validation-for="ShiftGroupId" class="text-danger"></span>
+            </div>
+            @*<div class="form-group">
+                <label asp-for="UserRole"></label>
+                <select asp-for="UserRole" class="form-control" asp-items="ViewBag.UserRole"></select>
+                <span asp-validation-for="UserRole" class="text-danger"></span>
+            </div>*@
             <button type="submit" class="btn btn-success">Save Changes</button>
         </form>
         <a asp-action="Index">Back to List</a>

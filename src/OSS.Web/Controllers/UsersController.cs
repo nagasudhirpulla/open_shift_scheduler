@@ -15,8 +15,10 @@ using OSS.App.Security.Commands.DeleteAppUser;
 using OSS.App.Security.Commands.EditAppUser;
 using OSS.App.Security.Queries.GetAppUserById;
 using OSS.App.Security.Queries.GetAppUsers;
+using OSS.App.Security.Queries.GetRawRawAppUserById;
 using OSS.App.ShiftGroups.Queries.GetShiftGroups;
 using OSS.App.ShiftRoles.Queries.GetShiftRoles;
+using OSS.Domain.Entities;
 using OSS.Web.Extensions;
 
 namespace OSS.Web.Controllers
@@ -65,23 +67,27 @@ namespace OSS.Web.Controllers
 
             // If we got this far, something failed, redisplay form
             ViewData["GenderId"] = new SelectList(await _mediator.Send(new GetGendersQuery()), "Id", "Name");
-            ViewData["ShiftRoleId"] = new SelectList(await _mediator.Send(new GetShiftGroupsQuery()), "Id", "Name");
-            ViewData["ShiftGroupId"] = new SelectList(await _mediator.Send(new GetShiftRolesQuery()), "Id", "RoleName");
+            ViewData["ShiftGroupId"] = new SelectList(await _mediator.Send(new GetShiftGroupsQuery()), "Id", "Name");
+            ViewData["ShiftRoleId"] = new SelectList(await _mediator.Send(new GetShiftRolesQuery()), "Id", "RoleName");
             return View(vm);
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
-            UserDTO uDTO = await _mediator.Send(new GetAppUserByIdQuery() { Id = id });
-            if (uDTO == null)
+            ApplicationUser user = await _mediator.Send(new GetRawAppUserByIdQuery() { Id = id });
+            if (user == null)
             {
                 return NotFound();
             }
 
-            EditAppUserCommand vm = _mapper.Map<EditAppUserCommand>(uDTO);
+            EditAppUserCommand vm = _mapper.Map<EditAppUserCommand>(user);
 
-            ViewData["UserRole"] = new SelectList(SecurityConstants.GetRoles());
+            // If we got this far, something failed, redisplay form
+            // ViewData["UserRole"] = new SelectList(SecurityConstants.GetRoles());
+            ViewData["GenderId"] = new SelectList(await _mediator.Send(new GetGendersQuery()), "Id", "Name");
+            ViewData["ShiftGroupId"] = new SelectList(await _mediator.Send(new GetShiftGroupsQuery()), "Id", "Name");
+            ViewData["ShiftRoleId"] = new SelectList(await _mediator.Send(new GetShiftRolesQuery()), "Id", "RoleName");
             return View(vm);
         }
 
@@ -100,7 +106,10 @@ namespace OSS.Web.Controllers
             }
 
             // If we got this far, something failed, redisplay form
-            ViewData["UserRole"] = new SelectList(SecurityConstants.GetRoles());
+            // ViewData["UserRole"] = new SelectList(SecurityConstants.GetRoles());
+            ViewData["GenderId"] = new SelectList(await _mediator.Send(new GetGendersQuery()), "Id", "Name");
+            ViewData["ShiftGroupId"] = new SelectList(await _mediator.Send(new GetShiftGroupsQuery()), "Id", "Name");
+            ViewData["ShiftRoleId"] = new SelectList(await _mediator.Send(new GetShiftRolesQuery()), "Id", "RoleName");
             return View(vm);
         }
 
