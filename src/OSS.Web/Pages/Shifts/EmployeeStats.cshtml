@@ -1,0 +1,90 @@
+﻿@page
+@model OSS.Web.Pages.Shifts.EmployeeStatsModel
+@using OSS.App.Shifts.Queries.GetAllEmployeeStats;
+@{
+    ViewData["Title"] = "Employee Statistics";
+}
+
+<form method="post">
+    <label asp-for="Query.StartDate"></label>
+    <input asp-for="Query.StartDate" type="date" />
+    <span asp-validation-for="Query.StartDate" class="text-danger"></span>
+    <label asp-for="Query.EndDate" style="margin-left:3em"></label>
+    <input asp-for="Query.EndDate" type="date" />
+    <span asp-validation-for="Query.StartDate" class="text-danger"></span>
+    <button type="submit" class="btn btn-primary" style="margin-left:3em">Load</button>
+    @if (Model.EmployeeStats == null || Model.EmployeeStats.Count == 0)
+    {
+        <div>
+            <h4>No Employee statistics to display</h4>
+        </div>
+    }
+    else
+    {
+        List<string> shiftTypesLabels = new List<string>(Model.EmployeeStats[0].NumShiftsPerType.Keys);
+        <table id="dis_table" class="table table-striped table-bordered table-hover" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Employee</th>
+                    @foreach (string sType in shiftTypesLabels)
+                    {
+                        <th>@sType</th>
+                    }
+                    <th>Presence</th>
+                    <th>Absence</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (EmployeeStatsDTO empStats in Model.EmployeeStats)
+                {
+                    <tr>
+                        <td>
+                            @empStats.Employee.Username
+                        </td>
+                        @foreach (string sTypeLabel in shiftTypesLabels)
+                        {
+                            <td>
+                                @empStats.NumShiftsPerType[sTypeLabel]
+                            </td>
+                        }
+                        <td>
+                            @empStats.numPresenceShifts
+                        </td>
+                        <td>
+                            @empStats.numAbsenceShifts
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</form>
+
+@section Scripts{
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/fc-3.2.5/fh-3.1.4/r-2.2.2/datatables.min.css" />
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/fc-3.2.5/fh-3.1.4/r-2.2.2/datatables.min.js"></script>
+    @*<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>*@
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+    @*<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>*@
+    @*<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>*@
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+    @*<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>*@
+    <script>
+        $(document).ready(function () {
+            $('#dis_table').DataTable({
+                fixedColumns: true,
+                scrollX: true,
+                columnDefs: [{
+                    targets: [0],
+                    orderData: [0]
+                }],
+                scrollCollapse: true,
+                paging: false,
+                dom: 'Bfrtip',
+                buttons: ['pdf']
+            });
+        });
+    </script>
+}

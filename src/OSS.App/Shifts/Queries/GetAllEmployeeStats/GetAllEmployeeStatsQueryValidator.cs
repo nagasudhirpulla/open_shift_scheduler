@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 using System;
 
-namespace OSS.App.Shifts.Queries.GetShiftRoster
+namespace OSS.App.Shifts.Queries.GetAllEmployeeStats
 {
-    public class GetShiftRosterQueryValidator : AbstractValidator<GetShiftRosterQuery>
+    public class GetAllEmployeeStatsQueryValidator : AbstractValidator<GetAllEmployeeStatsQuery>
     {
-        public GetShiftRosterQueryValidator()
+        public GetAllEmployeeStatsQueryValidator()
         {
             RuleFor(x => x.StartDate).Must(BeAValidDate).WithMessage("Start date is required");
             RuleFor(x => x.EndDate).Must(BeAValidDate).WithMessage("End date is required");

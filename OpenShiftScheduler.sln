@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OSS.App", "src\OSS.App\OSS.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OSS.Infra", "src\OSS.Infra\OSS.Infra.csproj", "{623A5AC7-93F7-4D9B-B256-59F69C71BFDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OSS.Web", "src\OSS.Web\OSS.Web.csproj", "{C6C27A7E-6075-4E3C-A56A-04C6A7B7EC2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OSS.Web", "src\OSS.Web\OSS.Web.csproj", "{C6C27A7E-6075-4E3C-A56A-04C6A7B7EC2E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

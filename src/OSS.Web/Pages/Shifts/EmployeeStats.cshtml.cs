@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,39 +7,40 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using OSS.App.Shifts.Queries.GetShiftRoster;
+using OSS.App.Shifts.Queries.GetAllEmployeeStats;
 
-namespace OSS.Web
+namespace OSS.Web.Pages.Shifts
 {
     [Authorize]
-    public class RosterModel : PageModel
+    public class EmployeeStatsModel : PageModel
     {
         private readonly IMediator _mediator;
-        public RosterModel(IMediator mediator)
+        public EmployeeStatsModel(IMediator mediator)
         {
             _mediator = mediator;
         }
 
         [BindProperty]
-        public GetShiftRosterQuery Query { get; set; }
+        public GetAllEmployeeStatsQuery Query { get; set; }
 
-        public ShiftRosterDTO Roster { get; set; }
-        public async Task OnGet()
+        public List<EmployeeStatsDTO> EmployeeStats { get; set; }
+        public async Task<IActionResult> OnGet()
         {
             // set start and end dates as this month
             DateTime today = DateTime.Now;
-            Query = new GetShiftRosterQuery
+            Query = new GetAllEmployeeStatsQuery
             {
                 StartDate = new DateTime(today.Year, today.Month, 1)
             };
             Query.EndDate = Query.StartDate.AddMonths(1).AddDays(-1);
-            // get roster data
-            Roster = await _mediator.Send(Query);
+            // get employee stats
+            EmployeeStats = await _mediator.Send(Query);
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var validator = new GetShiftRosterQueryValidator();
+            var validator = new GetAllEmployeeStatsQueryValidator();
             var validationResult = validator.Validate(Query);
 
             if (!validationResult.IsValid)
@@ -48,7 +49,7 @@ namespace OSS.Web
                 return Page();
             }
             // get roster data
-            Roster = await _mediator.Send(Query);
+            EmployeeStats = await _mediator.Send(Query);
             return Page();
         }
     }
