@@ -1,0 +1,59 @@
+﻿@page
+@model OSS.Web.AttachParticipationModel
+@{
+    ViewData["Title"] = "AttachParticipation";
+}
+
+<h4>Attach Shift Participation</h4>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Command.StartDate" class="control-label"></label>
+                <input asp-for="Command.StartDate" class="form-control" type="date" />
+                <span asp-validation-for="Command.StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Command.EndDate" class="control-label"></label>
+                <input asp-for="Command.EndDate" class="form-control" type="date" />
+                <span asp-validation-for="Command.EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Select Target Employee To Follow</label>
+                <select asp-for="Command.TargetEmployeeId" class="form-control" asp-items="ViewBag.EmployeeId"></select>
+                <span asp-validation-for="Command.TargetEmployeeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Select Target Employee Participation Type</label>
+                <select asp-for="Command.TargetParticipationTypeId" class="form-control" asp-items="ViewBag.PartTypeIdWithNull"></select>
+                <span asp-validation-for="Command.TargetParticipationTypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Select New Participation Employee</label>
+                <select asp-for="Command.NewEmployeeId" class="form-control" asp-items="ViewBag.EmployeeId"></select>
+                <span asp-validation-for="Command.NewEmployeeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Select New Participation Type</label>
+                <select asp-for="Command.NewParticipationTypeId" class="form-control" asp-items="ViewBag.PartTypeId"></select>
+                <span asp-validation-for="Command.NewParticipationTypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

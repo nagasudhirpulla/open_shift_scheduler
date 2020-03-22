@@ -26,6 +26,9 @@
             <thead>
                 <tr>
                     <th>Employee</th>
+                    <th>Role</th>
+                    <th>Group</th>
+                    <th>Gender</th>
                     @foreach (string sType in shiftTypesLabels)
                     {
                         <th>@sType</th>
@@ -40,6 +43,15 @@
                     <tr>
                         <td>
                             @empStats.Employee.Username
+                        </td>
+                        <td>
+                            @empStats.Employee.ShiftRole
+                        </td>
+                        <td>
+                            @empStats.Employee.ShiftGroup
+                        </td>
+                        <td>
+                            @empStats.Employee.Gender
                         </td>
                         @foreach (string sTypeLabel in shiftTypesLabels)
                         {
@@ -56,6 +68,20 @@
                     </tr>
                 }
             </tbody>
+            <tfoot>
+                <tr>
+                    <th>Employee</th>
+                    <th>Role</th>
+                    <th>Group</th>
+                    <th>Gender</th>
+                    @foreach (string sType in shiftTypesLabels)
+                    {
+                        <th>@sType</th>
+                    }
+                    <th>Presence</th>
+                    <th>Absence</th>
+                </tr>
+            </tfoot>
         </table>
     }
 </form>
@@ -73,18 +99,45 @@
     @*<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>*@
     <script>
         $(document).ready(function () {
-            $('#dis_table').DataTable({
-                fixedColumns: true,
-                scrollX: true,
-                columnDefs: [{
-                    targets: [0],
-                    orderData: [0]
-                }],
-                scrollCollapse: true,
-                paging: false,
+            // https://datatables.net/examples/api/multi_filter.html
+            // Setup - add a text input to each footer cell
+            $('#dis_table tfoot th').each(function () {
+                //var title = $(this).text();
+                $(this).html('<input type="text" placeholder="Search" />');
+            });
+
+            var users_table = $('#dis_table').DataTable({
+                fixedHeader: true,
+                "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+                "pageLength": 50,
                 dom: 'Bfrtip',
-                buttons: ['pdf']
+                "order": [[0, "asc"]],
+                buttons: ['pageLength', 'copy', 'csv', 'excel', 'pdf']
+            });
+
+            var r = $('#dis_table tfoot tr');
+            r.find('th').each(function () {
+                $(this).css('padding', '3px');
+            });
+
+            $('#dis_table thead').append(r);
+
+            // Apply the filter
+            // https://www.jqueryscript.net/demo/DataTables-Jquery-Table-Plugin/examples/api/multi_filter.html
+            $("#dis_table thead input").on('keyup change', function () {
+                users_table
+                    .column($(this).parent().index() + ':visible')
+                    .search(this.value)
+                    .draw();
             });
         });
     </script>
+    <style>
+        thead input {
+            padding: 2px;
+            box-sizing: border-box;
+            font-size: small;
+            width: 100%
+        }
+    </style>
 }
