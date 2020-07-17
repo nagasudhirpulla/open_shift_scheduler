@@ -48,6 +48,26 @@ namespace OSS.App.Security.Commands.CreateAppUser
                     await _userManager.AddToRoleAsync(user, request.UserRole);
                     Console.WriteLine($"{request.UserRole} role assigned to new user {user.UserName} with id {user.Id}");
                 }
+                // verify user email
+                string emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                IdentityResult emaiVerifiedResult = await _userManager.ConfirmEmailAsync(user, emailToken);
+                if (emaiVerifiedResult.Succeeded)
+                {
+                    Console.WriteLine($"Email verified for new user {user.UserName} with id {user.Id} and email {user.Email}");
+                }
+                else
+                {
+                    Console.WriteLine($"Email verify failed for {user.UserName} with id {user.Id} and email {user.Email} due to errors {emaiVerifiedResult.Errors}");
+                }
+
+                if (!string.IsNullOrWhiteSpace(user.PhoneNumber))
+                {
+                    // verify phone number
+                    string phoneVerifyToken = await _userManager.GenerateChangePhoneNumberTokenAsync(user, user.PhoneNumber);
+                    IdentityResult phoneVeifyResult = await _userManager.ChangePhoneNumberAsync(user, user.PhoneNumber, phoneVerifyToken);
+                    Console.WriteLine($"Phone verified new user {user.UserName} with id {user.Id} and phone {user.PhoneNumber} = {phoneVeifyResult.Succeeded}");
+                }
+                /**
                 // send confirmation email to user
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 var callbackUrl = QueryHelpers.AddQueryString(request.BaseUrl, new Dictionary<string, string>() { { "code", code }, { "userId", user.Id } });
@@ -64,6 +84,7 @@ namespace OSS.App.Security.Commands.CreateAppUser
                 {
                     Console.WriteLine(ex.Message);
                 }
+                **/
             }
             return result;
         }
