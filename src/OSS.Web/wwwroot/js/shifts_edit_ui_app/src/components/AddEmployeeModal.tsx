@@ -40,7 +40,7 @@ function AddEmployeeModal(props: IAddEmployeeModalProps) {
                 placeholder="Select Employee..."
                 options={props.employees}
                 onChange={handleEmpChange}
-                getOptionLabel={option => option.username}
+                getOptionLabel={option => option.displayName}
                 getOptionValue={option => option.userId} />
 
             <Select

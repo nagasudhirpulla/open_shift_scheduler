@@ -37,7 +37,7 @@ function ShiftCell(props: IShiftCellProps) {
     }
 
     const getEmployeeUsername = (empId: string): string => {
-        return props.groupedEmployees[empId] == undefined ? "" : props.groupedEmployees[empId][0].username
+        return props.groupedEmployees[empId] == undefined ? "" : props.groupedEmployees[empId][0].displayName
     }
 
     return (

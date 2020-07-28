@@ -1,6 +1,7 @@
 ﻿export interface IEmployee {
     userId: string;
     username: string;
+    displayName: string;
     email: string;
     userRole: string;
     officeId: string;
