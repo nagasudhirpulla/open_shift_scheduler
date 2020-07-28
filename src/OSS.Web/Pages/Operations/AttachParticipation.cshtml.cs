@@ -30,7 +30,7 @@ namespace OSS.Web
 
         public async Task<IActionResult> OnGetAsync()
         {
-            ViewData["EmployeeId"] = new SelectList((await _mediator.Send(new GetAppUsersListQuery())).Users, "UserId", "Username");
+            ViewData["EmployeeId"] = new SelectList((await _mediator.Send(new GetAppUsersListQuery())).Users, "UserId", "DisplayName");
 
             List<ShiftParticipationType> shiftPartTypes = await _mediator.Send(new GetShiftParticipationTypesQuery());
             ViewData["PartTypeId"] = new SelectList(shiftPartTypes, "Id", "Name");

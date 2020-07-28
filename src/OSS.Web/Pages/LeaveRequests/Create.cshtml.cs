@@ -43,7 +43,7 @@ namespace OSS.Web.Pages.LeaveRequests
             }
             else
             {
-                ViewData["EmployeeId"] = new SelectList((await _mediator.Send(new GetAppUsersListQuery())).Users, "UserId", "Username");
+                ViewData["EmployeeId"] = new SelectList((await _mediator.Send(new GetAppUsersListQuery())).Users, "UserId", "DisplayName");
             }
             return Page();
         }

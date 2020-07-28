@@ -5,7 +5,7 @@
 }
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a asp-page="Create" class="btn btn-sm btn-success">Create New</a>
 </p>
 <table id="dis_table" class="table table-striped table-bordered table-hover" style="width:100%">
     <thead>
@@ -48,7 +48,7 @@
                     <label class="hiddenDate">@item.EndDate.ToString("yyyy-MM-dd HH:mm:ss")</label> @item.EndDate.ToString("dd-MMM-yyyy")
                 </td>
                 <td>
-                    @item.Employee.UserName
+                    @item.Employee.DisplayName
                 </td>
                 <td>
                     @item.Remarks
