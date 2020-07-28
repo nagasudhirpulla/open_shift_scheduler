@@ -79,7 +79,7 @@ namespace OSS.App.Shifts.Queries.GetShiftRoster
                 {
                     participationType = shiftPartTypes[shiftPartTypeIndex];
                 }
-                vm.ShiftParticipations[shiftPart.Shift.ShiftDate.Date][shiftTypeIndex].Add(new Tuple<string, ShiftParticipationType>(shiftPart.Employee.UserName, participationType));
+                vm.ShiftParticipations[shiftPart.Shift.ShiftDate.Date][shiftTypeIndex].Add(new Tuple<string, ShiftParticipationType>(shiftPart.Employee.DisplayName, participationType));
             }
 
             // get all the shift objects for comments

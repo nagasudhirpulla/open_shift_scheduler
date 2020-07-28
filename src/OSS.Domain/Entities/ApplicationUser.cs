@@ -13,6 +13,8 @@ namespace OSS.Domain.Entities
             ShiftParticipations = new HashSet<ShiftParticipation>();
         }
 
+        public string DisplayName { get; set; }
+
         public string OfficeId { get; set; }
 
         public Gender Gender { get; set; }

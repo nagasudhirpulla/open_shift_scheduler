@@ -10,6 +10,7 @@ namespace OSS.App.Security.Queries.GetAppUsers
     {
         public string UserId { get; set; }
         public string Username { get; set; }
+        public string DisplayName { get; set; }
         public string Email { get; set; }
         public string UserRole { get; set; }
         public string OfficeId { get; set; }

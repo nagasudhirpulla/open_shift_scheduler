@@ -9,7 +9,7 @@
         <div class="col col-md-10 col-lg-8 col-xl-6">
             <h2>@ViewData["Title"]</h2>
             <hr />
-            <h3>Are you sure you want to delete @Model.Username ( @Model.Email ) ?</h3>
+            <h3>Are you sure you want to delete @Model.Username ( @Model.DisplayName , @Model.Email ) ?</h3>
             <div>
                 <form asp-action="Delete">
                     <input type="hidden" asp-for="UserId" />

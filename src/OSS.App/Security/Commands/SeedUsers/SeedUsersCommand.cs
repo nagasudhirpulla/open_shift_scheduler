@@ -59,6 +59,7 @@ namespace OSS.App.Security.Commands.SeedUsers
                     ApplicationUser user = new ApplicationUser
                     {
                         UserName = AdminUserName,
+                        DisplayName = AdminUserName,
                         Email = AdminEmail,
                         Gender = gender,
                         ShiftGroup = shiftGrp

@@ -7,6 +7,7 @@ namespace OSS.App.Security.Commands.CreateAppUser
         public CreateAppUserCommandValidator()
         {
             RuleFor(x => x.Username).NotEmpty();
+            RuleFor(x => x.DisplayName).NotEmpty();
             RuleFor(x => x.Email).EmailAddress().NotEmpty();
             RuleFor(x => x.UserRole).NotEmpty();
             RuleFor(x => x.Password)

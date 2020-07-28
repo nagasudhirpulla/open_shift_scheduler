@@ -89,6 +89,13 @@ namespace OSS.App.Security.Commands.EditAppUser
                 }
             }
 
+            // update DisplayName
+            if (user.DisplayName != request.DisplayName)
+            {
+                user.DisplayName = request.DisplayName;
+                await _userManager.UpdateAsync(user);
+            }
+
             // update OfficeId
             if (user.OfficeId != request.OfficeId)
             {

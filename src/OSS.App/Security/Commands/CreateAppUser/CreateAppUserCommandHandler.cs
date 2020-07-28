@@ -29,6 +29,7 @@ namespace OSS.App.Security.Commands.CreateAppUser
             ApplicationUser user = new ApplicationUser
             {
                 UserName = request.Username,
+                DisplayName = request.DisplayName,
                 Email = request.Email,
                 GenderId = request.GenderId,
                 ShiftRoleId = request.ShiftRoleId,
