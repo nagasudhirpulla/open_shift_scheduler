@@ -30,14 +30,12 @@ namespace OSS.Web
 
         public async Task<IActionResult> OnGetAsync()
         {
-            ViewData["EmployeeId"] = new SelectList((await _mediator.Send(new GetAppUsersListQuery())).Users, "UserId", "DisplayName");
+            Command = new FollowShiftParticipationCommand();
 
             List<ShiftParticipationType> shiftPartTypes = await _mediator.Send(new GetShiftParticipationTypesQuery());
-            ViewData["PartTypeId"] = new SelectList(shiftPartTypes, "Id", "Name");
-
-            List<ShiftParticipationType> shiftPartTypesWithNull = new List<ShiftParticipationType>(shiftPartTypes);
-            shiftPartTypesWithNull.Insert(0, new ShiftParticipationType() { Id = -1, Name = "Any" });
-            ViewData["PartTypeIdWithNull"] = new SelectList(shiftPartTypesWithNull, "Id", "Name");
+            ViewData["PartTypeIdWithNull"] = new SelectList(GetShiftPartTypesWithAny(shiftPartTypes), "Id", "Name");
+            ViewData["PartTypeId"] = new SelectList(GetShiftPartTypesWithSame(shiftPartTypes), "Id", "Name");
+            ViewData["EmployeeId"] = new SelectList((await _mediator.Send(new GetAppUsersListQuery())).Users, "UserId", "DisplayName");
 
             return Page();
         }
@@ -51,11 +49,29 @@ namespace OSS.Web
             if (!validationResult.IsValid)
             {
                 validationResult.AddToModelState(ModelState, null);
+                List<ShiftParticipationType> shiftPartTypes = await _mediator.Send(new GetShiftParticipationTypesQuery());
+                ViewData["PartTypeIdWithNull"] = new SelectList(GetShiftPartTypesWithAny(shiftPartTypes), "Id", "Name");
+                ViewData["PartTypeId"] = new SelectList(GetShiftPartTypesWithSame(shiftPartTypes), "Id", "Name");
+                ViewData["EmployeeId"] = new SelectList((await _mediator.Send(new GetAppUsersListQuery())).Users, "UserId", "DisplayName");
                 return Page();
             }
 
             bool isSuccess = await _mediator.Send(Command);
             return RedirectToPage("/Shifts/Edit");
+        }
+
+        public List<ShiftParticipationType> GetShiftPartTypesWithSame(List<ShiftParticipationType> shiftPartTypes)
+        {
+            List<ShiftParticipationType> newShiftPartTypes = new List<ShiftParticipationType>(shiftPartTypes);
+            newShiftPartTypes.Insert(0, new ShiftParticipationType() { Id = -1, Name = "Same" });
+            return newShiftPartTypes;
+        }
+
+        public List<ShiftParticipationType> GetShiftPartTypesWithAny(List<ShiftParticipationType> shiftPartTypes)
+        {
+            List<ShiftParticipationType> newShiftPartTypes = new List<ShiftParticipationType>(shiftPartTypes);
+            newShiftPartTypes.Insert(0, new ShiftParticipationType() { Id = -1, Name = "Any" });
+            return newShiftPartTypes;
         }
     }
 }

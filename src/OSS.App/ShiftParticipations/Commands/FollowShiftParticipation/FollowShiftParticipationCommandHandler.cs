@@ -33,16 +33,38 @@ namespace OSS.App.ShiftParticipations.Commands.FollowShiftParticipation
             // create similar shift participations for the new employee
             foreach (ShiftParticipation sp in spList)
             {
+                int newPartTypeId = request.NewParticipationTypeId;
+                newPartTypeId = (newPartTypeId == -1) ? sp.ShiftParticipationTypeId : newPartTypeId;
+
+                int newPartSeq = request.NewParticipationSequence;
+                newPartSeq = (newPartSeq == 0) ? sp.ParticipationSequence : newPartSeq;
+
                 ShiftParticipation newPart = new ShiftParticipation
                 {
                     EmployeeId = request.NewEmployeeId,
                     ShiftId = sp.ShiftId,
-                    ShiftParticipationTypeId = request.NewParticipationTypeId
+                    ShiftParticipationTypeId = newPartTypeId,
+                    ParticipationSequence = newPartSeq - 1
                 };
+
                 try
                 {
-                    _context.ShiftParticipations.Add(newPart);
-                    await _context.SaveChangesAsync();
+                    if (request.NewEmployeeId != request.TargetEmployeeId)
+                    {
+                        // we are trying to follow an employee participation
+                        _context.ShiftParticipations.Add(newPart);
+                        await _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        // we are trying to modify an existing participation
+                        sp.EmployeeId = newPart.EmployeeId;
+                        sp.ShiftId = newPart.ShiftId;
+                        sp.ShiftParticipationTypeId = newPart.ShiftParticipationTypeId;
+                        sp.ParticipationSequence = newPart.ParticipationSequence;
+                        _context.Entry(sp).State = EntityState.Modified;
+                        await _context.SaveChangesAsync();
+                    }
                 }
                 catch (Exception e)
                 {

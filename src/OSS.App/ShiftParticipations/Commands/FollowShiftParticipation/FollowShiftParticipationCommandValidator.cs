@@ -7,6 +7,7 @@ namespace OSS.App.ShiftParticipations.Commands.FollowShiftParticipation
     {
         public FollowShiftParticipationCommandValidator()
         {
+            RuleFor(x => x.NewParticipationSequence).GreaterThanOrEqualTo(x => 0).WithMessage("New Participation Sequence should be >= 0");
             RuleFor(x => x.StartDate).Must(BeAValidDate).WithMessage("Start date is required");
             RuleFor(x => x.EndDate).Must(BeAValidDate).WithMessage("End date is required");
             RuleFor(x => x.StartDate)
