@@ -17,6 +17,7 @@ namespace OSS.App.Security.Commands.EditAppUser
         public string ConfirmPassword { get; set; }
         public string UserRole { get; set; }
         public string OfficeId { get; set; }
+        public string Designation { get; set; }
         public int GenderId { get; set; }
         public bool IsActive { get; set; }
         public int ShiftRoleId { get; set; }

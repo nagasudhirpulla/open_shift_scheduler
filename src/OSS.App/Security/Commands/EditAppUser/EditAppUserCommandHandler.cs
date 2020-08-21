@@ -103,6 +103,13 @@ namespace OSS.App.Security.Commands.EditAppUser
                 await _userManager.UpdateAsync(user);
             }
 
+            // update Designation
+            if (user.Designation != request.Designation)
+            {
+                user.Designation = request.Designation;
+                await _userManager.UpdateAsync(user);
+            }
+
             // update GenderId
             if (user.GenderId != request.GenderId)
             {

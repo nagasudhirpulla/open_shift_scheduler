@@ -14,6 +14,7 @@ namespace OSS.App.Security.Queries.GetAppUsers
         public string Email { get; set; }
         public string UserRole { get; set; }
         public string OfficeId { get; set; }
+        public string Designation { get; set; }
         public string Gender { get; set; }
         public DateTime? Dob { get; set; }
         public bool IsActive { get; set; } = true;

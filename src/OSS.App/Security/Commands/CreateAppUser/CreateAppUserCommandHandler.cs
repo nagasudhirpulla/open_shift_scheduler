@@ -35,6 +35,7 @@ namespace OSS.App.Security.Commands.CreateAppUser
                 ShiftRoleId = request.ShiftRoleId,
                 ShiftGroupId = request.ShiftGroupId,
                 OfficeId = request.OfficeId,
+                Designation = request.Designation,
                 IsActive = request.IsActive
             };
             IdentityResult result = await _userManager.CreateAsync(user, request.Password);

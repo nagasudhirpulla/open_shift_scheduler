@@ -15,6 +15,7 @@ namespace OSS.App.Security.Commands.CreateAppUser
         public string ConfirmPassword { get; set; }
         public string UserRole { get; set; } = SecurityConstants.GuestRoleString;
         public string OfficeId { get; set; }
+        public string Designation { get; set; }
         public int GenderId { get; set; }
         public bool IsActive { get; set; } = true;
         public int ShiftRoleId { get; set; }

@@ -17,6 +17,8 @@ namespace OSS.Domain.Entities
 
         public string OfficeId { get; set; }
 
+        public string Designation { get; set; }
+
         public Gender Gender { get; set; }
         public int GenderId { get; set; }
 
