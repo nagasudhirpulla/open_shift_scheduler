@@ -31,6 +31,7 @@ namespace OSS.App.Security.Commands.CreateAppUser
                 UserName = request.Username,
                 DisplayName = request.DisplayName,
                 Email = request.Email,
+                PhoneNumber = request.PhoneNumber,
                 GenderId = request.GenderId,
                 ShiftRoleId = request.ShiftRoleId,
                 ShiftGroupId = request.ShiftGroupId,

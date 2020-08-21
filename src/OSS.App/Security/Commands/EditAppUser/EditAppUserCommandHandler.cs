@@ -74,6 +74,21 @@ namespace OSS.App.Security.Commands.EditAppUser
                 }
             }
 
+            // change phone number if changed
+            if (user.PhoneNumber != request.PhoneNumber)
+            {
+                string phoneChangeToken = await _userManager.GenerateChangePhoneNumberTokenAsync(user, request.PhoneNumber);
+                IdentityResult phoneChangeResult = await _userManager.ChangePhoneNumberAsync(user, request.PhoneNumber, phoneChangeToken);
+                if (phoneChangeResult.Succeeded)
+                {
+                    Console.WriteLine($"phone number of user {user.UserName} with id {user.Id} changed to {request.PhoneNumber}");
+                }
+                else
+                {
+                    identityErrors.AddRange(phoneChangeResult.Errors);
+                }
+            }
+
             // change user role if not present in user
             bool isValidRole = SecurityConstants.GetRoles().Contains(request.UserRole);
             List<string> existingUserRoles = (await _userManager.GetRolesAsync(user)).ToList();
