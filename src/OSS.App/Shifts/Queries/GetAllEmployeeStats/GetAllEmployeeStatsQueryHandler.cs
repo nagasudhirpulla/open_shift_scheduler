@@ -67,7 +67,9 @@ namespace OSS.App.Shifts.Queries.GetAllEmployeeStats
                     foreach (ShiftType sType in shiftTypes)
                     {
                         int numEmpShiftsOfThisType = shiftParts.Count(sp => sp.EmployeeId == emp.Id && sp.Shift.ShiftTypeId == sType.Id && !sp.ShiftParticipationType.IsAbsence);
-                        stats.NumShiftsPerType.Add(sType.Name, numEmpShiftsOfThisType);
+                        stats.NumShiftsPerType.Add($"{sType.Name}", numEmpShiftsOfThisType);
+                        numEmpShiftsOfThisType = shiftParts.Count(sp => sp.EmployeeId == emp.Id && sp.Shift.ShiftTypeId == sType.Id);
+                        stats.NumShiftsPerType.Add($"{sType.Name}_Allotted", numEmpShiftsOfThisType);
                     }
 
                     // count as per participation type

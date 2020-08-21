@@ -27,6 +27,7 @@
                 <tr>
                     <th>Employee</th>
                     <th>Role</th>
+                    <th>Designation</th>
                     <th>Group</th>
                     <th>Gender</th>
                     @foreach (string sType in shiftTypesLabels)
@@ -46,6 +47,9 @@
                         </td>
                         <td>
                             @empStats.Employee.ShiftRole
+                        </td>
+                        <td>
+                            @empStats.Employee.Designation
                         </td>
                         <td>
                             @empStats.Employee.ShiftGroup
@@ -72,6 +76,7 @@
                 <tr>
                     <th>Employee</th>
                     <th>Role</th>
+                    <th>Designation</th>
                     <th>Group</th>
                     <th>Gender</th>
                     @foreach (string sType in shiftTypesLabels)
