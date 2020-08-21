@@ -37,14 +37,15 @@ namespace OSS.App.ShiftParticipations.Commands.FollowShiftParticipation
                 newPartTypeId = (newPartTypeId == -1) ? sp.ShiftParticipationTypeId : newPartTypeId;
 
                 int newPartSeq = request.NewParticipationSequence;
-                newPartSeq = (newPartSeq == 0) ? sp.ParticipationSequence : newPartSeq;
+                newPartSeq += -1;
+                newPartSeq = (newPartSeq == -1) ? sp.ParticipationSequence : newPartSeq;
 
                 ShiftParticipation newPart = new ShiftParticipation
                 {
                     EmployeeId = request.NewEmployeeId,
                     ShiftId = sp.ShiftId,
                     ShiftParticipationTypeId = newPartTypeId,
-                    ParticipationSequence = newPartSeq - 1
+                    ParticipationSequence = newPartSeq
                 };
 
                 try

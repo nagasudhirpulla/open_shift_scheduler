@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+﻿import React, { useState, useEffect } from "react";
 import Modal from 'react-bootstrap/Modal'
 import Select from 'react-select'
 import { IEmployee } from "../type_defs/IEmployee";
@@ -39,18 +39,24 @@ function EditParticipationModal(props: IEditParticipationModalProps) {
         setSelPartType(selectedOption)
     }
 
-    const [selSeq, setSelSeq] = useState(props.participation.participationSequence + 1);
+    const [selSeq, setSelSeq] = useState(props.participation.participationSequence + 1)
+
+    useEffect(() => {
+        setSelEmp(groupedEmployees[props.participation.employeeId][0])
+        setSelPartType(groupedShiftPartTypes[props.participation.shiftParticipationTypeId][0])
+        setSelSeq(props.participation.participationSequence + 1)
+    }, [props.participation.id]); // Only re-run the effect if props.participation.id changes
 
     return <Modal show={props.show} onHide={handleClose}>
         <Modal.Header closeButton>
-            <Modal.Title>New Shift Participation</Modal.Title>
+            <Modal.Title>Edit Shift Participation</Modal.Title>
         </Modal.Header>
         <Modal.Body>
             <Select
                 placeholder="Select Employee..."
                 options={props.employees}
                 onChange={handleEmpChange}
-                getOptionLabel={option => option.username}
+                getOptionLabel={option => option.displayName}
                 value={selEmp}
                 getOptionValue={option => option.userId} />
 
