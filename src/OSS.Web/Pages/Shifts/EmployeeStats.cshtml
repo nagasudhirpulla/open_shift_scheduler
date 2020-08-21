@@ -30,6 +30,7 @@
                     <th>Designation</th>
                     <th>Group</th>
                     <th>Gender</th>
+                    <th>OfficeId</th>
                     @foreach (string sType in shiftTypesLabels)
                     {
                         <th>@sType</th>
@@ -57,6 +58,9 @@
                         <td>
                             @empStats.Employee.Gender
                         </td>
+                        <td>
+                            @empStats.Employee.OfficeId
+                        </td>
                         @foreach (string sTypeLabel in shiftTypesLabels)
                         {
                             <td>
@@ -79,6 +83,7 @@
                     <th>Designation</th>
                     <th>Group</th>
                     <th>Gender</th>
+                    <th>OfficeId</th>
                     @foreach (string sType in shiftTypesLabels)
                     {
                         <th>@sType</th>
