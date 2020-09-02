@@ -22,6 +22,7 @@ namespace OSS.App.LeaveRequests.Queries.GetLeaveRequestById
             LeaveRequest res = await _context.LeaveRequests
                                             .Where(r => r.Id == request.Id)
                                             .Include(r => r.Employee)
+                                            .Include(r => r.LeaveType)
                                             .Include(r => r.LeaveRequestComments)
                                             .ThenInclude(c=>c.CreatedBy)
                                             .FirstOrDefaultAsync();

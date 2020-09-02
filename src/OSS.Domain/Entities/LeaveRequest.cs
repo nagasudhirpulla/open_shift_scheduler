@@ -16,6 +16,9 @@ namespace OSS.Domain.Entities
         public ApplicationUser Employee { get; set; }
         public string EmployeeId { get; set; }
 
+        public ShiftParticipationType LeaveType { get; set; }
+        public int LeaveTypeId { get; set; }
+
         public string Remarks { get; set; }
 
         public bool IsExecuted { get; set; }

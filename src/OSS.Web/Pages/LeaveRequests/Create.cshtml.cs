@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using OSS.App.LeaveRequests.Commands.CreateLeaveRequest;
 using OSS.App.Security;
 using OSS.App.Security.Queries.GetAppUsers;
+using OSS.App.ShiftParticipationTypes.Queries.GetShiftParticipationTypes;
 using OSS.Domain.Entities;
 
 namespace OSS.Web.Pages.LeaveRequests
@@ -45,6 +46,8 @@ namespace OSS.Web.Pages.LeaveRequests
             {
                 ViewData["EmployeeId"] = new SelectList((await _mediator.Send(new GetAppUsersListQuery())).Users, "UserId", "DisplayName");
             }
+            var leaveTypes = (await _mediator.Send(new GetShiftParticipationTypesQuery())).Where(i => i.IsAbsence).OrderBy(i=>i.Id);
+            ViewData["LeaveTypeId"] = new SelectList(leaveTypes, "Id", "Name", leaveTypes.Where(lt => lt.Name.ToLower() == "leave").FirstOrDefault().Id);
             return Page();
         }
 

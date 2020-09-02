@@ -22,8 +22,8 @@ namespace OSS.App.LeaveRequests.Commands.ExecuteLeaveRequest
         {
             LeaveRequest lr = await _context.LeaveRequests.FindAsync(request.Id);
 
-            // get the participation type id of "Leave"
-            int leaveSpTypeId = (await _context.ShiftParticipationTypes.Where(spt => spt.Name.ToLower().Equals("leave")).FirstOrDefaultAsync()).Id;
+            // get the participation type id of this leave request
+            int leaveSpTypeId = lr.LeaveTypeId;
             // get all the shift participations that satisfy the leave request
             var spList = await _context.ShiftParticipations
                             .Where(sp => sp.Shift.ShiftDate >= lr.StartDate

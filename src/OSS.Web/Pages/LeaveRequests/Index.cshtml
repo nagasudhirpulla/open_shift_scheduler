@@ -20,6 +20,9 @@
                 To
             </th>
             <th>
+                LeaveType
+            </th>
+            <th>
                 Requester
             </th>
             <th>
@@ -46,6 +49,9 @@
                 </td>
                 <td>
                     <label class="hiddenDate">@item.EndDate.ToString("yyyy-MM-dd HH:mm:ss")</label> @item.EndDate.ToString("dd-MMM-yyyy")
+                </td>
+                <td>
+                    @(item.LeaveType?.Name)
                 </td>
                 <td>
                     @item.Employee.DisplayName
@@ -93,7 +99,7 @@
         $(document).ready(function () {
             $('#dis_table').DataTable({
                 fixedColumns: true,
-                "order": [[ 0, 'desc' ]],
+                "order": [[0, 'desc']],
                 scrollX: true,
                 columnDefs: [{
                     targets: [0],
