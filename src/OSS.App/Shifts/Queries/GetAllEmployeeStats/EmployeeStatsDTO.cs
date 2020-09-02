@@ -12,5 +12,7 @@ namespace OSS.App.Shifts.Queries.GetAllEmployeeStats
 
         public int numAbsenceShifts { get; set; } = 0;
         public int numPresenceShifts { get; set; } = 0;
+        public DateTime? LatestParticipation { get; set; }
+        public DateTime? LatestNightParticipation { get; set; }
     }
 }

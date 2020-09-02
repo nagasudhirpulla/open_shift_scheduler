@@ -37,6 +37,8 @@
                     }
                     <th>Presence</th>
                     <th>Absence</th>
+                    <th>Latest Night</th>
+                    <th>Latest Shift</th>
                 </tr>
             </thead>
             <tbody>
@@ -73,6 +75,12 @@
                         <td>
                             @empStats.numAbsenceShifts
                         </td>
+                        <td>
+                            @((empStats.LatestNightParticipation != default) ? empStats.LatestNightParticipation.Value.ToString("yyyy-MM-dd") : "NA")
+                        </td>
+                        <td>
+                            @((empStats.LatestParticipation != default) ? empStats.LatestParticipation.Value.ToString("yyyy-MM-dd") : "NA")
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -90,6 +98,8 @@
                     }
                     <th>Presence</th>
                     <th>Absence</th>
+                    <th>Latest Night</th>
+                    <th>Latest Shift</th>
                 </tr>
             </tfoot>
         </table>

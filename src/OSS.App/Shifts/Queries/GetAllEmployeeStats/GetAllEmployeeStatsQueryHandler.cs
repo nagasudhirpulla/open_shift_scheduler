@@ -34,7 +34,7 @@ namespace OSS.App.Shifts.Queries.GetAllEmployeeStats
             List<ShiftParticipation> shiftParts = await _context.ShiftParticipations.Where(sp => sp.Shift.ShiftDate >= request.StartDate.Date && sp.Shift.ShiftDate <= request.EndDate.Date)
                                                       .Include(sp => sp.ShiftParticipationType)
                                                       .Include(sp => sp.Shift)
-                                                      .ThenInclude(sp => sp.ShiftType)
+                                                      .ThenInclude(s => s.ShiftType)
                                                       .ToListAsync();
 
             List<ShiftType> shiftTypes = await _context.ShiftTypes.ToListAsync();
@@ -86,6 +86,29 @@ namespace OSS.App.Shifts.Queries.GetAllEmployeeStats
                             stats.numPresenceShifts += numEmpShiftsOfThisType;
                         }
                     }
+
+                    // fetch the latest night shift date
+                    ShiftParticipation latestNightPart = await _context.ShiftParticipations.Where(sp => (sp.EmployeeId == emp.Id) && (sp.Shift.ShiftType.Name.ToLower() == "night"))
+                                                      .Include(sp => sp.Shift)
+                                                      .ThenInclude(s => s.ShiftType)
+                                                      .OrderByDescending(sp => sp.Shift.ShiftDate)
+                                                      .FirstOrDefaultAsync();
+                    if (latestNightPart != default(ShiftParticipation))
+                    {
+                        stats.LatestNightParticipation = latestNightPart.Shift.ShiftDate;
+                    }
+
+                    // fetch the latest shift date
+                    ShiftParticipation latestPart = await _context.ShiftParticipations.Where(sp => (sp.EmployeeId == emp.Id))
+                                                      .Include(sp => sp.Shift)
+                                                      .ThenInclude(s => s.ShiftType)
+                                                      .OrderByDescending(sp => sp.Shift.ShiftDate)
+                                                      .FirstOrDefaultAsync();
+                    if (latestPart != default(ShiftParticipation))
+                    {
+                        stats.LatestParticipation = latestPart.Shift.ShiftDate;
+                    }
+
                     vm.Add(stats);
                 }
             }
