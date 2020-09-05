@@ -35,7 +35,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="ShiftType.ColorString" class="control-label"></label>
-                <input asp-for="ShiftType.ColorString" class="form-control" />
+                <input asp-for="ShiftType.ColorString" class="form-control color-picker" />
                 <span asp-validation-for="ShiftType.ColorString" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -51,4 +51,11 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/packages/node_modules/spectrum-colorpicker2/dist/spectrum.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/js/packages/node_modules/spectrum-colorpicker2/dist/spectrum.min.css" />
+    <script>
+        $('.color-picker').spectrum({
+            type: "text"
+        });
+    </script>
 }

@@ -12,10 +12,10 @@ using OSS.App.Shifts.Queries.GetShiftRoster;
 namespace OSS.Web.Shifts
 {
     [Authorize]
-    public class RosterModel : PageModel
+    public class PrintableRosterModel : PageModel
     {
         private readonly IMediator _mediator;
-        public RosterModel(IMediator mediator)
+        public PrintableRosterModel(IMediator mediator)
         {
             _mediator = mediator;
         }
