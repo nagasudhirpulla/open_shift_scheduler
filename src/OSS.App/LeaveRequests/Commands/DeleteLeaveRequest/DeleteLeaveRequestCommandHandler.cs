@@ -30,9 +30,9 @@ namespace OSS.App.LeaveRequests.Commands.DeleteLeaveRequest
             {
                 throw new Exception("non-admin user who did not create the leave request is trying to delete a request...");
             }
-            else if (leaveReq.IsApproved == true)
+            else if (!request.IsUserAdmin && leaveReq.IsApproved == true)
             {
-                throw new Exception("Leave Request already executed, hence cannot be deleted");
+                throw new Exception("Non-admin is trying to delete a leave Request already executed, hence cannot be deleted");
             }
 
             _context.LeaveRequests.Remove(leaveReq);
