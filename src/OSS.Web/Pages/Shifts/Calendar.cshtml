@@ -68,10 +68,11 @@
             var evntObj = serverEvnts[evntIter];
             events.push({ "backgroundColor": evntObj["titleBgColor"], "borderColor": "#FFFFFF", 'start': evntObj["shiftDate"].slice(0, 10), 'title': evntObj["eventTitle"], 'textColor': evntObj["titleColor"], 'classNames': evntObj["eventTextClasses"], 'description': evntObj["tooltipText"] });
         }
+        var calendar;
         document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
 
-            var calendar = new FullCalendar.Calendar(calendarEl, {
+            calendar = new FullCalendar.Calendar(calendarEl, {
                 plugins: ['interaction', 'dayGrid', 'timeGrid'],
                 defaultView: 'dayGridMonth',
                 defaultDate: '@Model.Query.StartDate.ToString("yyyy-MM-dd")',
@@ -88,7 +89,8 @@
                         trigger: 'hover',
                         container: 'body'
                     });
-                }
+                },
+                height:'parent'
             });
 
             calendar.render();
