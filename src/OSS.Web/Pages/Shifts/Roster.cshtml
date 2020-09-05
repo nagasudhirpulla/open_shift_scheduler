@@ -54,6 +54,8 @@
                                             //    partClasses.Add("general_part");
                                             //}
                                             partStyles.Add($"color:{day_shift_part.Item2.ColorString}");
+                                            partStyles.Add($"background-color:{day_shift_part.Item2.BgClrString}");
+                                            partStyles.Add($"padding:0.2rem");
                                         }
                                         <span class="@String.Join(" ", partClasses.ToArray())" style="@String.Join(";", partStyles.ToArray())">@day_shift_part.Item1</span>
                                         <br />

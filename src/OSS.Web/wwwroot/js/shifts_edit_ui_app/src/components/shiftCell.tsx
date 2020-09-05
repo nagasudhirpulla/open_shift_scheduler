@@ -10,6 +10,8 @@ function ShiftCell(props: IShiftCellProps) {
 
         if (shiftParticipationTypeObj != null) {
             styleObj['color'] = shiftParticipationTypeObj.colorString;
+            styleObj['background-color'] = shiftParticipationTypeObj.bgClrString;
+            styleObj['padding'] = '0.2rem';
         }
         return styleObj;
     }

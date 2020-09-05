@@ -25,6 +25,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.ShiftParticipationType[0].ColorString)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShiftParticipationType[0].BgClrString)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -43,6 +46,9 @@
                 </td>
                 <td>
                     <span style="color:@item.ColorString">@item.ColorString</span>
+                </td>
+                <td>
+                    <span style="color:@item.BgClrString">@item.BgClrString</span>
                 </td>
                 <td>
                     <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |

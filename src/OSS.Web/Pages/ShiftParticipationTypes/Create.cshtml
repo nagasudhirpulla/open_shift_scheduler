@@ -34,6 +34,11 @@
                 <span asp-validation-for="ShiftParticipationType.ColorString" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="ShiftParticipationType.BgClrString" class="control-label"></label>
+                <input asp-for="ShiftParticipationType.BgClrString" class="form-control color-picker" />
+                <span asp-validation-for="ShiftParticipationType.BgClrString" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>

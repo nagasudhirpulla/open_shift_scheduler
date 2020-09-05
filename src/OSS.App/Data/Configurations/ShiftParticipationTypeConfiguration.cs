@@ -18,6 +18,11 @@ namespace OSS.App.Data.Configurations
             .HasDefaultValue("#FFFFFF");
 
             builder
+            .Property(b => b.BgClrString)
+            .IsRequired()
+            .HasDefaultValue("#000000");
+
+            builder
             .Property(b => b.IsBold)
             .IsRequired()
             .HasDefaultValue(false);
