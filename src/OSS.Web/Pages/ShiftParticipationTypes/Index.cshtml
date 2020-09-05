@@ -29,26 +29,27 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.ShiftParticipationType) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsAbsence)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsBold)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ColorString)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.ShiftParticipationType)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsAbsence)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsBold)
+                </td>
+                <td>
+                    <span style="color:@item.ColorString">@item.ColorString</span>
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
