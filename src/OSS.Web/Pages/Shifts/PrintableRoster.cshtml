@@ -14,7 +14,7 @@
 
     @if (Model.Roster.ShiftTypes != null && Model.Roster.ShiftParticipations != null)
     {
-        <table id="dis_table" class="table table-bordered table-hover" style="width:100%">
+        <table id="dis_table" class="" style="width:100%">
             <thead>
                 <tr>
                     <th>Date</th>
@@ -28,13 +28,13 @@
                 @foreach (KeyValuePair<DateTime, List<List<Tuple<string, ShiftParticipationType>>>> day_parts in Model.Roster.ShiftParticipations)
                 {
                     <tr>
-                        <td>
-                            <label class="hiddenDate">@day_parts.Key.ToString("yyyy-MM-dd")|</label> @day_parts.Key.ToString("dd-MMM-yyyy")
+                        <td style="text-align: center;">
+                            @day_parts.Key.ToString("dd-MMM-yyyy")
                         </td>
                         @foreach (List<Tuple<string, ShiftParticipationType>> day_shift_parts in day_parts.Value)
                         {
                             <td>
-                                <table class="table table-borderless">
+                                <table style="width:100%;border:none">
                                     @foreach (Tuple<string, ShiftParticipationType> day_shift_part in day_shift_parts)
                                     {
                                         List<string> partClasses = new List<string>();
@@ -57,7 +57,7 @@
                                             partStyles.Add($"background-color:{day_shift_part.Item2.BgClrString}");
                                             partStyles.Add($"padding:0.2rem");
                                         }
-                                        <tr><td class="@String.Join(" ", partClasses.ToArray())" style="@String.Join(";", partStyles.ToArray())">@day_shift_part.Item1</td></tr>
+                                        <tr><td class="@String.Join(" ", partClasses.ToArray()) part_cell" style="@String.Join(";", partStyles.ToArray())">@day_shift_part.Item1</td></tr>
                                     }
                                 </table>
                             </td>
@@ -85,7 +85,7 @@
                 {
                     <tr>
                         <td>
-                            <label class="hiddenDate">@shift_comms.Item1.ToString("yyyy-MM-dd")</label>@shift_comms.Item1.ToString("dd-MMM-yy")
+                            @shift_comms.Item1.ToString("dd-MMM-yyyy")
                         </td>
                         <td>
                             @shift_comms.Item2
@@ -121,6 +121,18 @@
         .hiddenDate {
             color: transparent;
             font-size: 0.1em
+        }
+
+        #dis_table table {
+            border-collapse: collapse;
+        }
+
+        #dis_table table, th, td {
+            border: 1px solid black;
+        }
+
+        .part_cell {
+            border: none;
         }
     </style>
 }
