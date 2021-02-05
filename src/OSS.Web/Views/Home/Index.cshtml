@@ -1,7 +1,17 @@
-﻿@{
+﻿@using OSS.Domain.Entities
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
     ViewData["Title"] = "Home";
 }
 
 <div class="text-center">
     <h3 class="display-4">Welcome to <a href="http://wrldc.in">WRLDC</a> Shift Roster Management Software</h3>
+
+    @if (!SignInManager.IsSignedIn(User))
+    {
+        <h2 class="display-4"><a class="nav-link" asp-area="Identity" asp-page="/Account/Login">Login Here</a></h2>
+    }
 </div>
