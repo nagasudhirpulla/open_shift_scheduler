@@ -1,0 +1,139 @@
+﻿@page
+@model OSS.Web.Pages.Shifts.NightShiftStatsModel
+@using OSS.App.Shifts.Queries.GetAllEmployeeNightStats;
+
+@{
+    ViewData["Title"] = "Night Shift Statistics";
+}
+
+<form method="post">
+    <label asp-for="Query.StartDate"></label>
+    <input asp-for="Query.StartDate" type="date" />
+    <span asp-validation-for="Query.StartDate" class="text-danger"></span>
+    <label asp-for="Query.EndDate" style="margin-left:3em"></label>
+    <input asp-for="Query.EndDate" type="date" />
+    <span asp-validation-for="Query.StartDate" class="text-danger"></span>
+    <button type="submit" class="btn btn-primary" style="margin-left:3em">Load</button>
+    @if (Model.EmployeeStats == null || Model.EmployeeStats.Count == 0)
+    {
+        <div>
+            <h4>No Employee statistics to display</h4>
+        </div>
+    }
+    else
+    {
+        <table id="dis_table" class="table table-striped table-bordered table-hover" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Employee</th>
+                    <th>Role</th>
+                    <th>Designation</th>
+                    <th>Group</th>
+                    <th>OfficeId</th>
+                    <th>Night Shifts Allotted</th>
+                    <th>Night Shifts Attended</th>
+                    <th>Night Shifts Dates</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (EmployeeNightStatsDTO empStats in Model.EmployeeStats)
+                {
+                    <tr>
+                        <td>
+                            @empStats.Employee.DisplayName
+                        </td>
+                        <td>
+                            @empStats.Employee.ShiftRole
+                        </td>
+                        <td>
+                            @empStats.Employee.Designation
+                        </td>
+                        <td>
+                            @empStats.Employee.ShiftGroup
+                        </td>
+                        <td>
+                            @empStats.Employee.OfficeId
+                        </td>
+                        <td>
+                            @empStats.NumNightShiftsAllotted
+                        </td>
+                        <td>
+                            @empStats.NumNightShiftsAttended
+                        </td>
+                        <td>
+                            @empStats.NightShiftDates
+                        </td>
+                    </tr>
+                 }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Employee</th>
+                    <th>Role</th>
+                    <th>Designation</th>
+                    <th>Group</th>
+                    <th>OfficeId</th>
+                    <th>Night Shifts Allotted</th>
+                    <th>Night Shifts Attended</th>
+                    <th>Night Shifts Dates</th>
+                </tr>
+            </tfoot>
+        </table>
+    }
+</form>
+
+@section Scripts{
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/fc-3.2.5/fh-3.1.4/r-2.2.2/datatables.min.css" />
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/fc-3.2.5/fh-3.1.4/r-2.2.2/datatables.min.js"></script>
+    @*<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>*@
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+    @*<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>*@
+    @*<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>*@
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+    @*<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>*@
+    <script>
+        $(document).ready(function () {
+            // https://datatables.net/examples/api/multi_filter.html
+            // Setup - add a text input to each footer cell
+            $('#dis_table tfoot th').each(function () {
+                //var title = $(this).text();
+                $(this).html('<input type="text" placeholder="Search" />');
+            });
+
+            var users_table = $('#dis_table').DataTable({
+                fixedHeader: true,
+                "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+                "pageLength": 50,
+                dom: 'Bfrtip',
+                "order": [[0, "asc"]],
+                buttons: ['pageLength', 'copy', 'csv', 'excel', 'pdf']
+            });
+
+            var r = $('#dis_table tfoot tr');
+            r.find('th').each(function () {
+                $(this).css('padding', '3px');
+            });
+
+            $('#dis_table thead').append(r);
+
+            // Apply the filter
+            // https://www.jqueryscript.net/demo/DataTables-Jquery-Table-Plugin/examples/api/multi_filter.html
+            $("#dis_table thead input").on('keyup change', function () {
+                users_table
+                    .column($(this).parent().index() + ':visible')
+                    .search(this.value)
+                    .draw();
+            });
+        });
+    </script>
+    <style>
+        thead input {
+            padding: 2px;
+            box-sizing: border-box;
+            font-size: small;
+            width: 100%
+        }
+    </style>
+}
