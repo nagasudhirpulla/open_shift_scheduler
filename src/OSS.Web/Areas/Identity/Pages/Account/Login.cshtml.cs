@@ -12,6 +12,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using OSS.Domain.Entities;
 using System.Text.RegularExpressions;
+using DNTCaptcha.Core;
+using Microsoft.Extensions.Options;
+using System;
 
 namespace OSS.Web.Areas.Identity.Pages.Account;
 
@@ -22,16 +25,22 @@ public class LoginModel : PageModel
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly ILogger<LoginModel> _logger;
     private readonly IEmailSender _emailSender;
+    private readonly IDNTCaptchaValidatorService _validatorService;
+    private readonly DNTCaptchaOptions _captchaOptions;
 
     public LoginModel(SignInManager<ApplicationUser> signInManager,
         ILogger<LoginModel> logger,
         UserManager<ApplicationUser> userManager,
-        IEmailSender emailSender)
+        IEmailSender emailSender,
+        IDNTCaptchaValidatorService validatorService,
+        IOptions<DNTCaptchaOptions> options)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _emailSender = emailSender;
         _logger = logger;
+        _validatorService = validatorService;
+        _captchaOptions = options == null ? throw new ArgumentNullException(nameof(options)) : options.Value;
     }
 
     [BindProperty]
@@ -48,7 +57,7 @@ public class LoginModel : PageModel
     {
         [Required]
         [Display(Name = "Username or Email")]
-        public string Email { get; set; }
+        public string Username { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
@@ -78,34 +87,40 @@ public class LoginModel : PageModel
     public async Task<IActionResult> OnPostAsync(string returnUrl = null)
     {
         returnUrl = returnUrl ?? Url.Content("~/");
-        if (Input.Email.IndexOf('@') > -1)
+
+        if (!_validatorService.HasRequestValidCaptchaEntry(Language.English, DisplayMode.ShowDigits))
         {
-            //Validate email format
+            this.ModelState.AddModelError(_captchaOptions.CaptchaComponent.CaptchaInputName, "Please enter the security code as a number.");
+        }
+
+        if (Input.Username.IndexOf('@') > -1)
+        {
+            // Validate email format
             string emailRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
                                    @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" +
                                       @".)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
             Regex re = new Regex(emailRegex);
-            if (!re.IsMatch(Input.Email))
+            if (!re.IsMatch(Input.Username))
             {
                 ModelState.AddModelError(string.Empty, "Email is not valid");
             }
         }
         else
         {
-            //validate Username format
+            // Validate Username format
             string usernameRegex = @"^[a-zA-Z0-9]*$";
             Regex re = new Regex(usernameRegex);
-            if (!re.IsMatch(Input.Email))
+            if (!re.IsMatch(Input.Username))
             {
                 ModelState.AddModelError(string.Empty, "Username is not valid");
             }
         }
         if (ModelState.IsValid)
         {
-            string userName = Input.Email;
+            string userName = Input.Username;
             if (userName.IndexOf('@') > -1)
             {
-                var user = await _userManager.FindByEmailAsync(Input.Email);
+                var user = await _userManager.FindByEmailAsync(Input.Username);
                 if (user == null)
                 {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
@@ -126,7 +141,7 @@ public class LoginModel : PageModel
             }
             if (result.RequiresTwoFactor)
             {
-                return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
+                return RedirectToPage("./SendCode", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
             }
             if (result.IsLockedOut)
             {
@@ -151,7 +166,7 @@ public class LoginModel : PageModel
             return Page();
         }
 
-        var user = await _userManager.FindByNameAsync(Input.Email);
+        var user = await _userManager.FindByNameAsync(Input.Username);
         if (user == null)
         {
             ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");

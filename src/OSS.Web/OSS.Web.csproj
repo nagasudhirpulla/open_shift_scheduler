@@ -15,6 +15,7 @@
     <Content Include="wwwroot\js\packages\node_modules\%40fullcalendar\core\main.min.css" />
     <Content Include="wwwroot\js\packages\node_modules\%40fullcalendar\daygrid\main.min.css" />
     <Content Include="wwwroot\js\packages\node_modules\%40fullcalendar\timegrid\main.min.css" />
+    <Content Include="wwwroot\js\packages\node_modules\bootstrap-icons\font\bootstrap-icons.css" />
     <Content Include="wwwroot\js\packages\node_modules\spectrum-colorpicker2\dist\spectrum.min.css" />
     <Content Include="wwwroot\js\shifts_edit_ui_app\node_modules\%40fortawesome\fontawesome-free\css\all.min.css" />
     <Content Include="wwwroot\js\shifts_edit_ui_app\node_modules\react-datetime\css\react-datetime.css" />
@@ -33,6 +34,7 @@
 
 
   <ItemGroup>
+    <PackageReference Include="DNTCaptcha.Core" Version="4.2.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.6" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.1" />

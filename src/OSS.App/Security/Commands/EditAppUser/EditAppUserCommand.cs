@@ -20,12 +20,14 @@ public class EditAppUserCommand : IRequest<List<string>>, IMapFrom<UserDTO>
     public string Designation { get; set; }
     public int GenderId { get; set; }
     public bool IsActive { get; set; }
+    public bool IsTwoFactorEnabled { get; set; }
     public int ShiftRoleId { get; set; }
     public int ShiftGroupId { get; set; }
 
     public void Mapping(Profile profile)
     {
         profile.CreateMap<ApplicationUser, EditAppUserCommand>()
-            .ForMember(d => d.Username, opt => opt.MapFrom(s => s.UserName));
+            .ForMember(d => d.Username, opt => opt.MapFrom(s => s.UserName))
+            .ForMember(d => d.IsTwoFactorEnabled, opt => opt.MapFrom(s => s.TwoFactorEnabled));
     }
 }

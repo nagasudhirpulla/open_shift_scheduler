@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using OSS.Domain.Entities;
 
 namespace OSS.App.Security.Commands.EditAppUser;
@@ -7,10 +8,12 @@ namespace OSS.App.Security.Commands.EditAppUser;
 public class EditAppUserCommandHandler : IRequestHandler<EditAppUserCommand, List<string>>
 {
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly ILogger<EditAppUserCommandHandler> _logger;
 
-    public EditAppUserCommandHandler(UserManager<ApplicationUser> userManager)
+    public EditAppUserCommandHandler(UserManager<ApplicationUser> userManager, ILogger<EditAppUserCommandHandler> logger)
     {
         _userManager = userManager;
+        _logger = logger;
     }
 
     public async Task<List<string>> Handle(EditAppUserCommand request, CancellationToken cancellationToken)
@@ -30,7 +33,7 @@ public class EditAppUserCommandHandler : IRequestHandler<EditAppUserCommand, Lis
             IdentityResult passResetResult = await _userManager.ResetPasswordAsync(user, passResetToken, newPassword);
             if (passResetResult.Succeeded)
             {
-                Console.WriteLine("User password changed");
+                _logger.LogInformation("User password changed");
             }
             else
             {
@@ -44,7 +47,7 @@ public class EditAppUserCommandHandler : IRequestHandler<EditAppUserCommand, Lis
             IdentityResult usernameChangeResult = await _userManager.SetUserNameAsync(user, request.Username);
             if (usernameChangeResult.Succeeded)
             {
-                Console.WriteLine("Username changed");
+                _logger.LogInformation("Username changed");
 
             }
             else
@@ -60,7 +63,7 @@ public class EditAppUserCommandHandler : IRequestHandler<EditAppUserCommand, Lis
             IdentityResult emailChangeResult = await _userManager.ChangeEmailAsync(user, request.Email, emailResetToken);
             if (emailChangeResult.Succeeded)
             {
-                Console.WriteLine("email changed");
+                _logger.LogInformation("email changed");
             }
             else
             {
@@ -75,7 +78,7 @@ public class EditAppUserCommandHandler : IRequestHandler<EditAppUserCommand, Lis
             IdentityResult phoneChangeResult = await _userManager.ChangePhoneNumberAsync(user, request.PhoneNumber, phoneChangeToken);
             if (phoneChangeResult.Succeeded)
             {
-                Console.WriteLine($"phone number of user {user.UserName} with id {user.Id} changed to {request.PhoneNumber}");
+                _logger.LogInformation($"phone number of user {user.UserName} with id {user.Id} changed to {request.PhoneNumber}");
             }
             else
             {
@@ -95,6 +98,20 @@ public class EditAppUserCommandHandler : IRequestHandler<EditAppUserCommand, Lis
                 await _userManager.RemoveFromRolesAsync(user, existingUserRoles);
                 // add new Role to user from VM
                 await _userManager.AddToRoleAsync(user, request.UserRole);
+            }
+        }
+
+        // check if two factor authentication to be changed
+        if (user.TwoFactorEnabled != request.IsTwoFactorEnabled)
+        {
+            IdentityResult twoFactorChangeResult = await _userManager.SetTwoFactorEnabledAsync(user, request.IsTwoFactorEnabled);
+            if (twoFactorChangeResult.Succeeded)
+            {
+                _logger.LogInformation($"two factor enabled = {request.IsTwoFactorEnabled}");
+            }
+            else
+            {
+                identityErrors.AddRange(twoFactorChangeResult.Errors);
             }
         }
 

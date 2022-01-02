@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -55,11 +55,11 @@ public class Startup
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
-            app.UseDatabaseErrorPage();
+            //app.UseDatabaseErrorPage();
         }
         else
         {
-            app.UseExceptionHandler("/Home/Error");
+            app.UseExceptionHandler("/Error");
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
@@ -84,10 +84,10 @@ public class Startup
 
     public async Task SeedData(IMediator mediator)
     {
-        bool gendersSeeded = await mediator.Send(new SeedGendersCommand());
-        bool shiftRolesSeeded = await mediator.Send(new SeedShiftRolesCommand());
-        bool shiftGroupsSeeded = await mediator.Send(new SeedShiftGroupsCommand());
-        bool usersSeeded = await mediator.Send(new SeedUsersCommand());
-        bool partTypesSeeded = await mediator.Send(new SeedShiftParticipationTypesCommand());
+        _ = await mediator.Send(new SeedGendersCommand());
+        _ = await mediator.Send(new SeedShiftRolesCommand());
+        _ = await mediator.Send(new SeedShiftGroupsCommand());
+        _ = await mediator.Send(new SeedUsersCommand());
+        _ = await mediator.Send(new SeedShiftParticipationTypesCommand());
     }
 }
