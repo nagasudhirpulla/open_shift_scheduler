@@ -2,18 +2,13 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using OSS.Domain.Entities;
 
-namespace OSS.App.Data.Configurations
+namespace OSS.App.Data.Configurations;
+public class ShiftGroupConfiguration : IEntityTypeConfiguration<ShiftGroup>
 {
-    public class ShiftGroupConfiguration : IEntityTypeConfiguration<ShiftGroup>
+    public void Configure(EntityTypeBuilder<ShiftGroup> builder)
     {
-        public void Configure(EntityTypeBuilder<ShiftGroup> builder)
-        {
-            builder
-            .HasIndex(sg => sg.Name)
-            .IsUnique();
-        }
+        builder
+        .HasIndex(sg => sg.Name)
+        .IsUnique();
     }
-
-
-
 }

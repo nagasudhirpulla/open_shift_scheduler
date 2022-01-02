@@ -2,18 +2,13 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using OSS.Domain.Entities;
 
-namespace OSS.App.Data.Configurations
+namespace OSS.App.Data.Configurations;
+public class GenderConfiguration : IEntityTypeConfiguration<Gender>
 {
-    public class GenderConfiguration : IEntityTypeConfiguration<Gender>
+    public void Configure(EntityTypeBuilder<Gender> builder)
     {
-        public void Configure(EntityTypeBuilder<Gender> builder)
-        {
-            builder
-            .HasIndex(g => g.Name)
-            .IsUnique();
-        }
+        builder
+        .HasIndex(g => g.Name)
+        .IsUnique();
     }
-
-
-
 }

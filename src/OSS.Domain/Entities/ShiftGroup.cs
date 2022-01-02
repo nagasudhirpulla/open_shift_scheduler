@@ -1,15 +1,11 @@
-﻿using System.Collections.Generic;
-
-namespace OSS.Domain.Entities
+﻿namespace OSS.Domain.Entities;
+public class ShiftGroup : BaseEntity
 {
-    public class ShiftGroup : BaseEntity
+    public ShiftGroup()
     {
-        public ShiftGroup()
-        {
-            Employees = new HashSet<ApplicationUser>();
-        }
-
-        public string Name { get; set; }
-        public ICollection<ApplicationUser> Employees { get; private set; }
+        Employees = new HashSet<ApplicationUser>();
     }
+
+    public string Name { get; set; }
+    public ICollection<ApplicationUser> Employees { get; private set; }
 }

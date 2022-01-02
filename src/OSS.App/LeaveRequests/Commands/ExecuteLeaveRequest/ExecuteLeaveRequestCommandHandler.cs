@@ -2,45 +2,39 @@
 using Microsoft.EntityFrameworkCore;
 using OSS.App.Data;
 using OSS.Domain.Entities;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace OSS.App.LeaveRequests.Commands.ExecuteLeaveRequest
+namespace OSS.App.LeaveRequests.Commands.ExecuteLeaveRequest;
+public class ExecuteLeaveRequestCommandHandler : IRequestHandler<ExecuteLeaveRequestCommand, LeaveRequest>
 {
-    public class ExecuteLeaveRequestCommandHandler : IRequestHandler<ExecuteLeaveRequestCommand, LeaveRequest>
+    private readonly AppIdentityDbContext _context;
+
+    public ExecuteLeaveRequestCommandHandler(AppIdentityDbContext context)
     {
-        private readonly AppIdentityDbContext _context;
+        _context = context;
+    }
 
-        public ExecuteLeaveRequestCommandHandler(AppIdentityDbContext context)
+    public async Task<LeaveRequest> Handle(ExecuteLeaveRequestCommand request, CancellationToken cancellationToken)
+    {
+        LeaveRequest lr = await _context.LeaveRequests.FindAsync(new object[] { request.Id }, cancellationToken: cancellationToken);
+
+        // get the participation type id of this leave request
+        int leaveSpTypeId = lr.LeaveTypeId;
+        // get all the shift participations that satisfy the leave request
+        var spList = await _context.ShiftParticipations
+                        .Where(sp => sp.Shift.ShiftDate >= lr.StartDate
+                            && sp.Shift.ShiftDate <= lr.EndDate
+                            && sp.EmployeeId == lr.EmployeeId
+                            && sp.ShiftParticipationTypeId != leaveSpTypeId)
+                        .ToListAsync(cancellationToken: cancellationToken);
+        foreach (ShiftParticipation sp in spList)
         {
-            _context = context;
+            sp.ShiftParticipationTypeId = leaveSpTypeId;
+            _context.Attach(sp).State = EntityState.Modified;
         }
+        lr.IsExecuted = true;
+        _context.Attach(lr).State = EntityState.Modified;
+        await _context.SaveChangesAsync(cancellationToken);
 
-        public async Task<LeaveRequest> Handle(ExecuteLeaveRequestCommand request, CancellationToken cancellationToken)
-        {
-            LeaveRequest lr = await _context.LeaveRequests.FindAsync(request.Id);
-
-            // get the participation type id of this leave request
-            int leaveSpTypeId = lr.LeaveTypeId;
-            // get all the shift participations that satisfy the leave request
-            var spList = await _context.ShiftParticipations
-                            .Where(sp => sp.Shift.ShiftDate >= lr.StartDate
-                                && sp.Shift.ShiftDate <= lr.EndDate
-                                && sp.EmployeeId == lr.EmployeeId
-                                && sp.ShiftParticipationTypeId != leaveSpTypeId)
-                            .ToListAsync();
-            foreach (ShiftParticipation sp in spList)
-            {
-                sp.ShiftParticipationTypeId = leaveSpTypeId;
-                _context.Attach(sp).State = EntityState.Modified;
-            }
-            lr.IsExecuted = true;
-            _context.Attach(lr).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-
-            return lr;
-        }
+        return lr;
     }
 }

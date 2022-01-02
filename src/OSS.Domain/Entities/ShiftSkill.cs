@@ -1,9 +1,5 @@
-﻿using System.Collections.Generic;
-
-namespace OSS.Domain.Entities
+﻿namespace OSS.Domain.Entities;
+public class ShiftSkill : BaseEntity
 {
-    public class ShiftSkill : BaseEntity
-    {
-        public string Name { get; set; }
-    }
+    public string Name { get; set; }
 }

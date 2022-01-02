@@ -1,17 +1,13 @@
-﻿using System;
-
-namespace OSS.Domain.Entities
+﻿namespace OSS.Domain.Entities;
+public class AuditableEntity : BaseEntity
 {
-    public class AuditableEntity : BaseEntity
-    {
-        public ApplicationUser CreatedBy { get; set; }
-        public string CreatedById { get; set; }
+    public ApplicationUser CreatedBy { get; set; }
+    public string CreatedById { get; set; }
 
-        public DateTime Created { get; set; } = DateTime.Now;
+    public DateTime Created { get; set; } = DateTime.Now;
 
-        public ApplicationUser LastModifiedBy { get; set; }
-        public string LastModifiedById { get; set; }
+    public ApplicationUser LastModifiedBy { get; set; }
+    public string LastModifiedById { get; set; }
 
-        public DateTime? LastModified { get; set; }
-    }
+    public DateTime? LastModified { get; set; }
 }

@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
+﻿namespace OSS.App.Shifts.Queries.GetEmployeeCalendarById;
 
-namespace OSS.App.Shifts.Queries.GetEmployeeCalendarById
+public class CalendarDTO
 {
-    public class CalendarDTO
-    {
-        public List<CalendarEventDTO> CalendarEvents { get; set; } = new List<CalendarEventDTO>();
-    }
+    public List<CalendarEventDTO> CalendarEvents { get; set; } = new List<CalendarEventDTO>();
 }

@@ -3,97 +3,90 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OSS.App.Data;
 using OSS.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace OSS.App.Security.Commands.SeedUsers
+namespace OSS.App.Security.Commands.SeedUsers;
+
+public class SeedUsersCommand : IRequest<bool>
 {
-    public class SeedUsersCommand : IRequest<bool>
+    public class SeedUsersCommandHandler : IRequestHandler<SeedUsersCommand, bool>
     {
-        public class SeedUsersCommandHandler : IRequestHandler<SeedUsersCommand, bool>
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IdentityInit _identityInit;
+        private readonly AppIdentityDbContext _context;
+
+        public SeedUsersCommandHandler(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IdentityInit identityInit, AppIdentityDbContext context)
         {
-            private readonly UserManager<ApplicationUser> _userManager;
-            private readonly RoleManager<IdentityRole> _roleManager;
-            private readonly IdentityInit _identityInit;
-            private readonly AppIdentityDbContext _context;
+            _userManager = userManager;
+            _roleManager = roleManager;
+            _identityInit = identityInit;
+            _context = context;
+        }
 
-            public SeedUsersCommandHandler(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IdentityInit identityInit, AppIdentityDbContext context)
+        public async Task<bool> Handle(SeedUsersCommand request, CancellationToken cancellationToken)
+        {
+            // seed roles
+            await SeedUserRoles(_roleManager);
+            // seed admin user
+            await SeedAdminUser(_userManager);
+            return true;
+        }
+
+        /**
+         * This method seeds admin user
+         * **/
+        public async Task SeedAdminUser(UserManager<ApplicationUser> userManager)
+        {
+            string AdminUserName = _identityInit.AdminUserName;
+            string AdminEmail = _identityInit.AdminEmail;
+            string AdminPassword = _identityInit.AdminPassword;
+
+            // check if admin user doesn't exist
+            if ((await userManager.FindByNameAsync(AdminUserName)) == null)
             {
-                _userManager = userManager;
-                _roleManager = roleManager;
-                _identityInit = identityInit;
-                _context = context;
-            }
-
-            public async Task<bool> Handle(SeedUsersCommand request, CancellationToken cancellationToken)
-            {
-                // seed roles
-                await SeedUserRoles(_roleManager);
-                // seed admin user
-                await SeedAdminUser(_userManager);
-                return true;
-            }
-
-            /**
-             * This method seeds admin user
-             * **/
-            public async Task SeedAdminUser(UserManager<ApplicationUser> userManager)
-            {
-                string AdminUserName = _identityInit.AdminUserName;
-                string AdminEmail = _identityInit.AdminEmail;
-                string AdminPassword = _identityInit.AdminPassword;
-
-                // check if admin user doesn't exist
-                if ((await userManager.FindByNameAsync(AdminUserName)) == null)
+                // get gender by name "Male"
+                Gender gender = await _context.Genders.Where(b => b.Name.ToLower() == "male")
+                                                      .FirstOrDefaultAsync();
+                ShiftGroup shiftGrp = await _context.ShiftGroups.Where(b => b.Name.ToLower() == "general")
+                                                      .FirstOrDefaultAsync();
+                // create desired admin user object
+                ApplicationUser user = new ApplicationUser
                 {
-                    // get gender by name "Male"
-                    Gender gender = await _context.Genders.Where(b => b.Name.ToLower() == "male")
-                                                          .FirstOrDefaultAsync();
-                    ShiftGroup shiftGrp = await _context.ShiftGroups.Where(b => b.Name.ToLower() == "general")
-                                                          .FirstOrDefaultAsync();
-                    // create desired admin user object
-                    ApplicationUser user = new ApplicationUser
-                    {
-                        UserName = AdminUserName,
-                        DisplayName = AdminUserName,
-                        Email = AdminEmail,
-                        Gender = gender,
-                        ShiftGroup = shiftGrp
-                    };
+                    UserName = AdminUserName,
+                    DisplayName = AdminUserName,
+                    Email = AdminEmail,
+                    Gender = gender,
+                    ShiftGroup = shiftGrp
+                };
 
-                    // push desired admin user object to DB
-                    IdentityResult result = await userManager.CreateAsync(user, AdminPassword);
+                // push desired admin user object to DB
+                IdentityResult result = await userManager.CreateAsync(user, AdminPassword);
 
-                    if (result.Succeeded)
-                    {
-                        await userManager.AddToRoleAsync(user, SecurityConstants.AdminRoleString);
-                    }
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(user, SecurityConstants.AdminRoleString);
                 }
             }
+        }
 
-            /**
-             * This method seeds roles
-             * **/
-            public async Task SeedUserRoles(RoleManager<IdentityRole> roleManager)
+        /**
+         * This method seeds roles
+         * **/
+        public async Task SeedUserRoles(RoleManager<IdentityRole> roleManager)
+        {
+            List<string> desiredRoles = new List<string>() { SecurityConstants.GuestRoleString, SecurityConstants.AdminRoleString };
+            foreach (string roleName in desiredRoles)
             {
-                List<string> desiredRoles = new List<string>() { SecurityConstants.GuestRoleString, SecurityConstants.AdminRoleString };
-                foreach (string roleName in desiredRoles)
+                // check if role doesn't exist
+                if (!await roleManager.RoleExistsAsync(roleName))
                 {
-                    // check if role doesn't exist
-                    if (!await roleManager.RoleExistsAsync(roleName))
+                    // create desired role object
+                    IdentityRole role = new IdentityRole
                     {
-                        // create desired role object
-                        IdentityRole role = new IdentityRole
-                        {
-                            Name = roleName,
-                        };
-                        // push desired role object to DB
-                        IdentityResult roleResult = await roleManager.CreateAsync(role);
-                    }
+                        Name = roleName,
+                    };
+                    // push desired role object to DB
+                    IdentityResult roleResult = await roleManager.CreateAsync(role);
                 }
             }
         }

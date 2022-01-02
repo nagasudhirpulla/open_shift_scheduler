@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -12,56 +9,55 @@ using OSS.App.LeaveRequestComments.Queries.GetLeaveRequestCommentById;
 using OSS.App.Security;
 using OSS.Domain.Entities;
 
-namespace OSS.Web.Pages.LeaveRequestComments
+namespace OSS.Web.Pages.LeaveRequestComments;
+
+[Authorize]
+public class DeleteModel : PageModel
 {
-    [Authorize]
-    public class DeleteModel : PageModel
+    private readonly IMediator _mediator;
+    private readonly UserManager<ApplicationUser> _userManager;
+    public DeleteModel(IMediator mediator, UserManager<ApplicationUser> userManager)
     {
-        private readonly IMediator _mediator;
-        private readonly UserManager<ApplicationUser> _userManager;
-        public DeleteModel(IMediator mediator, UserManager<ApplicationUser> userManager)
+        _mediator = mediator;
+        _userManager = userManager;
+    }
+
+    [BindProperty]
+    public LeaveRequestComment LeaveRequestComment { get; set; }
+
+    public async Task<IActionResult> OnGetAsync(int? id)
+    {
+        if (id == null)
         {
-            _mediator = mediator;
-            _userManager = userManager;
+            return NotFound();
         }
 
-        [BindProperty]
-        public LeaveRequestComment LeaveRequestComment { get; set; }
+        LeaveRequestComment = await _mediator.Send(new GetLeaveRequestCommentByIdQuery() { Id = id.Value });
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        if (LeaveRequestComment == null)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            return NotFound();
+        }
+        return Page();
+    }
 
-            LeaveRequestComment = await _mediator.Send(new GetLeaveRequestCommentByIdQuery() { Id = id.Value });
+    public async Task<IActionResult> OnPostAsync(int? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
+        }
+        string userId = _userManager.GetUserId(User);
 
-            if (LeaveRequestComment == null)
-            {
-                return NotFound();
-            }
-            return Page();
+
+        LeaveRequestComment = await _mediator.Send(new GetLeaveRequestCommentByIdQuery() { Id = id.Value });
+        if (LeaveRequestComment == null)
+        {
+            return NotFound();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            string userId = _userManager.GetUserId(User);
+        LeaveRequestComment lrc = await _mediator.Send(new DeleteLeaveRequestCommentCommand() { Id = id.Value, UserId = userId, IsUserAdmin = User.IsInRole(SecurityConstants.AdminRoleString) });
 
-
-            LeaveRequestComment = await _mediator.Send(new GetLeaveRequestCommentByIdQuery() { Id = id.Value });
-            if (LeaveRequestComment == null)
-            {
-                return NotFound();
-            }
-
-            LeaveRequestComment lrc = await _mediator.Send(new DeleteLeaveRequestCommentCommand() { Id = id.Value, UserId = userId, IsUserAdmin = User.IsInRole(SecurityConstants.AdminRoleString) });
-
-            return RedirectToPage("/LeaveRequests/Details", new { Id = lrc.LeaveRequestId });
-        }
+        return RedirectToPage("/LeaveRequests/Details", new { Id = lrc.LeaveRequestId });
     }
 }

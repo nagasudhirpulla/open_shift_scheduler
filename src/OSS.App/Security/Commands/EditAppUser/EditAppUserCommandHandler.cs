@@ -1,163 +1,156 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using OSS.Domain.Entities;
 
-namespace OSS.App.Security.Commands.EditAppUser
+namespace OSS.App.Security.Commands.EditAppUser;
+
+public class EditAppUserCommandHandler : IRequestHandler<EditAppUserCommand, List<string>>
 {
-    public class EditAppUserCommandHandler : IRequestHandler<EditAppUserCommand, List<string>>
+    private readonly UserManager<ApplicationUser> _userManager;
+
+    public EditAppUserCommandHandler(UserManager<ApplicationUser> userManager)
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        _userManager = userManager;
+    }
 
-        public EditAppUserCommandHandler(UserManager<ApplicationUser> userManager)
+    public async Task<List<string>> Handle(EditAppUserCommand request, CancellationToken cancellationToken)
+    {
+        List<string> errors = new List<string>();
+        ApplicationUser user = await _userManager.FindByIdAsync(request.Id);
+        if (user == null)
         {
-            _userManager = userManager;
+            errors.Add($"Unable to find user with id {request.Id}");
+        }
+        List<IdentityError> identityErrors = new List<IdentityError>();
+        // change password if not null
+        string newPassword = request.Password;
+        if (!string.IsNullOrWhiteSpace(newPassword))
+        {
+            string passResetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+            IdentityResult passResetResult = await _userManager.ResetPasswordAsync(user, passResetToken, newPassword);
+            if (passResetResult.Succeeded)
+            {
+                Console.WriteLine("User password changed");
+            }
+            else
+            {
+                identityErrors.AddRange(passResetResult.Errors);
+            }
         }
 
-        public async Task<List<string>> Handle(EditAppUserCommand request, CancellationToken cancellationToken)
+        // change username if changed
+        if (user.UserName != request.Username)
         {
-            List<string> errors = new List<string>();
-            ApplicationUser user = await _userManager.FindByIdAsync(request.Id);
-            if (user == null)
+            IdentityResult usernameChangeResult = await _userManager.SetUserNameAsync(user, request.Username);
+            if (usernameChangeResult.Succeeded)
             {
-                errors.Add($"Unable to find user with id {request.Id}");
-            }
-            List<IdentityError> identityErrors = new List<IdentityError>();
-            // change password if not null
-            string newPassword = request.Password;
-            if (!string.IsNullOrWhiteSpace(newPassword))
-            {
-                string passResetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
-                IdentityResult passResetResult = await _userManager.ResetPasswordAsync(user, passResetToken, newPassword);
-                if (passResetResult.Succeeded)
-                {
-                    Console.WriteLine("User password changed");
-                }
-                else
-                {
-                    identityErrors.AddRange(passResetResult.Errors);
-                }
-            }
+                Console.WriteLine("Username changed");
 
-            // change username if changed
-            if (user.UserName != request.Username)
-            {
-                IdentityResult usernameChangeResult = await _userManager.SetUserNameAsync(user, request.Username);
-                if (usernameChangeResult.Succeeded)
-                {
-                    Console.WriteLine("Username changed");
-
-                }
-                else
-                {
-                    identityErrors.AddRange(usernameChangeResult.Errors);
-                }
             }
-
-            // change email if changed
-            if (user.Email != request.Email)
+            else
             {
-                string emailResetToken = await _userManager.GenerateChangeEmailTokenAsync(user, request.Email);
-                IdentityResult emailChangeResult = await _userManager.ChangeEmailAsync(user, request.Email, emailResetToken);
-                if (emailChangeResult.Succeeded)
-                {
-                    Console.WriteLine("email changed");
-                }
-                else
-                {
-                    identityErrors.AddRange(emailChangeResult.Errors);
-                }
+                identityErrors.AddRange(usernameChangeResult.Errors);
             }
-
-            // change phone number if changed
-            if (user.PhoneNumber != request.PhoneNumber)
-            {
-                string phoneChangeToken = await _userManager.GenerateChangePhoneNumberTokenAsync(user, request.PhoneNumber);
-                IdentityResult phoneChangeResult = await _userManager.ChangePhoneNumberAsync(user, request.PhoneNumber, phoneChangeToken);
-                if (phoneChangeResult.Succeeded)
-                {
-                    Console.WriteLine($"phone number of user {user.UserName} with id {user.Id} changed to {request.PhoneNumber}");
-                }
-                else
-                {
-                    identityErrors.AddRange(phoneChangeResult.Errors);
-                }
-            }
-
-            // change user role if not present in user
-            bool isValidRole = SecurityConstants.GetRoles().Contains(request.UserRole);
-            List<string> existingUserRoles = (await _userManager.GetRolesAsync(user)).ToList();
-            bool isRoleChanged = !existingUserRoles.Any(r => r == request.UserRole);
-            if (isValidRole)
-            {
-                if (isRoleChanged)
-                {
-                    // remove existing user roles if any
-                    await _userManager.RemoveFromRolesAsync(user, existingUserRoles);
-                    // add new Role to user from VM
-                    await _userManager.AddToRoleAsync(user, request.UserRole);
-                }
-            }
-
-            // update DisplayName
-            if (user.DisplayName != request.DisplayName)
-            {
-                user.DisplayName = request.DisplayName;
-                await _userManager.UpdateAsync(user);
-            }
-
-            // update OfficeId
-            if (user.OfficeId != request.OfficeId)
-            {
-                user.OfficeId = request.OfficeId;
-                await _userManager.UpdateAsync(user);
-            }
-
-            // update Designation
-            if (user.Designation != request.Designation)
-            {
-                user.Designation = request.Designation;
-                await _userManager.UpdateAsync(user);
-            }
-
-            // update GenderId
-            if (user.GenderId != request.GenderId)
-            {
-                user.GenderId = request.GenderId;
-                await _userManager.UpdateAsync(user);
-            }
-
-            // update IsActive
-            if (user.IsActive != request.IsActive)
-            {
-                user.IsActive = request.IsActive;
-                await _userManager.UpdateAsync(user);
-            }
-
-            // update ShiftRoleId
-            if (user.ShiftRoleId != request.ShiftRoleId)
-            {
-                user.ShiftRoleId = request.ShiftRoleId;
-                await _userManager.UpdateAsync(user);
-            }
-
-            // update ShiftGroupId
-            if (user.ShiftGroupId != request.ShiftGroupId)
-            {
-                user.ShiftGroupId = request.ShiftGroupId;
-                await _userManager.UpdateAsync(user);
-            }
-
-            foreach (IdentityError iError in identityErrors)
-            {
-                errors.Add(iError.Description);
-            }
-            return errors;
         }
+
+        // change email if changed
+        if (user.Email != request.Email)
+        {
+            string emailResetToken = await _userManager.GenerateChangeEmailTokenAsync(user, request.Email);
+            IdentityResult emailChangeResult = await _userManager.ChangeEmailAsync(user, request.Email, emailResetToken);
+            if (emailChangeResult.Succeeded)
+            {
+                Console.WriteLine("email changed");
+            }
+            else
+            {
+                identityErrors.AddRange(emailChangeResult.Errors);
+            }
+        }
+
+        // change phone number if changed
+        if (user.PhoneNumber != request.PhoneNumber)
+        {
+            string phoneChangeToken = await _userManager.GenerateChangePhoneNumberTokenAsync(user, request.PhoneNumber);
+            IdentityResult phoneChangeResult = await _userManager.ChangePhoneNumberAsync(user, request.PhoneNumber, phoneChangeToken);
+            if (phoneChangeResult.Succeeded)
+            {
+                Console.WriteLine($"phone number of user {user.UserName} with id {user.Id} changed to {request.PhoneNumber}");
+            }
+            else
+            {
+                identityErrors.AddRange(phoneChangeResult.Errors);
+            }
+        }
+
+        // change user role if not present in user
+        bool isValidRole = SecurityConstants.GetRoles().Contains(request.UserRole);
+        List<string> existingUserRoles = (await _userManager.GetRolesAsync(user)).ToList();
+        bool isRoleChanged = !existingUserRoles.Any(r => r == request.UserRole);
+        if (isValidRole)
+        {
+            if (isRoleChanged)
+            {
+                // remove existing user roles if any
+                await _userManager.RemoveFromRolesAsync(user, existingUserRoles);
+                // add new Role to user from VM
+                await _userManager.AddToRoleAsync(user, request.UserRole);
+            }
+        }
+
+        // update DisplayName
+        if (user.DisplayName != request.DisplayName)
+        {
+            user.DisplayName = request.DisplayName;
+            await _userManager.UpdateAsync(user);
+        }
+
+        // update OfficeId
+        if (user.OfficeId != request.OfficeId)
+        {
+            user.OfficeId = request.OfficeId;
+            await _userManager.UpdateAsync(user);
+        }
+
+        // update Designation
+        if (user.Designation != request.Designation)
+        {
+            user.Designation = request.Designation;
+            await _userManager.UpdateAsync(user);
+        }
+
+        // update GenderId
+        if (user.GenderId != request.GenderId)
+        {
+            user.GenderId = request.GenderId;
+            await _userManager.UpdateAsync(user);
+        }
+
+        // update IsActive
+        if (user.IsActive != request.IsActive)
+        {
+            user.IsActive = request.IsActive;
+            await _userManager.UpdateAsync(user);
+        }
+
+        // update ShiftRoleId
+        if (user.ShiftRoleId != request.ShiftRoleId)
+        {
+            user.ShiftRoleId = request.ShiftRoleId;
+            await _userManager.UpdateAsync(user);
+        }
+
+        // update ShiftGroupId
+        if (user.ShiftGroupId != request.ShiftGroupId)
+        {
+            user.ShiftGroupId = request.ShiftGroupId;
+            await _userManager.UpdateAsync(user);
+        }
+
+        foreach (IdentityError iError in identityErrors)
+        {
+            errors.Add(iError.Description);
+        }
+        return errors;
     }
 }

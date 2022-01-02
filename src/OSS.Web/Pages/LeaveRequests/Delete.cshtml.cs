@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -12,57 +9,56 @@ using OSS.App.LeaveRequests.Queries.GetLeaveRequestById;
 using OSS.App.Security;
 using OSS.Domain.Entities;
 
-namespace OSS.Web.Pages.LeaveRequests
+namespace OSS.Web.Pages.LeaveRequests;
+
+[Authorize]
+public class DeleteModel : PageModel
 {
-    [Authorize]
-    public class DeleteModel : PageModel
+    private readonly IMediator _mediator;
+    private readonly UserManager<ApplicationUser> _userManager;
+
+    public DeleteModel(IMediator mediator, UserManager<ApplicationUser> userManager)
     {
-        private readonly IMediator _mediator;
-        private readonly UserManager<ApplicationUser> _userManager;
+        _mediator = mediator;
+        _userManager = userManager;
+    }
 
-        public DeleteModel(IMediator mediator, UserManager<ApplicationUser> userManager)
+    [BindProperty]
+    public LeaveRequest LeaveRequest { get; set; }
+
+    public async Task<IActionResult> OnGetAsync(int? id)
+    {
+        if (id == null)
         {
-            _mediator = mediator;
-            _userManager = userManager;
+            return NotFound();
         }
 
-        [BindProperty]
-        public LeaveRequest LeaveRequest { get; set; }
+        LeaveRequest = await _mediator.Send(new GetLeaveRequestByIdQuery() { Id = id.Value });
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        if (LeaveRequest == null)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            return NotFound();
+        }
+        return Page();
+    }
 
-            LeaveRequest = await _mediator.Send(new GetLeaveRequestByIdQuery() { Id = id.Value });
+    public async Task<IActionResult> OnPostAsync(int? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
+        }
+        string userId = _userManager.GetUserId(User);
 
-            if (LeaveRequest == null)
-            {
-                return NotFound();
-            }
-            return Page();
+
+        LeaveRequest = await _mediator.Send(new GetLeaveRequestByIdQuery() { Id = id.Value });
+        if (LeaveRequest == null)
+        {
+            return NotFound();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            string userId = _userManager.GetUserId(User);
+        LeaveRequest lr = await _mediator.Send(new DeleteLeaveRequestCommand() { Id = id.Value, UserId = userId, IsUserAdmin = User.IsInRole(SecurityConstants.AdminRoleString) });
 
-
-            LeaveRequest = await _mediator.Send(new GetLeaveRequestByIdQuery() { Id = id.Value });
-            if (LeaveRequest == null)
-            {
-                return NotFound();
-            }
-
-            LeaveRequest lr = await _mediator.Send(new DeleteLeaveRequestCommand() { Id = id.Value, UserId = userId, IsUserAdmin = User.IsInRole(SecurityConstants.AdminRoleString) });
-
-            return RedirectToPage("./Index");
-        }
+        return RedirectToPage("./Index");
     }
 }

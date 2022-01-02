@@ -1,12 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29411.108
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenShiftScheduler", "OpenShiftScheduler\OpenShiftScheduler.csproj", "{0675FAE1-A8BC-4F8B-92BE-610C699BC5F3}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample", "Sample\Sample.csproj", "{013BB6AE-F0E3-4DAA-B122-320D77090D05}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OSS.Domain", "src\OSS.Domain\OSS.Domain.csproj", "{B46BDF23-A161-4C48-8466-60F5982FA11A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OSS.App", "src\OSS.App\OSS.App.csproj", "{19DFA28B-4FDD-4180-AA37-F09DE10631CB}"
@@ -15,20 +11,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OSS.Infra", "src\OSS.Infra\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OSS.Web", "src\OSS.Web\OSS.Web.csproj", "{C6C27A7E-6075-4E3C-A56A-04C6A7B7EC2E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7FB08627-891C-49D5-A5AD-FCF685E17F63}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0675FAE1-A8BC-4F8B-92BE-610C699BC5F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0675FAE1-A8BC-4F8B-92BE-610C699BC5F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0675FAE1-A8BC-4F8B-92BE-610C699BC5F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0675FAE1-A8BC-4F8B-92BE-610C699BC5F3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{013BB6AE-F0E3-4DAA-B122-320D77090D05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{013BB6AE-F0E3-4DAA-B122-320D77090D05}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{013BB6AE-F0E3-4DAA-B122-320D77090D05}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{013BB6AE-F0E3-4DAA-B122-320D77090D05}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B46BDF23-A161-4C48-8466-60F5982FA11A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B46BDF23-A161-4C48-8466-60F5982FA11A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B46BDF23-A161-4C48-8466-60F5982FA11A}.Release|Any CPU.ActiveCfg = Release|Any CPU

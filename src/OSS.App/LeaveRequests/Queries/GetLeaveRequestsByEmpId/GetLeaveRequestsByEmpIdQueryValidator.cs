@@ -1,12 +1,10 @@
 ﻿using FluentValidation;
 
-namespace OSS.App.LeaveRequests.Queries.GetLeaveRequestsByEmpId
+namespace OSS.App.LeaveRequests.Queries.GetLeaveRequestsByEmpId;
+public class GetLeaveRequestsByEmpIdQueryValidator : AbstractValidator<GetLeaveRequestsByEmpIdQuery>
 {
-    public class GetLeaveRequestsByEmpIdQueryValidator : AbstractValidator<GetLeaveRequestsByEmpIdQuery>
+    public GetLeaveRequestsByEmpIdQueryValidator()
     {
-        public GetLeaveRequestsByEmpIdQueryValidator()
-        {
-            RuleFor(x => x.EmployeeId).NotEmpty();
-        }
+        RuleFor(x => x.EmployeeId).NotEmpty();
     }
 }

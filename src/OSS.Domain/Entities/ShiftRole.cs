@@ -1,7 +1,5 @@
-﻿namespace OSS.Domain.Entities
+﻿namespace OSS.Domain.Entities;
+public class ShiftRole : BaseEntity
 {
-    public class ShiftRole : BaseEntity
-    {
-        public string RoleName { get; set; }
-    }
+    public string RoleName { get; set; }
 }

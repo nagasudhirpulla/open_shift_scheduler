@@ -1,43 +1,36 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using OSS.Domain.Entities;
 
-namespace OSS.App.Security.Commands.DeleteAppUser
+namespace OSS.App.Security.Commands.DeleteAppUser;
+
+public class DeleteAppUserCommandHandler : IRequestHandler<DeleteAppUserCommand, List<string>>
 {
-    public class DeleteAppUserCommandHandler : IRequestHandler<DeleteAppUserCommand, List<string>>
+    private readonly UserManager<ApplicationUser> _userManager;
+
+    public DeleteAppUserCommandHandler(UserManager<ApplicationUser> userManager)
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        _userManager = userManager;
+    }
 
-        public DeleteAppUserCommandHandler(UserManager<ApplicationUser> userManager)
+    public async Task<List<string>> Handle(DeleteAppUserCommand request, CancellationToken cancellationToken)
+    {
+        List<string> errors = new List<string>();
+        ApplicationUser user = await _userManager.FindByIdAsync(request.Id);
+        if (user == null)
         {
-            _userManager = userManager;
+            errors.Add($"User not found with id {request.Id}");
         }
 
-        public async Task<List<string>> Handle(DeleteAppUserCommand request, CancellationToken cancellationToken)
+        IdentityResult result = await _userManager.DeleteAsync(user);
+        if (!result.Succeeded)
         {
-            List<string> errors = new List<string>();
-            ApplicationUser user = await _userManager.FindByIdAsync(request.Id);
-            if (user == null)
+            foreach (IdentityError err in result.Errors)
             {
-                errors.Add($"User not found with id {request.Id}");
+                errors.Add(err.Description);
             }
-
-            IdentityResult result = await _userManager.DeleteAsync(user);
-            if (!result.Succeeded)
-            {
-                foreach (IdentityError err in result.Errors)
-                {
-                    errors.Add(err.Description);
-                }
-            }
-
-            return errors;
         }
+
+        return errors;
     }
 }

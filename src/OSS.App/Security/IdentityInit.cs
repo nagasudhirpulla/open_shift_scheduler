@@ -1,9 +1,8 @@
-﻿namespace OSS.App.Security
+﻿namespace OSS.App.Security;
+
+public class IdentityInit
 {
-    public class IdentityInit
-    {
-        public string AdminEmail { get; set; }
-        public string AdminPassword { get; set; }
-        public string AdminUserName { get; set; }
-    }
+    public string AdminEmail { get; set; }
+    public string AdminPassword { get; set; }
+    public string AdminUserName { get; set; }
 }

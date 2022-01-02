@@ -1,18 +1,17 @@
 ﻿using FluentValidation;
 
-namespace OSS.App.Security.Commands.EditAppUser
+namespace OSS.App.Security.Commands.EditAppUser;
+
+public class EditAppUserCommandValidator : AbstractValidator<EditAppUserCommand>
 {
-    public class EditAppUserCommandValidator : AbstractValidator<EditAppUserCommand>
+    public EditAppUserCommandValidator()
     {
-        public EditAppUserCommandValidator()
-        {
-            RuleFor(x => x.Id).NotEmpty();
-            RuleFor(x => x.Username).NotEmpty();
-            RuleFor(x => x.DisplayName).NotEmpty();
-            RuleFor(x => x.Email).EmailAddress().NotEmpty();
-            RuleFor(x => x.UserRole).NotEmpty();
-            RuleFor(x => x.Password)
-                .Equal(x => x.ConfirmPassword).WithMessage("Password and confirmation password do not match.");
-        }
+        RuleFor(x => x.Id).NotEmpty();
+        RuleFor(x => x.Username).NotEmpty();
+        RuleFor(x => x.DisplayName).NotEmpty();
+        RuleFor(x => x.Email).EmailAddress().NotEmpty();
+        RuleFor(x => x.UserRole).NotEmpty();
+        RuleFor(x => x.Password)
+            .Equal(x => x.ConfirmPassword).WithMessage("Password and confirmation password do not match.");
     }
 }

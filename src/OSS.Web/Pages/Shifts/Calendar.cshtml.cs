@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -11,45 +9,44 @@ using OSS.App.Security;
 using OSS.App.Shifts.Queries.GetEmployeeCalendarById;
 using OSS.Domain.Entities;
 
-namespace OSS.Web
+namespace OSS.Web;
+
+[Authorize(Roles = SecurityConstants.GuestRoleString)]
+public class CalendarModel : PageModel
 {
-    [Authorize(Roles = SecurityConstants.GuestRoleString)]
-    public class CalendarModel : PageModel
+    private readonly IMediator _mediator;
+    private readonly UserManager<ApplicationUser> _userManager;
+
+    public CalendarModel(IMediator mediator, UserManager<ApplicationUser> userManager)
     {
-        private readonly IMediator _mediator;
-        private readonly UserManager<ApplicationUser> _userManager;
+        _mediator = mediator;
+        _userManager = userManager;
+    }
 
-        public CalendarModel(IMediator mediator, UserManager<ApplicationUser> userManager)
+    [BindProperty]
+    public GetEmployeeCalendarByIdQuery Query { get; set; }
+    public CalendarDTO Calendar { get; set; }
+
+    public async Task OnGet()
+    {
+        // set start and end dates as this month
+        DateTime today = DateTime.Now;
+        Query = new GetEmployeeCalendarByIdQuery
         {
-            _mediator = mediator;
-            _userManager = userManager;
-        }
+            StartDate = new DateTime(today.Year, today.Month, 1)
+        };
+        Query.EndDate = Query.StartDate.AddMonths(1).AddDays(-1);
+        Query.EmployeeId = _userManager.GetUserId(User);
+        // get employee data
+        Calendar = await _mediator.Send(Query);
+    }
 
-        [BindProperty]
-        public GetEmployeeCalendarByIdQuery Query { get; set; }
-        public CalendarDTO Calendar { get; set; }
-
-        public async Task OnGet()
+    public async Task OnPostAsync()
+    {
+        if (!ModelState.IsValid)
         {
-            // set start and end dates as this month
-            DateTime today = DateTime.Now;
-            Query = new GetEmployeeCalendarByIdQuery
-            {
-                StartDate = new DateTime(today.Year, today.Month, 1)
-            };
-            Query.EndDate = Query.StartDate.AddMonths(1).AddDays(-1);
-            Query.EmployeeId = _userManager.GetUserId(User);
-            // get employee data
-            Calendar = await _mediator.Send(Query);
+            return;
         }
-
-        public async Task OnPostAsync()
-        {
-            if (!ModelState.IsValid)
-            {
-                return;
-            }
-            Calendar = await _mediator.Send(Query);
-        }
+        Calendar = await _mediator.Send(Query);
     }
 }

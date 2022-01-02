@@ -1,17 +1,14 @@
 ﻿using OSS.Domain.Entities;
-using System;
-using System.Collections.Generic;
 
-namespace OSS.App.Shifts.Queries.GetShiftRoster
+namespace OSS.App.Shifts.Queries.GetShiftRoster;
+
+public class ShiftRosterDTO
 {
-    public class ShiftRosterDTO
-    {
-        public List<string> ShiftTypes { get; set; }
+    public List<string> ShiftTypes { get; set; }
 
-        // the shift participations for a date will in the same order as the shift types array
-        public Dictionary<DateTime, List<List<Tuple<string, ShiftParticipationType>>>> ShiftParticipations { get; set; } = new Dictionary<DateTime, List<List<Tuple<string, ShiftParticipationType>>>>();
+    // the shift participations for a date will in the same order as the shift types array
+    public Dictionary<DateTime, List<List<Tuple<string, ShiftParticipationType>>>> ShiftParticipations { get; set; } = new Dictionary<DateTime, List<List<Tuple<string, ShiftParticipationType>>>>();
 
-        // Shift Comments
-        public List<Tuple<DateTime, string, string>> ShiftComments { get; set; } = new List<Tuple<DateTime, string, string>>();
-    }
+    // Shift Comments
+    public List<Tuple<DateTime, string, string>> ShiftComments { get; set; } = new List<Tuple<DateTime, string, string>>();
 }

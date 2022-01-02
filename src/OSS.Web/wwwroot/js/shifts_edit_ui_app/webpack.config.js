@@ -30,7 +30,7 @@ module.exports = {
             },
             {
                 test: /\.(js|jsx)$/,
-                exclude: /node_modules/,
+                exclude: [/node_modules/, /dist/, /webpack.config.js/],
                 use: ["babel-loader"]
             },
             // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Encodings.Web;
@@ -14,164 +13,163 @@ using Microsoft.Extensions.Logging;
 using OSS.Domain.Entities;
 using System.Text.RegularExpressions;
 
-namespace OSS.Web.Areas.Identity.Pages.Account
+namespace OSS.Web.Areas.Identity.Pages.Account;
+
+[AllowAnonymous]
+public class LoginModel : PageModel
 {
-    [AllowAnonymous]
-    public class LoginModel : PageModel
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly ILogger<LoginModel> _logger;
+    private readonly IEmailSender _emailSender;
+
+    public LoginModel(SignInManager<ApplicationUser> signInManager,
+        ILogger<LoginModel> logger,
+        UserManager<ApplicationUser> userManager,
+        IEmailSender emailSender)
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly ILogger<LoginModel> _logger;
-        private readonly IEmailSender _emailSender;
+        _userManager = userManager;
+        _signInManager = signInManager;
+        _emailSender = emailSender;
+        _logger = logger;
+    }
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager,
-            ILogger<LoginModel> logger,
-            UserManager<ApplicationUser> userManager,
-            IEmailSender emailSender)
+    [BindProperty]
+    public InputModel Input { get; set; }
+
+    public IList<AuthenticationScheme> ExternalLogins { get; set; }
+
+    public string ReturnUrl { get; set; }
+
+    [TempData]
+    public string ErrorMessage { get; set; }
+
+    public class InputModel
+    {
+        [Required]
+        [Display(Name = "Username or Email")]
+        public string Email { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+
+        [Display(Name = "Remember me?")]
+        public bool RememberMe { get; set; }
+    }
+
+    public async Task OnGetAsync(string returnUrl = null)
+    {
+        if (!string.IsNullOrEmpty(ErrorMessage))
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _emailSender = emailSender;
-            _logger = logger;
+            ModelState.AddModelError(string.Empty, ErrorMessage);
         }
 
-        [BindProperty]
-        public InputModel Input { get; set; }
+        returnUrl = returnUrl ?? Url.Content("~/");
 
-        public IList<AuthenticationScheme> ExternalLogins { get; set; }
+        // Clear the existing external cookie to ensure a clean login process
+        await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
-        public string ReturnUrl { get; set; }
+        ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-        [TempData]
-        public string ErrorMessage { get; set; }
+        ReturnUrl = returnUrl;
+    }
 
-        public class InputModel
+    public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+    {
+        returnUrl = returnUrl ?? Url.Content("~/");
+        if (Input.Email.IndexOf('@') > -1)
         {
-            [Required]
-            [Display(Name = "Username or Email")]
-            public string Email { get; set; }
-
-            [Required]
-            [DataType(DataType.Password)]
-            public string Password { get; set; }
-
-            [Display(Name = "Remember me?")]
-            public bool RememberMe { get; set; }
+            //Validate email format
+            string emailRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
+                                   @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" +
+                                      @".)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
+            Regex re = new Regex(emailRegex);
+            if (!re.IsMatch(Input.Email))
+            {
+                ModelState.AddModelError(string.Empty, "Email is not valid");
+            }
         }
-
-        public async Task OnGetAsync(string returnUrl = null)
+        else
         {
-            if (!string.IsNullOrEmpty(ErrorMessage))
+            //validate Username format
+            string usernameRegex = @"^[a-zA-Z0-9]*$";
+            Regex re = new Regex(usernameRegex);
+            if (!re.IsMatch(Input.Email))
             {
-                ModelState.AddModelError(string.Empty, ErrorMessage);
+                ModelState.AddModelError(string.Empty, "Username is not valid");
             }
-
-            returnUrl = returnUrl ?? Url.Content("~/");
-
-            // Clear the existing external cookie to ensure a clean login process
-            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-
-            ReturnUrl = returnUrl;
         }
-
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        if (ModelState.IsValid)
         {
-            returnUrl = returnUrl ?? Url.Content("~/");
-            if (Input.Email.IndexOf('@') > -1)
+            string userName = Input.Email;
+            if (userName.IndexOf('@') > -1)
             {
-                //Validate email format
-                string emailRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
-                                       @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" +
-                                          @".)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
-                Regex re = new Regex(emailRegex);
-                if (!re.IsMatch(Input.Email))
-                {
-                    ModelState.AddModelError(string.Empty, "Email is not valid");
-                }
-            }
-            else
-            {
-                //validate Username format
-                string usernameRegex = @"^[a-zA-Z0-9]*$";
-                Regex re = new Regex(usernameRegex);
-                if (!re.IsMatch(Input.Email))
-                {
-                    ModelState.AddModelError(string.Empty, "Username is not valid");
-                }
-            }
-            if (ModelState.IsValid)
-            {
-                string userName = Input.Email;
-                if (userName.IndexOf('@') > -1)
-                {
-                    var user = await _userManager.FindByEmailAsync(Input.Email);
-                    if (user == null)
-                    {
-                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                        return Page();
-                    }
-                    else
-                    {
-                        userName = user.UserName;
-                    }
-                }
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(userName, Input.Password, Input.RememberMe, lockoutOnFailure: true);
-                if (result.Succeeded)
-                {
-                    _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
-                }
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("User account locked out.");
-                    return RedirectToPage("./Lockout");
-                }
-                else
+                var user = await _userManager.FindByEmailAsync(Input.Email);
+                if (user == null)
                 {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return Page();
                 }
+                else
+                {
+                    userName = user.UserName;
+                }
             }
-
-            // If we got this far, something failed, redisplay form
-            return Page();
-        }
-
-        public async Task<IActionResult> OnPostSendVerificationEmailAsync()
-        {
-            if (!ModelState.IsValid)
+            // This doesn't count login failures towards account lockout
+            // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+            var result = await _signInManager.PasswordSignInAsync(userName, Input.Password, Input.RememberMe, lockoutOnFailure: true);
+            if (result.Succeeded)
             {
+                _logger.LogInformation("User logged in.");
+                return LocalRedirect(returnUrl);
+            }
+            if (result.RequiresTwoFactor)
+            {
+                return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
+            }
+            if (result.IsLockedOut)
+            {
+                _logger.LogWarning("User account locked out.");
+                return RedirectToPage("./Lockout");
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                 return Page();
             }
+        }
 
-            var user = await _userManager.FindByNameAsync(Input.Email);
-            if (user == null)
-            {
-                ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
-            }
+        // If we got this far, something failed, redisplay form
+        return Page();
+    }
 
-            var userId = await _userManager.GetUserIdAsync(user);
-            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var callbackUrl = Url.Page(
-                "/Account/ConfirmEmail",
-                pageHandler: null,
-                values: new { userId = userId, code = code },
-                protocol: Request.Scheme);
-            await _emailSender.SendEmailAsync(
-                user.Email,
-                "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-            ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
+    public async Task<IActionResult> OnPostSendVerificationEmailAsync()
+    {
+        if (!ModelState.IsValid)
+        {
             return Page();
         }
+
+        var user = await _userManager.FindByNameAsync(Input.Email);
+        if (user == null)
+        {
+            ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
+        }
+
+        var userId = await _userManager.GetUserIdAsync(user);
+        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        var callbackUrl = Url.Page(
+            "/Account/ConfirmEmail",
+            pageHandler: null,
+            values: new { userId = userId, code = code },
+            protocol: Request.Scheme);
+        await _emailSender.SendEmailAsync(
+            user.Email,
+            "Confirm your email",
+            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+        ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
+        return Page();
     }
 }

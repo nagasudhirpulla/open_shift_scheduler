@@ -1,10 +1,6 @@
-﻿using System.Collections.Generic;
+﻿namespace OSS.App.Security.Queries.GetAppUsers;
 
-namespace OSS.App.Security.Queries.GetAppUsers
+public class UserListVM
 {
-    public class UserListVM
-    {
-        public IList<UserDTO> Users { get; set; }
-    }
-
+    public IList<UserDTO> Users { get; set; }
 }

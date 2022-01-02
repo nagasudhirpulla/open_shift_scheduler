@@ -2,31 +2,26 @@
 using Microsoft.EntityFrameworkCore;
 using OSS.App.Data;
 using OSS.Domain.Entities;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace OSS.App.LeaveRequests.Queries.GetLeaveRequestById
+namespace OSS.App.LeaveRequests.Queries.GetLeaveRequestById;
+public class GetLeaveRequestByIdQueryHandler : IRequestHandler<GetLeaveRequestByIdQuery, LeaveRequest>
 {
-    public class GetLeaveRequestByIdQueryHandler : IRequestHandler<GetLeaveRequestByIdQuery, LeaveRequest>
+    private readonly AppIdentityDbContext _context;
+
+    public GetLeaveRequestByIdQueryHandler(AppIdentityDbContext context)
     {
-        private readonly AppIdentityDbContext _context;
+        _context = context;
+    }
 
-        public GetLeaveRequestByIdQueryHandler(AppIdentityDbContext context)
-        {
-            _context = context;
-        }
-
-        public async Task<LeaveRequest> Handle(GetLeaveRequestByIdQuery request, CancellationToken cancellationToken)
-        {
-            LeaveRequest res = await _context.LeaveRequests
-                                            .Where(r => r.Id == request.Id)
-                                            .Include(r => r.Employee)
-                                            .Include(r => r.LeaveType)
-                                            .Include(r => r.LeaveRequestComments)
-                                            .ThenInclude(c=>c.CreatedBy)
-                                            .FirstOrDefaultAsync();
-            return res;
-        }
+    public async Task<LeaveRequest> Handle(GetLeaveRequestByIdQuery request, CancellationToken cancellationToken)
+    {
+        LeaveRequest res = await _context.LeaveRequests
+                                        .Where(r => r.Id == request.Id)
+                                        .Include(r => r.Employee)
+                                        .Include(r => r.LeaveType)
+                                        .Include(r => r.LeaveRequestComments)
+                                        .ThenInclude(c => c.CreatedBy)
+                                        .FirstOrDefaultAsync(cancellationToken: cancellationToken);
+        return res;
     }
 }

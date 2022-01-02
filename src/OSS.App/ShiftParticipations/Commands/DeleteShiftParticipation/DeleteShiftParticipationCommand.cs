@@ -1,36 +1,33 @@
 ﻿using MediatR;
 using OSS.App.Data;
 using OSS.Domain.Entities;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace OSS.App.ShiftParticipations.Commands.DeleteShiftParticipation
+namespace OSS.App.ShiftParticipations.Commands.DeleteShiftParticipation;
+
+public class DeleteShiftParticipationCommand : IRequest<ShiftParticipation>
 {
-    public class DeleteShiftParticipationCommand : IRequest<ShiftParticipation>
+    public int Id { get; set; }
+    public class DeleteShiftParticipationCommandHandler : IRequestHandler<DeleteShiftParticipationCommand, ShiftParticipation>
     {
-        public int Id { get; set; }
-        public class DeleteShiftParticipationCommandHandler : IRequestHandler<DeleteShiftParticipationCommand, ShiftParticipation>
+        private readonly AppIdentityDbContext _context;
+
+        public DeleteShiftParticipationCommandHandler(AppIdentityDbContext context)
         {
-            private readonly AppIdentityDbContext _context;
+            _context = context;
+        }
 
-            public DeleteShiftParticipationCommandHandler(AppIdentityDbContext context)
+        public async Task<ShiftParticipation> Handle(DeleteShiftParticipationCommand request, CancellationToken cancellationToken)
+        {
+            var shiftParticipation = await _context.ShiftParticipations.FindAsync(new object[] { request.Id }, cancellationToken: cancellationToken);
+            if (shiftParticipation == null)
             {
-                _context = context;
+                return null;
             }
 
-            public async Task<ShiftParticipation> Handle(DeleteShiftParticipationCommand request, CancellationToken cancellationToken)
-            {
-                var shiftParticipation = await _context.ShiftParticipations.FindAsync(request.Id);
-                if (shiftParticipation == null)
-                {
-                    return null;
-                }
+            _context.ShiftParticipations.Remove(shiftParticipation);
+            await _context.SaveChangesAsync(cancellationToken);
 
-                _context.ShiftParticipations.Remove(shiftParticipation);
-                await _context.SaveChangesAsync();
-
-                return shiftParticipation;
-            }
+            return shiftParticipation;
         }
     }
 }

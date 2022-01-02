@@ -1,26 +1,22 @@
 ﻿using MediatR;
 using OSS.App.Data;
 using OSS.Domain.Entities;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace OSS.App.LeaveRequests.Commands.AddCommentToLeaveRequest
+namespace OSS.App.LeaveRequests.Commands.AddCommentToLeaveRequest;
+public class AddCommentToLeaveRequestCommandHandler : IRequestHandler<AddCommentToLeaveRequestCommand, LeaveRequestComment>
 {
-    public class AddCommentToLeaveRequestCommandHandler : IRequestHandler<AddCommentToLeaveRequestCommand, LeaveRequestComment>
+    private readonly AppIdentityDbContext _context;
+
+    public AddCommentToLeaveRequestCommandHandler(AppIdentityDbContext context)
     {
-        private readonly AppIdentityDbContext _context;
+        _context = context;
+    }
 
-        public AddCommentToLeaveRequestCommandHandler(AppIdentityDbContext context)
-        {
-            _context = context;
-        }
-
-        public async Task<LeaveRequestComment> Handle(AddCommentToLeaveRequestCommand request, CancellationToken cancellationToken)
-        {
-            LeaveRequestComment lrc = request.LeaveRequestComment;
-            _context.LeaveRequestComments.Add(lrc);
-            await _context.SaveChangesAsync();
-            return lrc;
-        }
+    public async Task<LeaveRequestComment> Handle(AddCommentToLeaveRequestCommand request, CancellationToken cancellationToken)
+    {
+        LeaveRequestComment lrc = request.LeaveRequestComment;
+        _context.LeaveRequestComments.Add(lrc);
+        await _context.SaveChangesAsync(cancellationToken);
+        return lrc;
     }
 }

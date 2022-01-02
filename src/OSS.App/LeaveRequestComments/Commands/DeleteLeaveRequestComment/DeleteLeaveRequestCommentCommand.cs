@@ -1,47 +1,40 @@
 ﻿using MediatR;
 using OSS.App.Data;
 using OSS.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace OSS.App.LeaveRequestComments.Commands.DeleteLeaveRequestComment
+namespace OSS.App.LeaveRequestComments.Commands.DeleteLeaveRequestComment;
+public class DeleteLeaveRequestCommentCommand : IRequest<LeaveRequestComment>
 {
-    public class DeleteLeaveRequestCommentCommand : IRequest<LeaveRequestComment>
+    public int Id { get; set; }
+    public string UserId { get; set; }
+    public bool IsUserAdmin { get; set; }
+}
+
+public class DeleteLeaveRequestCommentCommandHandler : IRequestHandler<DeleteLeaveRequestCommentCommand, LeaveRequestComment>
+{
+    private readonly AppIdentityDbContext _context;
+
+    public DeleteLeaveRequestCommentCommandHandler(AppIdentityDbContext context)
     {
-        public int Id { get; set; }
-        public string UserId { get; set; }
-        public bool IsUserAdmin { get; set; }
+        _context = context;
     }
 
-    public class DeleteLeaveRequestCommentCommandHandler : IRequestHandler<DeleteLeaveRequestCommentCommand, LeaveRequestComment>
+    public async Task<LeaveRequestComment> Handle(DeleteLeaveRequestCommentCommand request, CancellationToken cancellationToken)
     {
-        private readonly AppIdentityDbContext _context;
+        LeaveRequestComment leaveReqComm = await _context.LeaveRequestComments.FindAsync(new object[] { request.Id }, cancellationToken: cancellationToken);
 
-        public DeleteLeaveRequestCommentCommandHandler(AppIdentityDbContext context)
+        if (leaveReqComm == null)
         {
-            _context = context;
+            throw new Exception("Leave Request Comment not found for deletion...");
+        }
+        else if (!request.IsUserAdmin && leaveReqComm.CreatedById != request.UserId)
+        {
+            throw new Exception("non-admin user who did not create the leave request comment is trying to delete it...");
         }
 
-        public async Task<LeaveRequestComment> Handle(DeleteLeaveRequestCommentCommand request, CancellationToken cancellationToken)
-        {
-            LeaveRequestComment leaveReqComm = await _context.LeaveRequestComments.FindAsync(request.Id);
+        _context.LeaveRequestComments.Remove(leaveReqComm);
+        await _context.SaveChangesAsync(cancellationToken);
 
-            if (leaveReqComm == null)
-            {
-                throw new Exception("Leave Request Comment not found for deletion...");
-            }
-            else if (!request.IsUserAdmin && leaveReqComm.CreatedById != request.UserId)
-            {
-                throw new Exception("non-admin user who did not create the leave request comment is trying to delete it...");
-            }
-
-            _context.LeaveRequestComments.Remove(leaveReqComm);
-            await _context.SaveChangesAsync();
-
-            return leaveReqComm;
-        }
+        return leaveReqComm;
     }
 }

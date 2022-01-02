@@ -1,41 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using OSS.App.Data;
 using OSS.Domain.Entities;
 
-namespace OSS.Web.Pages.ShiftCycleItems
+namespace OSS.Web.Pages.ShiftCycleItems;
+
+public class DetailsModel : PageModel
 {
-    public class DetailsModel : PageModel
+    private readonly OSS.App.Data.AppIdentityDbContext _context;
+
+    public DetailsModel(OSS.App.Data.AppIdentityDbContext context)
     {
-        private readonly OSS.App.Data.AppIdentityDbContext _context;
+        _context = context;
+    }
 
-        public DetailsModel(OSS.App.Data.AppIdentityDbContext context)
+    public ShiftCycleItem ShiftCycleItem { get; set; }
+
+    public async Task<IActionResult> OnGetAsync(int? id)
+    {
+        if (id == null)
         {
-            _context = context;
+            return NotFound();
         }
 
-        public ShiftCycleItem ShiftCycleItem { get; set; }
+        ShiftCycleItem = await _context.ShiftCycleItems
+            .Include(s => s.ShiftType).FirstOrDefaultAsync(m => m.Id == id);
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        if (ShiftCycleItem == null)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            ShiftCycleItem = await _context.ShiftCycleItems
-                .Include(s => s.ShiftType).FirstOrDefaultAsync(m => m.Id == id);
-
-            if (ShiftCycleItem == null)
-            {
-                return NotFound();
-            }
-            return Page();
+            return NotFound();
         }
+        return Page();
     }
 }

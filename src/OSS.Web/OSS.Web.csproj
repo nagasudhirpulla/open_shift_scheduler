@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <UserSecretsId>aspnet-OSS.Web-20166FD8-CA5C-4D61-BD86-B71B10E5A82D</UserSecretsId>
   </PropertyGroup>
@@ -9,61 +9,6 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200316115323_leaveRequestCommentsCascadeDelete.cs" />
     <Compile Remove="Migrations\20200316115323_leaveRequestCommentsCascadeDelete.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\AddParticipationToUiAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\AddShiftToUiAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\deleteParticipationFromUiAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\EditShiftCommentAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\EditShiftParticipationAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\GetShiftsForUiAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\SetActiveShiftAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\SetActiveShiftParticipationAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\SetEmployeesAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\SetEndTimeAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\SetShiftGroupsAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\setShiftParticipationsAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\SetShiftParticipationTypesAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\SetShiftsAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\SetShiftTypesAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\SetStartTimeAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\UpdateShiftAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\components\AddEmployeeModal.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\components\AddFromShiftGroupModal.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\components\CommentEditModal.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\components\EditParticipationModal.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\components\shiftCell.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\initial_states\shiftEditUIInitState.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\ActionType.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\CreateShiftAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\CreateShiftParticipationAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\CreateShiftParticipationsFromGroupAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\DeleteShiftAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\DeleteShiftParticipationAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\GetEmployeesAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\GetShiftGroupsAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\GetShiftParticipationTypesAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\GetShiftTypesAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\MoveShiftParticipationAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\UpdateShiftCommentsAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\actions\UpdateShiftParticipationAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\components\shiftsEditApp.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\reducers\shiftsEditUIReducer.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\server_mediators\employees.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\server_mediators\shiftGroups.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\server_mediators\shiftParticipation.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\server_mediators\shiftParticipationTypes.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\server_mediators\shifts.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\server_mediators\shiftTypes.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\shifts_edit_ui.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\type_defs\IAction.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\type_defs\IShiftCellProps.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\type_defs\IShiftsEditUIState.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\utils\CommentsListElement.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\utils\objUtils.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\utils\ShiftCellsMatrix.tsx" />
-    <Content Remove="wwwroot\js\shifts_edit_ui_app\src\utils\timeUtils.tsx" />
   </ItemGroup>
 
   <ItemGroup>
@@ -117,116 +62,6 @@
     <ProjectReference Include="..\OSS.App\OSS.App.csproj" />
     <ProjectReference Include="..\OSS.Domain\OSS.Domain.csproj" />
     <ProjectReference Include="..\OSS.Infra\OSS.Infra.csproj" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\AddParticipationToUiAction.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\AddShiftToUiAction.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\UpdateShiftAction.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\deleteParticipationFromUiAction.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\EditShiftCommentAction.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\SetActiveShiftParticipationAction.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\SetShiftParticipationsAction.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\SetShiftGroupsAction.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\SetShiftParticipationTypesAction.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\SetShiftTypesAction.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\SetShiftsAction.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\SetEndTimeAction.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\SetActiveShiftAction.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\SetStartTimeAction.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\SetEmployeesAction.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\EditShiftParticipationAction.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\components\CommentEditModal.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\components\EditParticipationModal.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\components\AddFromShiftGroupModal.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\components\AddEmployeeModal.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\components\ShiftCell.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\initial_states\shiftEditUIInitState.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\ActionType.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\DeleteShiftAction.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\UpdateShiftCommentsAction.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\MoveShiftParticipationAction.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\GetShiftsForUiAction.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\CreateShiftAction.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\CreateShiftParticipationAction.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\CreateShiftParticipationsFromGroupAction.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\DeleteShiftParticipationAction.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\GetShiftTypesAction.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\GetShiftParticipationTypesAction.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\UpdateShiftParticipationAction.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\GetShiftGroupsAction.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\actions\GetEmployeesAction.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\components\ShiftsEditApp.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\reducers\shiftsEditUIReducer.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\server_mediators\employees.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\server_mediators\shiftParticipation.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\server_mediators\shifts.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\server_mediators\shiftTypes.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\server_mediators\shiftParticipationTypes.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\server_mediators\shiftGroups.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\shifts_edit_ui.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\type_defs\IAction.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\type_defs\IShiftsEditUIState.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\type_defs\IShiftCellProps.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\components\CommentsElement.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\utils\objUtils.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\utils\timeUtils.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shifts_edit_ui_app\src\components\ShiftCellsMatrix.tsx" />
   </ItemGroup>
 
 
