@@ -45,8 +45,9 @@ public class Startup
             })
             .AddRazorRuntimeCompilation();
 
-
-        services.AddRazorPages();
+        services
+            .AddRazorPages()
+            .AddRazorRuntimeCompilation();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -77,7 +78,7 @@ public class Startup
         {
             endpoints.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller}/{action=Index}/{id?}");
             endpoints.MapRazorPages();
         });
     }

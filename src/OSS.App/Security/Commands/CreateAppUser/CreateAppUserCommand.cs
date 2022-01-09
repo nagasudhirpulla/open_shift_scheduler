@@ -18,5 +18,5 @@ public class CreateAppUserCommand : IRequest<IdentityResult>
     public int ShiftRoleId { get; set; }
     public int ShiftGroupId { get; set; }
     public string BaseUrl { get; set; }
-    public bool IsTwoFactorEnabled { get; set; }
+    public bool IsTwoFactorEnabled { get; set; } = true;
 }

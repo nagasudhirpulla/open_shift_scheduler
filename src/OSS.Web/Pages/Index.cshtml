@@ -1,8 +1,9 @@
-﻿@using OSS.Domain.Entities
+﻿@page
+@model OSS.Web.Pages.IndexModel
+@using OSS.Domain.Entities
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
-
 @{
     ViewData["Title"] = "Home";
 }

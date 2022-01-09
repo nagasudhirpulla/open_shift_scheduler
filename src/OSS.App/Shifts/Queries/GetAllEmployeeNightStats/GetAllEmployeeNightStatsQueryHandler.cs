@@ -33,7 +33,11 @@ public class GetAllEmployeeNightStatsQueryHandler : IRequestHandler<GetAllEmploy
                                                   .ThenInclude(s => s.ShiftType)
                                                   .ToListAsync(cancellationToken: cancellationToken);
 
-        ShiftType nShiftType = (await _context.ShiftTypes.Where(s => s.Name.ToLower().Contains("night shift")).ToListAsync(cancellationToken: cancellationToken)).ElementAt(0);
+        ShiftType nShiftType = (await _context.ShiftTypes.Where(s => s.Name.ToLower().Contains("night shift")).ToListAsync(cancellationToken: cancellationToken)).ElementAtOrDefault(0);
+        if (nShiftType == default)
+        {
+            return vm;
+        }
         List<ShiftParticipationType> shiftPartTypes = await _context.ShiftParticipationTypes.ToListAsync(cancellationToken: cancellationToken);
         List<ApplicationUser> employees = await _userManager.Users
                                                     .Include(e => e.ShiftGroup)

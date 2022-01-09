@@ -1,20 +1,18 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using OSS.App.Security;
 
-namespace OSS.Web.Controllers;
-
-public class HomeController : Controller
+namespace OSS.Web.Pages;
+public class IndexModel : PageModel
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly ILogger<IndexModel> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
+    public IndexModel(ILogger<IndexModel> logger)
     {
         _logger = logger;
     }
-
-    public IActionResult Index()
+    public IActionResult OnGet()
     {
         if (User.Identity.IsAuthenticated)
         {
@@ -27,11 +25,6 @@ public class HomeController : Controller
                 return RedirectToPage("/Shifts/Calendar");
             }
         }
-        return View();
-    }
-
-    public IActionResult Privacy()
-    {
-        return View();
+        return Page();
     }
 }

@@ -1,0 +1,92 @@
+﻿@page
+@model OSS.Web.Pages.Users.EditModel
+@{
+    ViewData["Title"] = "Edit User";
+}
+
+<div class="row justify-content-center align-items-center">
+    <div class="col col-md-4 col-lg-4 col-xl-3">
+        <h2>@ViewData["Title"]</h2>
+        <form method="post">
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input asp-for="Usr.Id" type="hidden" />
+            <div class="form-group">
+                <label asp-for="Usr.Username"></label>
+                <input asp-for="Usr.Username" class="form-control" />
+                <span asp-validation-for="Usr.Username" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Usr.DisplayName"></label>
+                <input asp-for="Usr.DisplayName" class="form-control" />
+                <span asp-validation-for="Usr.DisplayName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Usr.Email"></label>
+                <input asp-for="Usr.Email" class="form-control" />
+                <span asp-validation-for="Usr.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Usr.PhoneNumber"></label>
+                <input asp-for="Usr.PhoneNumber" class="form-control" />
+                <span asp-validation-for="Usr.PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Usr.Password"></label>
+                <input asp-for="Usr.Password" class="form-control" />
+                <span asp-validation-for="Usr.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Usr.ConfirmPassword"></label>
+                <input asp-for="Usr.ConfirmPassword" class="form-control" />
+                <span asp-validation-for="Usr.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Usr.OfficeId"></label>
+                <input asp-for="Usr.OfficeId" class="form-control" />
+                <span asp-validation-for="Usr.OfficeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Usr.Designation"></label>
+                <input asp-for="Usr.Designation" class="form-control" />
+                <span asp-validation-for="Usr.Designation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Gender</label>
+                <select asp-for="Usr.GenderId" class="form-control" asp-items="ViewBag.GenderId"></select>
+                <span asp-validation-for="Usr.GenderId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Usr.IsActive"></label>
+                <input asp-for="Usr.IsActive" class="form-control" />
+                <span asp-validation-for="Usr.IsActive" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Usr.IsTwoFactorEnabled"></label>
+                <input asp-for="Usr.IsTwoFactorEnabled" class="form-control" />
+                <span asp-validation-for="Usr.IsTwoFactorEnabled" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Shift Role</label>
+                <select asp-for="Usr.ShiftRoleId" class="form-control" asp-items="ViewBag.ShiftRoleId"></select>
+                <span asp-validation-for="Usr.ShiftRoleId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>ShiftGroup</label>
+                <select asp-for="Usr.ShiftGroupId" class="form-control" asp-items="ViewBag.ShiftGroupId"></select>
+                <span asp-validation-for="Usr.ShiftGroupId" class="text-danger"></span>
+            </div>
+            @*<div class="form-group">
+                <label asp-for="Usr.UserRole"></label>
+                <select asp-for="Usr.UserRole" class="form-control" asp-items="ViewBag.UserRole"></select>
+                <span asp-validation-for="Usr.UserRole" class="text-danger"></span>
+                </div>*@
+            <button type="submit" class="btn btn-success">Save Changes</button>
+        </form>
+        <a asp-page="./Index">Back to List</a>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
