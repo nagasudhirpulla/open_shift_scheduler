@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OSS.BlazorUI", "OSS.BlazorUI\Client\OSS.BlazorUI.csproj", "{E5FFA632-1737-4A01-AC38-153F64C4619E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,10 @@ Global
 		{C6C27A7E-6075-4E3C-A56A-04C6A7B7EC2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6C27A7E-6075-4E3C-A56A-04C6A7B7EC2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6C27A7E-6075-4E3C-A56A-04C6A7B7EC2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5FFA632-1737-4A01-AC38-153F64C4619E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5FFA632-1737-4A01-AC38-153F64C4619E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5FFA632-1737-4A01-AC38-153F64C4619E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5FFA632-1737-4A01-AC38-153F64C4619E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

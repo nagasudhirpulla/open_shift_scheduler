@@ -1,0 +1,28 @@
+﻿@using OSS.BlazorUI.Components;
+@inject ShiftsEditUiState AppState;
+
+<h3>Edit Shifts</h3>
+<div class="datePickerDiv">
+    <span>Start Time{" "}</span>
+    <input type="date" value="@AppState.StartDate" class="timePicker" />
+</div>
+<div style="margin-left:0.5em" class="datePickerDiv">
+    <span>End Time{"  "}</span>
+    <input type="date" value="@AppState.EndDate" class="timePicker" />
+</div>
+<button onClick={onLoadBtnClicked} class="btn btn-success btn-sm btn-icon-split loadBtn">
+    <span class="icon text-white-50">
+        <i class="fas fa-sync"></i>
+    </span>
+    <span class="text">Load</span>
+</button>
+<br />
+<br />
+<ShiftCellsMatrix />
+
+@code {
+    // public void getShifts()
+    // {
+    //     var shifts = AppState.Shifts.GroupBy(s => s.ShiftDate);
+    // }
+}
