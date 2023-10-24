@@ -57,6 +57,7 @@ public class Startup
         {
             app.UseDeveloperExceptionPage();
             //app.UseDatabaseErrorPage();
+            app.UseWebAssemblyDebugging();
         }
         else
         {
@@ -64,6 +65,8 @@ public class Startup
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
+
+        app.UseBlazorFrameworkFiles();
         app.UseHttpsRedirection();
         app.UseStaticFiles();
 

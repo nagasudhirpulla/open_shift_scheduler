@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\js\shifts_edit_ui_app\**" />
+    <Content Remove="wwwroot\js\shifts_edit_ui_app\**" />
+    <EmbeddedResource Remove="wwwroot\js\shifts_edit_ui_app\**" />
+    <None Remove="wwwroot\js\shifts_edit_ui_app\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Migrations\20200316115323_leaveRequestCommentsCascadeDelete.cs" />
     <Compile Remove="Migrations\20200316115323_leaveRequestCommentsCascadeDelete.Designer.cs" />
   </ItemGroup>
@@ -17,8 +24,6 @@
     <Content Include="wwwroot\js\packages\node_modules\%40fullcalendar\timegrid\main.min.css" />
     <Content Include="wwwroot\js\packages\node_modules\bootstrap-icons\font\bootstrap-icons.css" />
     <Content Include="wwwroot\js\packages\node_modules\spectrum-colorpicker2\dist\spectrum.min.css" />
-    <Content Include="wwwroot\js\shifts_edit_ui_app\node_modules\%40fortawesome\fontawesome-free\css\all.min.css" />
-    <Content Include="wwwroot\js\shifts_edit_ui_app\node_modules\react-datetime\css\react-datetime.css" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,15 +32,15 @@
     <None Include="wwwroot\js\packages\node_modules\%40fullcalendar\interaction\main.min.js" />
     <None Include="wwwroot\js\packages\node_modules\%40fullcalendar\timegrid\main.min.js" />
     <None Include="wwwroot\js\packages\node_modules\spectrum-colorpicker2\dist\spectrum.min.js" />
-    <None Include="wwwroot\js\shifts_edit_ui_app\node_modules\react-dom\umd\react-dom.production.min.js" />
-    <None Include="wwwroot\js\shifts_edit_ui_app\node_modules\react\umd\react.production.min.js" />
-    <None Include="wwwroot\js\shifts_edit_ui_app\node_modules\toastr\build\toastr.min.js" />
   </ItemGroup>
 
 
   <ItemGroup>
     <PackageReference Include="DNTCaptcha.Core" Version="4.2.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.6" />
+    <PackageReference Include="Fluxor" Version="5.9.1" />
+    <PackageReference Include="Fluxor.Blazor.Web" Version="5.9.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.22" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.1" />
@@ -58,6 +63,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OSS.App\OSS.App.csproj" />
+    <ProjectReference Include="..\OSS.BlazorUI\OSS.BlazorUI.csproj" />
     <ProjectReference Include="..\OSS.Domain\OSS.Domain.csproj" />
     <ProjectReference Include="..\OSS.Infra\OSS.Infra.csproj" />
   </ItemGroup>
@@ -74,12 +80,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="wwwroot\favicon.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\js\shifts_edit_ui_app\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\js\shifts_edit_ui_app\node_modules\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

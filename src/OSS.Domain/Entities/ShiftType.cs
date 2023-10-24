@@ -1,6 +1,8 @@
 ﻿using OSS.Domain.Utils;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Drawing;
+using System.Text.Json.Serialization;
+
 namespace OSS.Domain.Entities;
 // color picker - https://www.eyecon.ro/colorpicker/#about
 public class ShiftType : BaseEntity

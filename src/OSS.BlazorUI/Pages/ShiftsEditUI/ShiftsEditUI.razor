@@ -1,16 +1,26 @@
-﻿@using OSS.BlazorUI.Components;
-@inject ShiftsEditUiState AppState;
+﻿<Fluxor.Blazor.Web.StoreInitializer/>
+
+
+@using OSS.BlazorUI.Pages.ShiftsEditUI.Actions;
+@using OSS.BlazorUI.Pages.ShiftsEditUI.Components
+@using OSS.BlazorUI.Pages.ShiftsEditUI.Store;
+
+@inherits FluxorComponent
+
+@inject IDispatcher Dispatcher
+@inject IState<ShiftsEditUiState> AppState
+
 
 <h3>Edit Shifts</h3>
 <div class="datePickerDiv">
-    <span>Start Time{" "}</span>
-    <input type="date" value="@AppState.StartDate" class="timePicker" />
+    <span>Start Time </span>
+    <input type="date" value="@AppState.Value.StartDate" />
 </div>
 <div style="margin-left:0.5em" class="datePickerDiv">
-    <span>End Time{"  "}</span>
-    <input type="date" value="@AppState.EndDate" class="timePicker" />
+    <span>End Time </span>
+    <input type="date" value="@AppState.Value.EndDate" />
 </div>
-<button onClick={onLoadBtnClicked} class="btn btn-success btn-sm btn-icon-split loadBtn">
+<button @onClick="onLoadBtnClicked" class="btn btn-success btn-sm btn-icon-split loadBtn">
     <span class="icon text-white-50">
         <i class="fas fa-sync"></i>
     </span>
@@ -20,9 +30,21 @@
 <br />
 <ShiftCellsMatrix />
 
+
 @code {
-    // public void getShifts()
-    // {
-    //     var shifts = AppState.Shifts.GroupBy(s => s.ShiftDate);
-    // }
+
+    protected override void OnInitialized()
+    {
+        Dispatcher.Dispatch(new LoadEmployeesAction());
+        Dispatcher.Dispatch(new LoadShiftTypesAction());
+        Dispatcher.Dispatch(new LoadShiftParticipationTypesAction());
+        Dispatcher.Dispatch(new LoadShiftGroupsAction());
+        // Dispatcher.Dispatch(new LoadShiftsAction(AppState.Value.StartDate, AppState.Value.EndDate));
+        base.OnInitialized();
+    }
+
+    public void onLoadBtnClicked()
+    {
+        Dispatcher.Dispatch(new LoadShiftsAction(AppState.Value.StartDate, AppState.Value.EndDate));
+    }
 }

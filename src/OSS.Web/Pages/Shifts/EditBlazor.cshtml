@@ -1,0 +1,14 @@
+﻿@page
+@using OSS.BlazorUI.Pages.ShiftsEditUI;
+@model OSS.Web.Pages.Shifts.EditModel
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<component type="@typeof(ShiftsEditUI)" render-mode="WebAssembly" />
+
+@section Scripts {
+    <script src="~/_framework/blazor.webassembly.js"></script>
+    <script src="~/_content/Fluxor.Blazor.Web/scripts/index.js"></script>
+}
+
