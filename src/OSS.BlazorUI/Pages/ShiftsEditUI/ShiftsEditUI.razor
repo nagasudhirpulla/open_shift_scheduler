@@ -1,4 +1,4 @@
-﻿<Fluxor.Blazor.Web.StoreInitializer/>
+﻿<Fluxor.Blazor.Web.StoreInitializer />
 
 
 @using OSS.BlazorUI.Pages.ShiftsEditUI.Actions;
@@ -14,13 +14,13 @@
 <h3>Edit Shifts</h3>
 <div class="datePickerDiv">
     <span>Start Time </span>
-    <input type="date" value="@AppState.Value.StartDate" />
+    <input type="date" @bind="StartDate" />
 </div>
 <div style="margin-left:0.5em" class="datePickerDiv">
     <span>End Time </span>
-    <input type="date" value="@AppState.Value.EndDate" />
+    <input type="date" @bind="EndDate" />
 </div>
-<button @onClick="onLoadBtnClicked" class="btn btn-success btn-sm btn-icon-split loadBtn">
+<button @onclick="OnLoadBtnClicked" class="btn btn-success btn-sm btn-icon-split loadBtn">
     <span class="icon text-white-50">
         <i class="fas fa-sync"></i>
     </span>
@@ -33,6 +33,24 @@
 
 @code {
 
+    public DateTime StartDate
+    {
+        get => AppState.Value.StartDate.ToDateTime(new TimeOnly(0));
+        set
+        {
+            Dispatcher.Dispatch(new SetStartDateAction(DateOnly.FromDateTime(value)));
+        }
+    }
+
+    public DateTime EndDate
+    {
+        get => AppState.Value.EndDate.ToDateTime(new TimeOnly(0));
+        set
+        {
+            Dispatcher.Dispatch(new SetEndDateAction(DateOnly.FromDateTime(value)));
+        }
+    }
+
     protected override void OnInitialized()
     {
         Dispatcher.Dispatch(new LoadEmployeesAction());
@@ -43,8 +61,18 @@
         base.OnInitialized();
     }
 
-    public void onLoadBtnClicked()
+    public void OnLoadBtnClicked()
     {
         Dispatcher.Dispatch(new LoadShiftsAction(AppState.Value.StartDate, AppState.Value.EndDate));
+    }
+
+    private void OnStartDateChanged(ChangeEventArgs args)
+    {
+        Dispatcher.Dispatch(new SetStartDateAction((DateOnly)(args.Value ?? DateOnly.FromDateTime(DateTime.Now))));
+    }
+
+    private void OnEndDateChanged(ChangeEventArgs args)
+    {
+        Dispatcher.Dispatch(new SetEndDateAction((DateOnly)(args.Value ?? DateOnly.FromDateTime(DateTime.Now))));
     }
 }

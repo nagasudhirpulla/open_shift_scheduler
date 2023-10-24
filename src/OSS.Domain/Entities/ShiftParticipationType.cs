@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Drawing;
+using System.Text.Json.Serialization;
 
 namespace OSS.Domain.Entities;
 public class ShiftParticipationType : BaseEntity
@@ -10,8 +11,10 @@ public class ShiftParticipationType : BaseEntity
     public bool IsAbsence { get; set; }
     public bool IsBold { get; set; }
 
+    [JsonIgnore]
     [NotMapped]
     public Color DisplayColor { get; set; } = Color.Purple;
+
     [DisplayName("Font Color")]
     public string ColorString
     {
@@ -21,5 +24,4 @@ public class ShiftParticipationType : BaseEntity
 
     [DisplayName("Background Color")]
     public string BgClrString { get; set; }
-
 }
