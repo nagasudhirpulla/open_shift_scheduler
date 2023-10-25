@@ -16,7 +16,7 @@ public class SetShiftsAction
         return state with
         {
             Shifts = action.Shifts,
-            ShiftsInTable = shiftsInTable,
+            ShiftsInGrid = shiftsInTable,
         };
     }
 }

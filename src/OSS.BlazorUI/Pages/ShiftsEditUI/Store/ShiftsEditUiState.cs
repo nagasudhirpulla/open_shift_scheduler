@@ -17,6 +17,6 @@ public record ShiftsEditUiState
 
     public List<ShiftParticipationType> ShiftParticipationTypes { get; init; } = new();
 
-    public List<ShiftsGridRow> ShiftsInTable { get; init; } = new();
+    public List<ShiftsGridRow> ShiftsInGrid { get; init; } = new();
 
 }
