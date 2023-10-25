@@ -36,19 +36,13 @@
     public DateTime StartDate
     {
         get => AppState.Value.StartDate.ToDateTime(new TimeOnly(0));
-        set
-        {
-            Dispatcher.Dispatch(new SetStartDateAction(DateOnly.FromDateTime(value)));
-        }
+        set => Dispatcher.Dispatch(new SetStartDateAction(DateOnly.FromDateTime(value)));
     }
 
     public DateTime EndDate
     {
         get => AppState.Value.EndDate.ToDateTime(new TimeOnly(0));
-        set
-        {
-            Dispatcher.Dispatch(new SetEndDateAction(DateOnly.FromDateTime(value)));
-        }
+        set => Dispatcher.Dispatch(new SetEndDateAction(DateOnly.FromDateTime(value)));
     }
 
     protected override void OnInitialized()

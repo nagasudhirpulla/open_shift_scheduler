@@ -17,7 +17,7 @@ public class LoadShiftTypesEffect
     [EffectMethod(typeof(LoadShiftTypesAction))]
     public async Task LoadShiftTypes(IDispatcher dispatcher)
     {
-        var shiftTypes = await Http.GetFromJsonAsync<List<ShiftType>>($"api/ShiftTypes");
-        dispatcher.Dispatch(new SetShiftTypesAction(shiftTypes ?? new()));
+        List<ShiftType> shiftTypes = (await Http.GetFromJsonAsync<List<ShiftType>>($"api/ShiftTypes") ?? new()).OrderBy(st => st.ShiftSequence).ToList();
+        dispatcher.Dispatch(new SetShiftTypesAction(shiftTypes));
     }
 }

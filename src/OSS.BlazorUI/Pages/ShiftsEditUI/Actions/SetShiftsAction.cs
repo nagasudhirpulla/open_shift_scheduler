@@ -12,7 +12,7 @@ public class SetShiftsAction
     [ReducerMethod]
     public static ShiftsEditUiState OnSetShifts(ShiftsEditUiState state, SetShiftsAction action)
     {
-        var shiftsInTable = DateShifts.FromShifts(state.Shifts);
+        var shiftsInTable = ShiftsGridRow.FromShifts(action.Shifts, state.ShiftTypes, state.StartDate, state.EndDate);
         return state with
         {
             Shifts = action.Shifts,

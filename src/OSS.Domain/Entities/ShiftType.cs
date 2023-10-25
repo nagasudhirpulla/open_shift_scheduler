@@ -12,6 +12,7 @@ public class ShiftType : BaseEntity
     public int StartOffsetMins { get; set; }
     public int ShiftSequence { get; set; }
     // TODO implement this via fluent validation
+    [JsonIgnore]
     [NotMapped]
     public Color DisplayColor { get; set; } = Color.Purple;
     public string ColorString
