@@ -1,0 +1,29 @@
+﻿@using Fluxor.Blazor.Web.Components;
+@using Fluxor;
+@using OSS.BlazorUI.Pages.ShiftsEditUI.Actions;
+@using OSS.BlazorUI.Pages.ShiftsEditUI.Components;
+@using OSS.BlazorUI.Pages.ShiftsEditUI.Store;
+
+@inherits FluxorComponent
+
+@inject IDispatcher Dispatcher
+@inject IState<ShiftsEditUiState> AppState
+
+@code {
+    public int Colsize { get; set; }
+    protected override void OnInitialized()
+    {
+        Colsize = (int)Math.Floor((double)(12 / (AppState.Value.ShiftTypes.Count)));
+    }
+
+    protected string DictToStyle(Dictionary<string, string> styleDict)
+    {
+        List<string> styleStrs = new();
+        foreach (var k in styleDict)
+        {
+            styleStrs.Add($"{k.Key}:{k.Value}");
+        }
+        return string.Join(";", styleStrs);
+
+    }
+}

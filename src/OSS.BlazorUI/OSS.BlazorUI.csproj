@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Pages\ShiftsEditUI\Components\ShiftCell.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Fluxor" Version="5.9.1" />
     <PackageReference Include="Fluxor.Blazor.Web" Version="5.9.1" />
     <PackageReference Include="Fluxor.Blazor.Web.ReduxDevTools" Version="5.9.1" />
@@ -25,6 +29,18 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OSS.Domain\OSS.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\ShiftsEditUI\Components\ShiftCell.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\ShiftsEditUI\Components\ShiftCell.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Pages\ShiftsEditUI\Components\ShiftCell.razor" />
   </ItemGroup>
 
 </Project>

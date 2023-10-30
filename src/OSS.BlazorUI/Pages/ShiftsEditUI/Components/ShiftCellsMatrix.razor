@@ -1,5 +1,5 @@
 ﻿@using OSS.BlazorUI.Pages.ShiftsEditUI.Actions;
-@using OSS.BlazorUI.Pages.ShiftsEditUI.Components
+@using OSS.BlazorUI.Pages.ShiftsEditUI.Components;
 @using OSS.BlazorUI.Pages.ShiftsEditUI.Store;
 
 @inherits FluxorComponent
@@ -7,6 +7,19 @@
 @inject IDispatcher Dispatcher
 @inject IState<ShiftsEditUiState> AppState
 
+@foreach (ShiftsGridRow shiftRowState in AppState.Value.ShiftsInGrid)
+{
+    <div class="row ml-md-5 mr-md-5">
+        <div class="shift_date_display col-md-auto col-sm-12">
+            <span class="h6">@shiftRowState.ShiftsDate.ToString("dd-MMM-yyyy")</span><br />
+            <span class="h6">@shiftRowState.ShiftsDate.ToString("dddd")</span>
+        </div>
+        <div className={'col'}>
+            <div className={'row'}>
+            </div>
+        </div>
+    </div>
+}
 
 @code {
 
