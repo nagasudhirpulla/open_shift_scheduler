@@ -5,9 +5,9 @@ namespace OSS.BlazorUI.Pages.ShiftsEditUI;
 public class ShiftsGridRow
 {
     public DateOnly ShiftsDate { get; set; } = new();
-    public List<Shift> Shifts { get; set; } = new();
+    public List<ShiftDTO> Shifts { get; set; } = new();
 
-    public static List<ShiftsGridRow> FromShifts(List<Shift> shifts, List<ShiftType> shiftTypes, DateOnly StartDate, DateOnly EndDate)
+    public static List<ShiftsGridRow> FromShifts(List<ShiftDTO> shifts, List<ShiftType> shiftTypes, DateOnly StartDate, DateOnly EndDate)
     {
         static IEnumerable<DateOnly> EachDay(DateOnly from, DateOnly thru)
         {
@@ -22,13 +22,13 @@ public class ShiftsGridRow
         {
             var dateShifts = new ShiftsGridRow { ShiftsDate = itrDt, Shifts = new() };
 
-            List<Shift> shiftsForDate = shiftsGroupedByDate[itrDt].ToList() ?? new();
+            List<ShiftDTO> shiftsForDate = shiftsGroupedByDate[itrDt].ToList() ?? new();
             var shiftsForDateGroupedByShiftType = shiftsForDate.ToLookup(s => s.ShiftTypeId);
 
             foreach (var st in shiftTypes)
             {
 
-                Shift shift = shiftsForDateGroupedByShiftType[st.Id].FirstOrDefault() ?? new()
+                ShiftDTO shift = shiftsForDateGroupedByShiftType[st.Id].FirstOrDefault() ?? new()
                 {
                     Id = -1,
                     ShiftType = st,

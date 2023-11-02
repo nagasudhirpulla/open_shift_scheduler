@@ -2,6 +2,7 @@
 
 public class UserDTO
 {
+    // TODO get the DTO from App layer
     public string UserId { get; set; }
     public string Username { get; set; }
     public string DisplayName { get; set; }

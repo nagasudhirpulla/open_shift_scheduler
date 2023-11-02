@@ -14,13 +14,17 @@
             <span class="h6">@shiftRowState.ShiftsDate.ToString("dd-MMM-yyyy")</span><br />
             <span class="h6">@shiftRowState.ShiftsDate.ToString("dddd")</span>
         </div>
-        <div className={'col'}>
-            <div className={'row'}>
-                <h4>TODO render shift Row</h4>
+        <div class="col">
+            <div class="row">
+                @foreach (var shift in shiftRowState.Shifts)
+                {
+                    <ShiftCell Shift=@shift/>
+                }
             </div>
         </div>
     </div>
 }
+
 
 @code {
     

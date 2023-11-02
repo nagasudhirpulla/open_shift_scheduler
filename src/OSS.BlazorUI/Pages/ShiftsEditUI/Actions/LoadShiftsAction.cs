@@ -28,7 +28,7 @@ public class LoadShiftsEffect
     [EffectMethod]
     public async Task LoadShifts(LoadShiftsAction action, IDispatcher dispatcher)
     {
-        var shifts = await Http.GetFromJsonAsync<List<Shift>>($"api/Shifts/BetweenDates?start_date={action.StartDate:yyyy-MM-dd}&end_date={action.EndDate:yyyy-MM-dd}");
+        var shifts = await Http.GetFromJsonAsync<List<ShiftDTO>>($"api/Shifts/BetweenDates?start_date={action.StartDate:yyyy-MM-dd}&end_date={action.EndDate:yyyy-MM-dd}");
         dispatcher.Dispatch(new SetShiftsAction(shifts ?? new()));
     }
 }

@@ -28,6 +28,8 @@
 <br />
 <br />
 <ShiftCellsMatrix />
+<br />
+<CommentsTable />
 
 
 @code {
@@ -46,6 +48,9 @@
 
     protected override void OnInitialized()
     {
+        var nowTime = DateTime.Now;
+        Dispatcher.Dispatch(new SetStartDateAction(new DateOnly(nowTime.Year, nowTime.Month, 1)));
+        Dispatcher.Dispatch(new SetEndDateAction(new DateOnly(nowTime.Year, nowTime.Month, DateTime.DaysInMonth(nowTime.Year, nowTime.Month))));
         Dispatcher.Dispatch(new LoadEmployeesAction());
         Dispatcher.Dispatch(new LoadShiftTypesAction());
         Dispatcher.Dispatch(new LoadShiftParticipationTypesAction());

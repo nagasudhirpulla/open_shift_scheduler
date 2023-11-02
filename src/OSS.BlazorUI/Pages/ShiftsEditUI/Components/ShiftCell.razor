@@ -1,6 +1,4 @@
-﻿@using Fluxor.Blazor.Web.Components;
-@using Fluxor;
-@using OSS.BlazorUI.Pages.ShiftsEditUI.Actions;
+﻿@using OSS.BlazorUI.Pages.ShiftsEditUI.Actions;
 @using OSS.BlazorUI.Pages.ShiftsEditUI.Components;
 @using OSS.BlazorUI.Pages.ShiftsEditUI.Store;
 @using OSS.Domain.Entities;
@@ -10,10 +8,10 @@
 @inject IDispatcher Dispatcher
 @inject IState<ShiftsEditUiState> AppState
 
-<div class="shift_cell col-md-@Colsize d-flex align-items-stretch flex-column" style="background-color: @ShiftType.ColorString; border: '1px dashed #aaa'">
+<div class="shift_cell col-md-@Colsize d-flex align-items-stretch flex-column" style="background-color:@ShiftType.ColorString;border:1px dashed #aaa">
     <div class="d-flex flex-row-reverse">
         <h6 class="shift_cell_type_name small">@ShiftType.Name</h6>
-        <button class="btn btn-outline btn-sm shift_comm_btn" onclick="TODO"><i class="@string.IsNullOrEmpty(Shift.Comments)?" far fa-comment-dots":"far fa-comment"></i></button>
+        <button class="btn btn-outline btn-sm shift_comm_btn" onclick="TODO"><i class="@(!string.IsNullOrEmpty(Shift.Comments)?"far fa-comment-dots":"far fa-comment")"></i></button>
     </div>
     <div>
         @if (Shift.ShiftParticipations != null)
@@ -42,22 +40,12 @@
     public ShiftType ShiftType { get; set; } = new();
 
     [Parameter, EditorRequired]
-    public Shift Shift { get; set; } = new();
+    public ShiftDTO Shift { get; set; } = new();
 
     protected override void OnInitialized()
     {
         Colsize = (int)Math.Floor((double)(12 / (AppState.Value.ShiftTypes.Count)));
-        ShiftType = AppState.Value.Shifts.FirstOrDefault(s => s.Id == Shift.Id)?.ShiftType ?? new();
-    }
-
-    protected string DictToStyle(Dictionary<string, string> styleDict)
-    {
-        List<string> styleStrs = new();
-        foreach (var k in styleDict)
-        {
-            styleStrs.Add($"{k.Key}:{k.Value}");
-        }
-        return string.Join(";", styleStrs);
+        ShiftType = AppState.Value.ShiftTypes.FirstOrDefault(s => s.Id == Shift.ShiftTypeId) ?? new();
     }
 
     protected string getPartDecorationStyleStr(int shiftPartTypeId)
@@ -98,4 +86,15 @@
     {
         return AppState.Value.Employees.FirstOrDefault(e => e.UserId == empId)?.DisplayName ?? "";
     }
+
+    protected string DictToStyle(Dictionary<string, string> styleDict)
+    {
+        List<string> styleStrs = new();
+        foreach (var k in styleDict)
+        {
+            styleStrs.Add($"{k.Key}:{k.Value}");
+        }
+        return string.Join(";", styleStrs);
+    }
+
 }

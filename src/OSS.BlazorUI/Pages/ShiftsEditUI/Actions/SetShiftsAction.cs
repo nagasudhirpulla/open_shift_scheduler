@@ -6,8 +6,8 @@ namespace OSS.BlazorUI.Pages.ShiftsEditUI.Actions;
 
 public class SetShiftsAction
 {
-    public List<Shift> Shifts { get; }
-    public SetShiftsAction(List<Shift> shifts) => Shifts = shifts;
+    public List<ShiftDTO> Shifts { get; }
+    public SetShiftsAction(List<ShiftDTO> shifts) => Shifts = shifts;
 
     [ReducerMethod]
     public static ShiftsEditUiState OnSetShifts(ShiftsEditUiState state, SetShiftsAction action)

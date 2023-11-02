@@ -9,7 +9,7 @@ public record ShiftsEditUiState
     public DateOnly StartDate { get; init; } = DateOnly.FromDateTime(DateTime.Now);
     public DateOnly EndDate { get; init; } = DateOnly.FromDateTime(DateTime.Now);
 
-    public List<Shift> Shifts { get; init; } = new();
+    public List<ShiftDTO> Shifts { get; init; } = new();
     public List<ShiftType> ShiftTypes { get; init; } = new();
     public List<ShiftGroup> ShiftGroups { get; init; } = new();
 
