@@ -3,17 +3,51 @@
 @using OSS.BlazorUI.Pages.ShiftsEditUI.Actions;
 @using OSS.BlazorUI.Pages.ShiftsEditUI.Components;
 @using OSS.BlazorUI.Pages.ShiftsEditUI.Store;
+@using OSS.Domain.Entities;
 
 @inherits FluxorComponent
 
 @inject IDispatcher Dispatcher
 @inject IState<ShiftsEditUiState> AppState
 
+<div class="shift_cell col-md-@Colsize d-flex align-items-stretch flex-column" style="background-color: @ShiftType.ColorString; border: '1px dashed #aaa'">
+    <div class="d-flex flex-row-reverse">
+        <h6 class="shift_cell_type_name small">@ShiftType.Name</h6>
+        <button class="btn btn-outline btn-sm shift_comm_btn" onclick="TODO"><i class="@string.IsNullOrEmpty(Shift.Comments)?" far fa-comment-dots":"far fa-comment"></i></button>
+    </div>
+    <div>
+        @if (Shift.ShiftParticipations != null)
+        {
+            @foreach (var shiftPart in Shift.ShiftParticipations.OrderBy(s => s.ParticipationSequence))
+            {
+                <div class="part_disp_row m-1">
+                    <button class="btn btn-outline-info btn-sm part_up_btn" onclick="TODO"><i class="fas fa-arrow-alt-circle-down"></i></button>
+                    <span class="@getPartDecorationClassStr(shiftPart.Id)" style="@getPartDecorationStyleStr(shiftPart.Id)">@($"{shiftPart.ParticipationSequence + 1}. {getEmployeeName(shiftPart.EmployeeId)}")</span>
+                    <button class="btn btn-outline-info btn-sm part_down_btn" onclick="TODO"><i class="fas fa-arrow-alt-circle-up"></i></button>
+                    <button class="btn btn-outline-warning btn-sm part_edit_btn" onclick="TODO"><i class="fas fa-pencil-alt"></i></button>
+                    <button class="btn btn-outline-danger btn-sm part_del_btn" onclick=""><i class="fas fa-trash-alt"></i></button>
+                </div>
+            }
+        }
+    </div>
+    <div class="cell_btns_div d-flex flex-sm-row flex-column mt-auto">
+        <button onclick="TODO" class="btn btn-sm btn-outline-success part_add_btn m-1"><span class="h6 small">+Employee</span></button>
+        <button onclick="TODO" class="btn btn-sm btn-outline-success grp_add_btn m-1"><span class="h6 small">+Shift Group</span></button>
+        <button onclick="TODO" class="btn btn-sm btn-outline-danger rem_all_part_btn m-1"><span class="h6 small">-Remove All</span></button>
+    </div>
+</div>
+
 @code {
     public int Colsize { get; set; }
+    public ShiftType ShiftType { get; set; } = new();
+
+    [Parameter, EditorRequired]
+    public Shift Shift { get; set; } = new();
+
     protected override void OnInitialized()
     {
         Colsize = (int)Math.Floor((double)(12 / (AppState.Value.ShiftTypes.Count)));
+        ShiftType = AppState.Value.Shifts.FirstOrDefault(s => s.Id == Shift.Id)?.ShiftType ?? new();
     }
 
     protected string DictToStyle(Dictionary<string, string> styleDict)
@@ -24,6 +58,44 @@
             styleStrs.Add($"{k.Key}:{k.Value}");
         }
         return string.Join(";", styleStrs);
+    }
 
+    protected string getPartDecorationStyleStr(int shiftPartTypeId)
+    {
+        Dictionary<string, string> styleObj = new();
+        var shiftPartObj = AppState.Value.ShiftParticipationTypes.Find(x => x.Id == shiftPartTypeId);
+        if (shiftPartObj == null)
+        {
+            return string.Empty;
+        }
+        styleObj["color"] = shiftPartObj.ColorString;
+        styleObj["background-color"] = shiftPartObj.BgClrString;
+        styleObj["padding"] = "0.2rem";
+        return DictToStyle(styleObj);
+    }
+
+    protected string getPartDecorationClassStr(int shiftPartTypeId)
+    {
+        List<string> classList = new() { "h6" };
+        var shiftPartObj = AppState.Value.ShiftParticipationTypes.Find(x => x.Id == shiftPartTypeId);
+        if (shiftPartObj == null)
+        {
+            return string.Empty;
+        }
+        if (shiftPartObj.IsAbsence)
+        {
+            classList.Add("absence_shift_part");
+        }
+        if (shiftPartObj.IsBold)
+        {
+            classList.Add("font-weight-bold");
+
+        }
+        return string.Join(" ", classList);
+    }
+
+    protected string getEmployeeName(string empId)
+    {
+        return AppState.Value.Employees.FirstOrDefault(e => e.UserId == empId)?.DisplayName ?? "";
     }
 }
