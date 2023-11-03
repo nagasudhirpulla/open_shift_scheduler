@@ -18,5 +18,7 @@ public record ShiftsEditUiState
     public List<ShiftParticipationType> ShiftParticipationTypes { get; init; } = new();
 
     public List<ShiftsGridRow> ShiftsInGrid { get; init; } = new();
+    public bool ShowAddEmpToShiftModal { get; init; } = false;
+    public ShiftDTO ActiveShift { get; init; } = new();
 
 }

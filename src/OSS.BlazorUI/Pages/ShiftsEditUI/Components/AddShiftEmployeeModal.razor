@@ -9,10 +9,8 @@
 @inject IDispatcher Dispatcher
 @inject IState<ShiftsEditUiState> AppState
 
-<ModalDialog @ref="@ModalDialog" Title="Add Shift Employee">
+<ModalDialog Title="Add Shift Employee" IsVisible="@IsVisible" SetVisible="SetVisible">
     <div class="row">
-        <h3>Add Shift Employee</h3>
-        <hr>
         <table>
             <tr>
                 <td>Employee</td>
@@ -37,24 +35,19 @@
                 </td>
             </tr>
         </table>
-
+    </div>
+    <div class="row">
         <button class="btn btn-success" onclick="TODO">Submit</button>
-        <button class="btn btn-danger" @onclick="() => ModalDialog.Close()">Close</button>
+        <button class="btn btn-danger" @onclick="() => SetVisible(false)">Close</button>
     </div>
 </ModalDialog>
 
 @code {
-    private ModalDialog ModalDialog { get; set; }
     private string EmpId { get; set; } = string.Empty;
     private int PartTypeId { get; set; } = -1;
-
-    public void Open()
+    public bool IsVisible { get => AppState.Value.ShowAddEmpToShiftModal; }
+    public void SetVisible(bool isVisible)
     {
-        ModalDialog.Open();
-    }
-
-    public void Close()
-    {
-        ModalDialog.Close();
+        Dispatcher.Dispatch(new SetShowAddShiftEmpModalAction(isVisible));
     }
 }
