@@ -18,14 +18,19 @@
             <div class="row">
                 @foreach (var shift in shiftRowState.Shifts)
                 {
-                    <ShiftCell Shift=@shift/>
+                    <ShiftCell Shift=@shift OpenAddShiftEmpModal="OpenAddShiftEmpModal"/>
                 }
             </div>
         </div>
     </div>
 }
 
+<AddShiftEmployeeModal @ref="addShiftEmpModal" />
 
 @code {
-    
+    private AddShiftEmployeeModal addShiftEmpModal { get; set; }
+    private void OpenAddShiftEmpModal()
+    {
+        addShiftEmpModal.Open();
+    }
 }

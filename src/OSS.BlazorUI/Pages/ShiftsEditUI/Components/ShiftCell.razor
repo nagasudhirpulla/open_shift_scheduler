@@ -29,7 +29,7 @@
         }
     </div>
     <div class="cell_btns_div d-flex flex-sm-row flex-column mt-auto">
-        <button onclick="TODO" class="btn btn-sm btn-outline-success part_add_btn m-1"><span class="h6 small">+Employee</span></button>
+        <button @onclick="()=>OpenAddShiftEmpModal?.Invoke()" class="btn btn-sm btn-outline-success part_add_btn m-1"><span class="h6 small">+Employee</span></button>
         <button onclick="TODO" class="btn btn-sm btn-outline-success grp_add_btn m-1"><span class="h6 small">+Shift Group</span></button>
         <button onclick="TODO" class="btn btn-sm btn-outline-danger rem_all_part_btn m-1"><span class="h6 small">-Remove All</span></button>
     </div>
@@ -41,6 +41,9 @@
 
     [Parameter, EditorRequired]
     public ShiftDTO Shift { get; set; } = new();
+
+    [Parameter, EditorRequired]
+    public Action? OpenAddShiftEmpModal { get; set; }
 
     protected override void OnInitialized()
     {

@@ -1,0 +1,60 @@
+﻿@using OSS.BlazorUI.Components;
+@using OSS.BlazorUI.Pages.ShiftsEditUI.Actions;
+@using OSS.BlazorUI.Pages.ShiftsEditUI.Components;
+@using OSS.BlazorUI.Pages.ShiftsEditUI.Store;
+@using OSS.Domain.Entities;
+
+@inherits FluxorComponent
+
+@inject IDispatcher Dispatcher
+@inject IState<ShiftsEditUiState> AppState
+
+<ModalDialog @ref="@ModalDialog" Title="Add Shift Employee">
+    <div class="row">
+        <h3>Add Shift Employee</h3>
+        <hr>
+        <table>
+            <tr>
+                <td>Employee</td>
+                <td>
+                    <select @bind="EmpId">
+                        @foreach (var emp in AppState.Value.Employees)
+                        {
+                            <option value="@emp.UserId">@emp.DisplayName</option>
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Participation Type</td>
+                <td>
+                    <select @bind="PartTypeId">
+                        @foreach (var sp in AppState.Value.ShiftParticipationTypes)
+                        {
+                            <option value="@sp.Id">@sp.Name</option>
+                        }
+                    </select>
+                </td>
+            </tr>
+        </table>
+
+        <button class="btn btn-success" onclick="TODO">Submit</button>
+        <button class="btn btn-danger" @onclick="() => ModalDialog.Close()">Close</button>
+    </div>
+</ModalDialog>
+
+@code {
+    private ModalDialog ModalDialog { get; set; }
+    private string EmpId { get; set; } = string.Empty;
+    private int PartTypeId { get; set; } = -1;
+
+    public void Open()
+    {
+        ModalDialog.Open();
+    }
+
+    public void Close()
+    {
+        ModalDialog.Close();
+    }
+}
