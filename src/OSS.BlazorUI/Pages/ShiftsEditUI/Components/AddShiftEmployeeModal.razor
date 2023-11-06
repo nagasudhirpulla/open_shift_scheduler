@@ -37,7 +37,7 @@
         </table>
     </div>
     <div class="row">
-        <button class="btn btn-success" onclick="TODO">Submit</button>
+        <button class="btn btn-success" @onclick="OnAddShiftParticipationClick">Submit</button>
         <button class="btn btn-danger" @onclick="() => SetVisible(false)">Close</button>
     </div>
 </ModalDialog>
@@ -49,5 +49,18 @@
     public void SetVisible(bool isVisible)
     {
         Dispatcher.Dispatch(new SetShowAddShiftEmpModalAction(isVisible));
+    }
+
+    public void OnAddShiftParticipationClick()
+    {
+        var activeShift = AppState.Value.ActiveShift;
+        var newPart = new ShiftParticipation
+            {
+                ShiftId = activeShift.Id,
+                EmployeeId = EmpId,
+                ShiftParticipationTypeId = PartTypeId,
+                ParticipationSequence = 0
+            };
+        Dispatcher.Dispatch(new CreateShiftParticipationAction(newPart, activeShift));
     }
 }

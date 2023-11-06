@@ -30,7 +30,7 @@ public class ShiftsGridRow
 
                 ShiftDTO shift = shiftsForDateGroupedByShiftType[st.Id].FirstOrDefault() ?? new()
                 {
-                    Id = -1,
+                    Id = 0,
                     ShiftType = st,
                     ShiftTypeId = st.Id,
                     ShiftDate = itrDt.ToDateTime(new(0))

@@ -20,7 +20,7 @@
             {
                 <div class="part_disp_row m-1">
                     <button class="btn btn-outline-info btn-sm part_up_btn" onclick="TODO"><i class="fas fa-arrow-alt-circle-down"></i></button>
-                    <span class="@getPartDecorationClassStr(shiftPart.Id)" style="@getPartDecorationStyleStr(shiftPart.Id)">@($"{shiftPart.ParticipationSequence + 1}. {getEmployeeName(shiftPart.EmployeeId)}")</span>
+                    <span class="@getPartDecorationClassStr(shiftPart)" style="@getPartDecorationStyleStr(shiftPart)">@($"{shiftPart.ParticipationSequence + 1}. {getEmployeeName(shiftPart.EmployeeId)}")</span>
                     <button class="btn btn-outline-info btn-sm part_down_btn" onclick="TODO"><i class="fas fa-arrow-alt-circle-up"></i></button>
                     <button class="btn btn-outline-warning btn-sm part_edit_btn" onclick="TODO"><i class="fas fa-pencil-alt"></i></button>
                     <button class="btn btn-outline-danger btn-sm part_del_btn" onclick=""><i class="fas fa-trash-alt"></i></button>
@@ -54,10 +54,10 @@
         ShiftType = AppState.Value.ShiftTypes.FirstOrDefault(s => s.Id == Shift.ShiftTypeId) ?? new();
     }
 
-    protected string getPartDecorationStyleStr(int shiftPartTypeId)
+    protected string getPartDecorationStyleStr(ShiftParticipation sp)
     {
         Dictionary<string, string> styleObj = new();
-        var shiftPartObj = AppState.Value.ShiftParticipationTypes.Find(x => x.Id == shiftPartTypeId);
+        var shiftPartObj = AppState.Value.ShiftParticipationTypes.Find(x => x.Id == sp.ShiftParticipationTypeId);
         if (shiftPartObj == null)
         {
             return string.Empty;
@@ -68,10 +68,10 @@
         return DictToStyle(styleObj);
     }
 
-    protected string getPartDecorationClassStr(int shiftPartTypeId)
+    protected string getPartDecorationClassStr(ShiftParticipation sp)
     {
         List<string> classList = new() { "h6" };
-        var shiftPartObj = AppState.Value.ShiftParticipationTypes.Find(x => x.Id == shiftPartTypeId);
+        var shiftPartObj = AppState.Value.ShiftParticipationTypes.Find(x => x.Id == sp.ShiftParticipationTypeId);
         if (shiftPartObj == null)
         {
             return string.Empty;
