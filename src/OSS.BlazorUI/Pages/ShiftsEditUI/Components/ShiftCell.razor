@@ -23,7 +23,7 @@
                     <span class="@getPartDecorationClassStr(shiftPart)" style="@getPartDecorationStyleStr(shiftPart)">@($"{shiftPart.ParticipationSequence + 1}. {getEmployeeName(shiftPart.EmployeeId)}")</span>
                     <button class="btn btn-outline-info btn-sm part_down_btn" onclick="TODO"><i class="fas fa-arrow-alt-circle-up"></i></button>
                     <button class="btn btn-outline-warning btn-sm part_edit_btn" onclick="TODO"><i class="fas fa-pencil-alt"></i></button>
-                    <button class="btn btn-outline-danger btn-sm part_del_btn" onclick=""><i class="fas fa-trash-alt"></i></button>
+                    <button class="btn btn-outline-danger btn-sm part_del_btn" @onclick="()=>onShiftPartDelClick(shiftPart)"><i class="fas fa-trash-alt"></i></button>
                 </div>
             }
         }
@@ -52,6 +52,11 @@
     {
         Colsize = (int)Math.Floor((double)(12 / (AppState.Value.ShiftTypes.Count)));
         ShiftType = AppState.Value.ShiftTypes.FirstOrDefault(s => s.Id == Shift.ShiftTypeId) ?? new();
+    }
+
+    private void onShiftPartDelClick(ShiftParticipation sp)
+    {
+        Dispatcher.Dispatch(new DeleteShiftParticipationAction(sp));
     }
 
     protected string getPartDecorationStyleStr(ShiftParticipation sp)
