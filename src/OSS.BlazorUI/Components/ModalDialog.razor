@@ -31,7 +31,7 @@
     [Parameter]
     public Action<bool>? SetVisible { get; set; }
 
-    public string ModalDisplay { get => IsVisible ? "block" : "none"; }
-    public string ModalClass { get => IsVisible ? "show" : string.Empty; }
-    public bool ShowBackdrop { get => IsVisible; }
+    private string ModalDisplay { get => IsVisible ? "block" : "none"; }
+    private string ModalClass { get => IsVisible ? "show" : string.Empty; }
+    private bool ShowBackdrop { get => IsVisible; }
 }

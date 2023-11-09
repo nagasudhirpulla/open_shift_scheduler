@@ -21,7 +21,7 @@
                 <div class="part_disp_row m-1">
                     <button class="btn btn-outline-info btn-sm part_up_btn" @onclick="()=>MoveShiftParticipation(shiftPart, true)"><i class="fas fa-arrow-alt-circle-down"></i></button>
                     <span class="@getPartDecorationClassStr(shiftPart)" style="@getPartDecorationStyleStr(shiftPart)">@($"{shiftPart.ParticipationSequence + 1}. {getEmployeeName(shiftPart.EmployeeId)}")</span>
-                    <button class="btn btn-outline-info btn-sm part_down_btn" @onclick="()=>MoveShiftParticipation(shiftPart, true)"><i class="fas fa-arrow-alt-circle-up"></i></button>
+                    <button class="btn btn-outline-info btn-sm part_down_btn" @onclick="()=>MoveShiftParticipation(shiftPart, false)"><i class="fas fa-arrow-alt-circle-up"></i></button>
                     <button class="btn btn-outline-warning btn-sm part_edit_btn" @onclick="()=>ShowEditShiftPartModal(shiftPart)"><i class="fas fa-pencil-alt"></i></button>
                     <button class="btn btn-outline-danger btn-sm part_del_btn" @onclick="()=>onShiftPartDelClick(shiftPart)"><i class="fas fa-trash-alt"></i></button>
                 </div>
@@ -50,7 +50,6 @@
 
     private void MoveShiftParticipation(ShiftParticipation sp, bool isUp)
     {
-        // TODO test this
         Dispatcher.Dispatch(new MoveShiftParticipationAction(sp, isUp));
     }
 
@@ -64,6 +63,7 @@
     {
         Colsize = (int)Math.Floor((double)(12 / (AppState.Value.ShiftTypes.Count)));
         ShiftType = AppState.Value.ShiftTypes.FirstOrDefault(s => s.Id == Shift.ShiftTypeId) ?? new();
+        base.OnInitialized();
     }
 
     private void onShiftPartDelClick(ShiftParticipation sp)

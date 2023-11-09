@@ -8,51 +8,54 @@
 
 @inject IDispatcher Dispatcher
 @inject IState<ShiftsEditUiState> AppState
+@inject IJSRuntime JsRuntime
 
 <ModalDialog Title="Add Shift Employee" IsVisible="@IsVisible" SetVisible="SetVisible">
-    <div class="row">
-        <table>
-            <tr>
-                <td>Employee</td>
-                <td>
-                    <select @bind="EmpId">
-                        @foreach (var emp in AppState.Value.Employees)
-                        {
-                            <option value="@emp.UserId">@emp.DisplayName</option>
-                        }
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>Participation Type</td>
-                <td>
-                    <select @bind="PartTypeId">
-                        @foreach (var sp in AppState.Value.ShiftParticipationTypes)
-                        {
-                            <option value="@sp.Id">@sp.Name</option>
-                        }
-                    </select>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div class="row">
-        <button class="btn btn-success" @onclick="OnAddShiftParticipationClick">Submit</button>
-        <button class="btn btn-danger" @onclick="() => SetVisible(false)">Close</button>
+    <div class="form">
+        <div class="form-group">
+            <label for="employeeId">Employee</label>
+            <select class="form-control" id="employeeId" @bind="EmpId">
+                <option value="">None</option>
+                @foreach (var emp in AppState.Value.Employees)
+                {
+                    <option value="@emp.UserId">@emp.DisplayName</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="partTypeId">Participation Type</label>
+            <select class="form-control" id="partTypeId" @bind="PartTypeId">
+                <option value="-1">None</option>
+                @foreach (var sp in AppState.Value.ShiftParticipationTypes)
+                {
+                    <option value="@sp.Id">@sp.Name</option>
+                }
+            </select>
+        </div>
+
+        <button class="btn btn-success" @onclick="OnAddShiftParticipationClick" type="button">Submit</button>
+        <button class="btn btn-danger" @onclick="() => SetVisible(false)" type="button">Close</button>
     </div>
 </ModalDialog>
 
 @code {
     private string EmpId { get; set; } = string.Empty;
     private int PartTypeId { get; set; } = -1;
+
     public bool IsVisible { get => AppState.Value.ShowAddEmpToShiftModal; }
     public void SetVisible(bool isVisible)
     {
         Dispatcher.Dispatch(new SetShowAddShiftEmpModalAction(isVisible));
     }
 
-    public void OnAddShiftParticipationClick()
+    public async void OnAddShiftParticipationClick()
     {
+        if (string.IsNullOrEmpty(EmpId) || PartTypeId == -1)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", "Please select valid inputs");
+            return;
+        }
         var activeShift = AppState.Value.ActiveShift;
         var newPart = new ShiftParticipation
             {
@@ -62,5 +65,6 @@
                 ParticipationSequence = 0
             };
         Dispatcher.Dispatch(new CreateShiftParticipationAction(newPart, activeShift));
+        Dispatcher.Dispatch(new SetShowAddShiftEmpModalAction(false));
     }
 }

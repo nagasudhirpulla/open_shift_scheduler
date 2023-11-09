@@ -20,7 +20,7 @@ public class DeleteShiftParticipationEffect
     public DeleteShiftParticipationEffect(HttpClient http) => Http = http;
 
     [EffectMethod]
-    public async Task DeleteShiftParticipation(CreateShiftParticipationAction action, IDispatcher dispatcher)
+    public async Task DeleteShiftParticipation(DeleteShiftParticipationAction action, IDispatcher dispatcher)
     {
         var shiftParticipation = action.ShiftParticipation;
         HttpResponseMessage resp = await Http.DeleteAsync($"api/ShiftParticipations/{shiftParticipation.Id}");

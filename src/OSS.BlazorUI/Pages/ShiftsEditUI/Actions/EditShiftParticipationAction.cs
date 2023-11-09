@@ -23,10 +23,11 @@ public class EditShiftParticipationEffect
     [EffectMethod]
     public async Task EditShiftParticipation(EditShiftParticipationAction action, IDispatcher dispatcher)
     {
-        var resp = await Http.PutAsJsonAsync($"api/ShiftParticipations/${action.ShiftParticipation.Id}", action.ShiftParticipation);
+        var resp = await Http.PutAsJsonAsync($"api/ShiftParticipations/{action.ShiftParticipation.Id}", action.ShiftParticipation);
         if (!resp.IsSuccessStatusCode)
         {
             Console.WriteLine("Shift Participation update server request returned error...");
+            return;
         }
         dispatcher.Dispatch(new UpdateShiftParticipationInUiAction(action.ShiftParticipation));
     }

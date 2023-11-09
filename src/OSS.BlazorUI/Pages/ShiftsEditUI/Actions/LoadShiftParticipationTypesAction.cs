@@ -17,7 +17,6 @@ public class LoadShiftParticipationTypesEffect
     [EffectMethod(typeof(LoadShiftTypesAction))]
     public async Task LoadShiftParticipationTypes(IDispatcher dispatcher)
     {
-        // TODO handle deserialization explicitly
         var ShiftParticipationTypes = await Http.GetFromJsonAsync<List<ShiftParticipationType>>($"api/ShiftParticipationTypes");
         dispatcher.Dispatch(new SetShiftParticipationTypesAction(ShiftParticipationTypes ?? new()));
     }

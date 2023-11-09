@@ -42,6 +42,5 @@ public class DeleteShiftParticipationFromUiAction
         shifts[shiftInd].ShiftParticipations.RemoveAt(shiftPartInd);
 
         return SetShiftsAction.OnSetShifts(state, new SetShiftsAction(shifts));
-        // TODO test this action
     }
 }

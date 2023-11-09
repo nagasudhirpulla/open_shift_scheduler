@@ -10,69 +10,50 @@
 @inject IState<ShiftsEditUiState> AppState
 
 <ModalDialog Title="Edit Shift Participation" IsVisible="@IsVisible" SetVisible="SetVisible">
-    <div class="row">
-        <table>
-            <tr>
-                <td>Employee</td>
-                <td>
-                    <select @bind="EmpId">
-                        @foreach (var emp in AppState.Value.Employees)
-                        {
-                            <option value="@emp.UserId">@emp.DisplayName</option>
-                        }
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>Participation Type</td>
-                <td>
-                    <select @bind="PartTypeId">
-                        @foreach (var sp in AppState.Value.ShiftParticipationTypes)
-                        {
-                            <option value="@sp.Id">@sp.Name</option>
-                        }
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>Participation Sequence</td>
-                <td>
-                    <input type="number" @bind="PartSequence" />
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div class="row">
-        <button class="btn btn-success" @onclick="OnUpdateShiftParticipationClick">Submit</button>
+    <EditForm Model="@model" OnValidSubmit="@HandleValidSubmit">
+        <div class="form-group">
+            <label for="employeeId">Employee</label>
+            <InputSelect class="form-control" id="employeeId" @bind-Value="model.EmployeeId">
+                @foreach (var emp in AppState.Value.Employees)
+                {
+                    <option value="@emp.UserId">@emp.DisplayName</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="form-group">
+            <label for="partTypeId">Participation Type</label>
+            <InputSelect class="form-control" id="partTypeId" @bind-Value="model.ShiftParticipationTypeId">
+                @foreach (var sp in AppState.Value.ShiftParticipationTypes)
+                {
+                    <option value="@sp.Id">@sp.Name</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="form-group">
+            <label for="partSeq">Participation Sequence</label>
+            <InputNumber class="form-control" id="partSeq" @bind-Value="model.ParticipationSequence" />
+        </div>
+
+        <button class="btn btn-success" type="submit">Submit</button>
         <button class="btn btn-danger" @onclick="() => SetVisible(false)">Close</button>
-    </div>
+    </EditForm>
 </ModalDialog>
 
 @code {
-    private string EmpId { get; set; } = string.Empty;
-    private int PartTypeId { get; set; } = -1;
-    private int PartSequence { get; set; } = 0;
+    private ShiftParticipation model => AppState.Value.ActiveShiftParticipation;
+
     public bool IsVisible { get => AppState.Value.ShowEditShiftParticipationModal; }
     public void SetVisible(bool isVisible)
     {
-        Dispatcher.Dispatch(new SetShowAddShiftEmpModalAction(isVisible));
+        Dispatcher.Dispatch(new SetShowEditShiftParticipationModalAction(isVisible));
     }
 
-    protected override void OnInitialized()
+    private void HandleValidSubmit()
     {
-        EmpId = AppState.Value.ActiveShiftParticipation.EmployeeId;
-        PartTypeId = AppState.Value.ActiveShiftParticipation.ShiftParticipationTypeId;
-        PartSequence = AppState.Value.ActiveShiftParticipation.ParticipationSequence + 1;
-    }
-
-    public void OnUpdateShiftParticipationClick()
-    {
-        var updatedShiftPart = AppState.Value.ActiveShiftParticipation;
-        updatedShiftPart.EmployeeId = EmpId;
-        updatedShiftPart.ShiftParticipationTypeId = PartTypeId;
-        updatedShiftPart.ParticipationSequence = PartSequence - 1;
-        Dispatcher.Dispatch(new EditShiftParticipationAction(updatedShiftPart));
-        // TODO test this
+        Dispatcher.Dispatch(new EditShiftParticipationAction(model));
+        Dispatcher.Dispatch(new SetShowEditShiftParticipationModalAction(false));
     }
 }
 
