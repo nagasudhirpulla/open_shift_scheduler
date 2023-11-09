@@ -19,10 +19,10 @@
             @foreach (var shiftPart in Shift.ShiftParticipations.OrderBy(s => s.ParticipationSequence))
             {
                 <div class="part_disp_row m-1">
-                    <button class="btn btn-outline-info btn-sm part_up_btn" onclick="TODO"><i class="fas fa-arrow-alt-circle-down"></i></button>
+                    <button class="btn btn-outline-info btn-sm part_up_btn" @onclick="()=>MoveShiftParticipation(shiftPart, true)"><i class="fas fa-arrow-alt-circle-down"></i></button>
                     <span class="@getPartDecorationClassStr(shiftPart)" style="@getPartDecorationStyleStr(shiftPart)">@($"{shiftPart.ParticipationSequence + 1}. {getEmployeeName(shiftPart.EmployeeId)}")</span>
-                    <button class="btn btn-outline-info btn-sm part_down_btn" onclick="TODO"><i class="fas fa-arrow-alt-circle-up"></i></button>
-                    <button class="btn btn-outline-warning btn-sm part_edit_btn" onclick="TODO"><i class="fas fa-pencil-alt"></i></button>
+                    <button class="btn btn-outline-info btn-sm part_down_btn" @onclick="()=>MoveShiftParticipation(shiftPart, true)"><i class="fas fa-arrow-alt-circle-up"></i></button>
+                    <button class="btn btn-outline-warning btn-sm part_edit_btn" @onclick="()=>ShowEditShiftPartModal(shiftPart)"><i class="fas fa-pencil-alt"></i></button>
                     <button class="btn btn-outline-danger btn-sm part_del_btn" @onclick="()=>onShiftPartDelClick(shiftPart)"><i class="fas fa-trash-alt"></i></button>
                 </div>
             }
@@ -42,10 +42,22 @@
     [Parameter, EditorRequired]
     public ShiftDTO Shift { get; set; } = new();
 
-    public void OpenAddShiftEmpModal()
+    private void OpenAddShiftEmpModal()
     {
         Dispatcher.Dispatch(new SetActiveShiftAction(Shift));
         Dispatcher.Dispatch(new SetShowAddShiftEmpModalAction(true));
+    }
+
+    private void MoveShiftParticipation(ShiftParticipation sp, bool isUp)
+    {
+        // TODO test this
+        Dispatcher.Dispatch(new MoveShiftParticipationAction(sp, isUp));
+    }
+
+    private void ShowEditShiftPartModal(ShiftParticipation sp)
+    {
+        Dispatcher.Dispatch(new SetActiveShiftParticipationAction(sp));
+        Dispatcher.Dispatch(new SetShowEditShiftParticipationModalAction(true));
     }
 
     protected override void OnInitialized()

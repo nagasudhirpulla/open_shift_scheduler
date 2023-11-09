@@ -9,7 +9,7 @@ public class SetShowAddShiftEmpModalAction
     public SetShowAddShiftEmpModalAction(bool isVisible) => IsVisible = isVisible;
 
     [ReducerMethod]
-    public static ShiftsEditUiState OnSetStartDate(ShiftsEditUiState state, SetShowAddShiftEmpModalAction action)
+    public static ShiftsEditUiState OnSetShowAddShiftEmpModal(ShiftsEditUiState state, SetShowAddShiftEmpModalAction action)
     {
         return state with
         {

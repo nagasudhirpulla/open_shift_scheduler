@@ -1,0 +1,78 @@
+﻿@using OSS.BlazorUI.Components;
+@using OSS.BlazorUI.Pages.ShiftsEditUI.Actions;
+@using OSS.BlazorUI.Pages.ShiftsEditUI.Components;
+@using OSS.BlazorUI.Pages.ShiftsEditUI.Store;
+@using OSS.Domain.Entities;
+
+@inherits FluxorComponent
+
+@inject IDispatcher Dispatcher
+@inject IState<ShiftsEditUiState> AppState
+
+<ModalDialog Title="Edit Shift Participation" IsVisible="@IsVisible" SetVisible="SetVisible">
+    <div class="row">
+        <table>
+            <tr>
+                <td>Employee</td>
+                <td>
+                    <select @bind="EmpId">
+                        @foreach (var emp in AppState.Value.Employees)
+                        {
+                            <option value="@emp.UserId">@emp.DisplayName</option>
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Participation Type</td>
+                <td>
+                    <select @bind="PartTypeId">
+                        @foreach (var sp in AppState.Value.ShiftParticipationTypes)
+                        {
+                            <option value="@sp.Id">@sp.Name</option>
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Participation Sequence</td>
+                <td>
+                    <input type="number" @bind="PartSequence" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="row">
+        <button class="btn btn-success" @onclick="OnUpdateShiftParticipationClick">Submit</button>
+        <button class="btn btn-danger" @onclick="() => SetVisible(false)">Close</button>
+    </div>
+</ModalDialog>
+
+@code {
+    private string EmpId { get; set; } = string.Empty;
+    private int PartTypeId { get; set; } = -1;
+    private int PartSequence { get; set; } = 0;
+    public bool IsVisible { get => AppState.Value.ShowEditShiftParticipationModal; }
+    public void SetVisible(bool isVisible)
+    {
+        Dispatcher.Dispatch(new SetShowAddShiftEmpModalAction(isVisible));
+    }
+
+    protected override void OnInitialized()
+    {
+        EmpId = AppState.Value.ActiveShiftParticipation.EmployeeId;
+        PartTypeId = AppState.Value.ActiveShiftParticipation.ShiftParticipationTypeId;
+        PartSequence = AppState.Value.ActiveShiftParticipation.ParticipationSequence + 1;
+    }
+
+    public void OnUpdateShiftParticipationClick()
+    {
+        var updatedShiftPart = AppState.Value.ActiveShiftParticipation;
+        updatedShiftPart.EmployeeId = EmpId;
+        updatedShiftPart.ShiftParticipationTypeId = PartTypeId;
+        updatedShiftPart.ParticipationSequence = PartSequence - 1;
+        Dispatcher.Dispatch(new EditShiftParticipationAction(updatedShiftPart));
+        // TODO test this
+    }
+}
+

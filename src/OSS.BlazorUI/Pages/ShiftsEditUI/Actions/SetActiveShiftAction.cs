@@ -9,7 +9,7 @@ public class SetActiveShiftAction
     public SetActiveShiftAction(ShiftDTO shift) => Shift = shift;
 
     [ReducerMethod]
-    public static ShiftsEditUiState OnSetStartDate(ShiftsEditUiState state, SetActiveShiftAction action)
+    public static ShiftsEditUiState OnSetActiveShift(ShiftsEditUiState state, SetActiveShiftAction action)
     {
         return state with
         {
