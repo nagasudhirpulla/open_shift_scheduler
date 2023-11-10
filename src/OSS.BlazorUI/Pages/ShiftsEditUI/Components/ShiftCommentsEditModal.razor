@@ -1,0 +1,50 @@
+﻿@using OSS.BlazorUI.Components;
+@using OSS.BlazorUI.Pages.ShiftsEditUI.Actions;
+@using OSS.BlazorUI.Pages.ShiftsEditUI.Components;
+@using OSS.BlazorUI.Pages.ShiftsEditUI.Store;
+@using OSS.Domain.Entities;
+@using System.ComponentModel.DataAnnotations;
+
+@inherits FluxorComponent
+
+@inject IDispatcher Dispatcher
+@inject IState<ShiftsEditUiState> AppState
+
+<ModalDialog Title="Edit Shift Comments" IsVisible="@IsVisible" SetVisible="SetVisible">
+    <EditForm Model="@model" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+
+        <div class="form-group">
+            <label for="shiftComments">Shift Comments</label>
+            <InputText class="form-control" id="shiftComments" @bind-Value="model.Comments" />
+        </div>
+
+        <button class="btn btn-success" type="submit">Submit</button>
+        <button class="btn btn-danger" @onclick="() => SetVisible(false)" type="button">Close</button>
+
+        <ValidationSummary />
+    </EditForm>
+</ModalDialog>
+
+@code {
+    private _EditShiftCommentsModalState model => AppState.Value.EditShiftCommentsModalState;
+
+    private class ShiftCommentsEditorModel
+    {
+        [EditorRequired]
+        public string Comments { get; set; } = string.Empty;
+    }
+
+    public bool IsVisible { get => AppState.Value.EditShiftCommentsModalState.showModal; }
+    public void SetVisible(bool isVisible)
+    {
+        Dispatcher.Dispatch(new SetShowEditShiftCommentsModalAction(isVisible));
+    }
+
+    private void HandleValidSubmit()
+    {
+        Dispatcher.Dispatch(new EditShiftCommentsAction(AppState.Value.ActiveShift, model.Comments));
+        SetVisible(false);
+    }
+}
+
