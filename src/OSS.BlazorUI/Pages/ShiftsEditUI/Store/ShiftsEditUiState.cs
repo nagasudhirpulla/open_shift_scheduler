@@ -24,5 +24,7 @@ public record ShiftsEditUiState
 
     public bool ShowEditShiftParticipationModal { get; init; } = false;
     public ShiftParticipation ActiveShiftParticipation { get; init; } = new();
+    
+    public bool ShowAddParticipationsFromGrpModal { get; init; } = false;
 
 }

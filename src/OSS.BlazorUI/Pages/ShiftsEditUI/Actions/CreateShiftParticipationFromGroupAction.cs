@@ -6,11 +6,11 @@ namespace OSS.BlazorUI.Pages.ShiftsEditUI.Actions;
 
 public class CreateShiftParticipationFromGroupAction
 {
-    public int ShiftId { get; }
+    public ShiftDTO Shift { get; }
     public int ShiftGroupId { get; }
-    public CreateShiftParticipationFromGroupAction(int sId, int sgId)
+    public CreateShiftParticipationFromGroupAction(ShiftDTO shift, int sgId)
     {
-        ShiftId = sId;
+        Shift = shift;
         ShiftGroupId = sgId;
     }
 }
@@ -24,7 +24,21 @@ public class CreateShiftParticipationFromGroupEffect
     [EffectMethod]
     public async Task CreateShiftParticipationFromGroup(CreateShiftParticipationFromGroupAction action, IDispatcher dispatcher)
     {
-        HttpResponseMessage resp = await Http.PostAsJsonAsync($"api/ShiftParticipations/FromGroup", action);
+        // create shift if not present at server and add to UI
+        int shiftId = action.Shift.Id;
+        if (shiftId <= 0)
+        {
+            var createdShift = await ServerMediators.CreateShift.Do(Http, action.Shift);
+            if (createdShift == null)
+            {
+                Console.WriteLine("Unable to parse created shift object returned from server");
+                return;
+            }
+            shiftId = createdShift.Id;
+            dispatcher.Dispatch(new AddShiftToUiAction(createdShift));
+        }
+        // create shift participations at server and add to UI
+        HttpResponseMessage resp = await Http.PostAsJsonAsync($"api/ShiftParticipations/FromGroup", new { ShiftId = shiftId, ShiftGroupId = action.ShiftGroupId });
         if (!resp.IsSuccessStatusCode)
         {
             Console.WriteLine("Error in creating shift participations from shift group at server");

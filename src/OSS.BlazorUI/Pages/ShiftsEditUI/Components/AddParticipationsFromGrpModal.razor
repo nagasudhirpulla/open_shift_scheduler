@@ -1,0 +1,56 @@
+﻿@using OSS.BlazorUI.Components;
+@using OSS.BlazorUI.Pages.ShiftsEditUI.Actions;
+@using OSS.BlazorUI.Pages.ShiftsEditUI.Components;
+@using OSS.BlazorUI.Pages.ShiftsEditUI.Store;
+@using OSS.Domain.Entities;
+
+@inherits FluxorComponent
+
+@inject IDispatcher Dispatcher
+@inject IState<ShiftsEditUiState> AppState
+@inject IJSRuntime JsRuntime
+
+
+<ModalDialog Title="Add Participations from Group" IsVisible="@IsVisible" SetVisible="SetVisible">
+    <EditForm Model="@model" OnValidSubmit="@HandleValidSubmit">
+        <div class="form-group">
+            <label for="partTypeId">Shift Group</label>
+            <InputSelect class="form-control" id="partTypeId" @bind-Value="model.ShiftGrpId">
+                <option value="-1">None</option>
+                @foreach (var sg in AppState.Value.ShiftGroups)
+                {
+                    <option value="@sg.Id">@sg.Name</option>
+                }
+            </InputSelect>
+        </div>
+
+        <button class="btn btn-success" type="submit">Submit</button>
+        <button class="btn btn-danger" @onclick="() => SetVisible(false)">Close</button>
+    </EditForm>
+</ModalDialog>
+
+@code {
+    private AddPartsFromGrpModel model => new();
+
+    private class AddPartsFromGrpModel
+    {
+        public int ShiftGrpId { get; set; } = -1;
+    }
+
+    public bool IsVisible { get => AppState.Value.ShowAddParticipationsFromGrpModal; }
+    public void SetVisible(bool isVisible)
+    {
+        Dispatcher.Dispatch(new SetShowAddParticipationsFromGrpModalAction(isVisible));
+    }
+
+    private async void HandleValidSubmit()
+    {
+        if (model.ShiftGrpId == -1)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", "Please select valid inputs");
+            return;
+        }
+        var activeShift = AppState.Value.ActiveShift;
+        // TODO implement this
+    }
+}

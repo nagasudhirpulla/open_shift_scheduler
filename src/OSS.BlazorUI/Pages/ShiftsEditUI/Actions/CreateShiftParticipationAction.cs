@@ -29,15 +29,7 @@ public class CreateShiftParticipationEffect
         {
             // create shift if not present
             var shift = action.Shift;
-            // do this to avoid error of creating a duplicate shift type
-            shift.ShiftType = null;
-            HttpResponseMessage resp = await Http.PostAsJsonAsync($"api/Shifts", shift);
-            if (!resp.IsSuccessStatusCode)
-            {
-                Console.WriteLine("Error in creating a shift for creating shift participation");
-                return;
-            }
-            ShiftDTO? createdShift = await resp.Content.ReadFromJsonAsync<ShiftDTO>();
+            var createdShift = await ServerMediators.CreateShift.Do(Http, shift);
             if (createdShift == null)
             {
                 Console.WriteLine("Unable to parse created shift object returned from server");
