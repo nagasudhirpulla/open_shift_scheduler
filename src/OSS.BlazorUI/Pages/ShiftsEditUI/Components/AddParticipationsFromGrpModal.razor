@@ -3,6 +3,7 @@
 @using OSS.BlazorUI.Pages.ShiftsEditUI.Components;
 @using OSS.BlazorUI.Pages.ShiftsEditUI.Store;
 @using OSS.Domain.Entities;
+@using System.ComponentModel.DataAnnotations;
 
 @inherits FluxorComponent
 
@@ -13,6 +14,8 @@
 
 <ModalDialog Title="Add Participations from Group" IsVisible="@IsVisible" SetVisible="SetVisible">
     <EditForm Model="@model" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+
         <div class="form-group">
             <label for="partTypeId">Shift Group</label>
             <InputSelect class="form-control" id="partTypeId" @bind-Value="model.ShiftGrpId">
@@ -25,15 +28,19 @@
         </div>
 
         <button class="btn btn-success" type="submit">Submit</button>
-        <button class="btn btn-danger" @onclick="() => SetVisible(false)">Close</button>
+        <button class="btn btn-danger" @onclick="() => SetVisible(false)" type="button">Close</button>
+
+        <ValidationSummary />
     </EditForm>
 </ModalDialog>
 
 @code {
-    private AddPartsFromGrpModel model => new();
+    private AddPartsFromGrpModel model { get; set; } = new();
 
     private class AddPartsFromGrpModel
     {
+        [Range(0, int.MaxValue, ErrorMessage = "Please select valid shift group")]
+        [EditorRequired]
         public int ShiftGrpId { get; set; } = -1;
     }
 
@@ -43,14 +50,11 @@
         Dispatcher.Dispatch(new SetShowAddParticipationsFromGrpModalAction(isVisible));
     }
 
-    private async void HandleValidSubmit()
+    private void HandleValidSubmit()
     {
-        if (model.ShiftGrpId == -1)
-        {
-            await JsRuntime.InvokeVoidAsync("alert", "Please select valid inputs");
-            return;
-        }
+        int shiftGrpId = model.ShiftGrpId;
         var activeShift = AppState.Value.ActiveShift;
-        // TODO implement this
+        Dispatcher.Dispatch(new CreateShiftParticipationFromGroupAction(activeShift, shiftGrpId));
+        Dispatcher.Dispatch(new SetShowAddParticipationsFromGrpModalAction(false));
     }
 }

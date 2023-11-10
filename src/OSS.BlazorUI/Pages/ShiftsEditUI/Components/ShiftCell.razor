@@ -11,7 +11,7 @@
 <div class="shift_cell col-md-@Colsize d-flex align-items-stretch flex-column" style="background-color:@ShiftType.ColorString;border:1px dashed #aaa">
     <div class="d-flex flex-row-reverse">
         <h6 class="shift_cell_type_name small">@ShiftType.Name</h6>
-        <button class="btn btn-outline btn-sm shift_comm_btn" onclick="TODO"><i class="@(!string.IsNullOrEmpty(Shift.Comments)?"far fa-comment-dots":"far fa-comment")"></i></button>
+        <button class="btn btn-outline btn-sm shift_comm_btn" @onclick="()=>OpenEditShiftCommentsModal()"><i class="@(!string.IsNullOrEmpty(Shift.Comments)?"far fa-comment-dots":"far fa-comment")"></i></button>
     </div>
     <div>
         @if (Shift.ShiftParticipations != null)
@@ -30,7 +30,7 @@
     </div>
     <div class="cell_btns_div d-flex flex-sm-row flex-column mt-auto">
         <button @onclick="()=>OpenAddShiftEmpModal()" class="btn btn-sm btn-outline-success part_add_btn m-1"><span class="h6 small">+Employee</span></button>
-        <button onclick="TODO" class="btn btn-sm btn-outline-success grp_add_btn m-1"><span class="h6 small">+Shift Group</span></button>
+        <button @onclick="()=>OpenAddParticipationsFromGrpModal()" class="btn btn-sm btn-outline-success grp_add_btn m-1"><span class="h6 small">+Shift Group</span></button>
         <button onclick="TODO" class="btn btn-sm btn-outline-danger rem_all_part_btn m-1"><span class="h6 small">-Remove All</span></button>
     </div>
 </div>
@@ -46,6 +46,18 @@
     {
         Dispatcher.Dispatch(new SetActiveShiftAction(Shift));
         Dispatcher.Dispatch(new SetShowAddShiftEmpModalAction(true));
+    }
+
+    private void OpenAddParticipationsFromGrpModal()
+    {
+        Dispatcher.Dispatch(new SetActiveShiftAction(Shift));
+        Dispatcher.Dispatch(new SetShowAddParticipationsFromGrpModalAction(true));
+    }
+
+    private void OpenEditShiftCommentsModal()
+    {
+        Dispatcher.Dispatch(new SetActiveShiftAction(Shift));
+        Dispatcher.Dispatch(new SetShowEditShiftCommentsModalAction(true));
     }
 
     private void MoveShiftParticipation(ShiftParticipation sp, bool isUp)

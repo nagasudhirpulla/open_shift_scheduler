@@ -24,7 +24,15 @@ public record ShiftsEditUiState
 
     public bool ShowEditShiftParticipationModal { get; init; } = false;
     public ShiftParticipation ActiveShiftParticipation { get; init; } = new();
-    
-    public bool ShowAddParticipationsFromGrpModal { get; init; } = false;
 
+    public bool ShowAddParticipationsFromGrpModal { get; init; } = false;
+    //public bool ShowEditShiftCommentsModal { get; init; } = false;
+
+    public _EditShiftCommentsModalState EditShiftCommentsModalState { get; init; } = new();
+}
+
+public record _EditShiftCommentsModalState
+{
+    public bool showModal { get; set; } = false;
+    public string Comments { get; set; } = string.Empty;
 }

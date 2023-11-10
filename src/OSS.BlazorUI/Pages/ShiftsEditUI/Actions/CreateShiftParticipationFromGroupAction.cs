@@ -24,37 +24,42 @@ public class CreateShiftParticipationFromGroupEffect
     [EffectMethod]
     public async Task CreateShiftParticipationFromGroup(CreateShiftParticipationFromGroupAction action, IDispatcher dispatcher)
     {
-        // create shift if not present at server and add to UI
-        int shiftId = action.Shift.Id;
-        if (shiftId <= 0)
+        ShiftDTO shift = action.Shift;
+        if (shift.Id <= 0)
         {
+            // create shift if not present at server
             var createdShift = await ServerMediators.CreateShift.Do(Http, action.Shift);
             if (createdShift == null)
             {
                 Console.WriteLine("Unable to parse created shift object returned from server");
                 return;
             }
-            shiftId = createdShift.Id;
+            shift = createdShift;
+            // add created shift to UI
             dispatcher.Dispatch(new AddShiftToUiAction(createdShift));
         }
-        // create shift participations at server and add to UI
-        HttpResponseMessage resp = await Http.PostAsJsonAsync($"api/ShiftParticipations/FromGroup", new { ShiftId = shiftId, ShiftGroupId = action.ShiftGroupId });
+        // create shift participations at server
+        HttpResponseMessage resp = await Http.PostAsJsonAsync($"api/ShiftParticipations/FromGroup", new { ShiftId = shift.Id, ShiftGroupId = action.ShiftGroupId });
         if (!resp.IsSuccessStatusCode)
         {
             Console.WriteLine("Error in creating shift participations from shift group at server");
             return;
         }
-        List<ShiftParticipation>? createdShiftParticipations = await resp.Content.ReadFromJsonAsync<List<ShiftParticipation>>();
-        if (createdShiftParticipations == null)
+        List<ShiftParticipation>? updatedShiftParticipations = await resp.Content.ReadFromJsonAsync<List<ShiftParticipation>>();
+        if (updatedShiftParticipations == null)
         {
             Console.WriteLine("Unable to parse created shift participations list returned from server");
             return;
         }
 
-        foreach (var sp in createdShiftParticipations)
+        // add created shift participations to UI
+        foreach (var sp in updatedShiftParticipations)
         {
-            dispatcher.Dispatch(new AddShiftParticipationToUiAction(sp));
+            if (!shift.ShiftParticipations.Any(x => x.Id == sp.Id))
+            {
+                // add the shift participation to UI if not present
+                dispatcher.Dispatch(new AddShiftParticipationToUiAction(sp));
+            }
         }
-        // TODO test this
     }
 }
