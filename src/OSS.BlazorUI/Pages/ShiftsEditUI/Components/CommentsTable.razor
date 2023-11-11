@@ -25,8 +25,10 @@
                     <tr>
                         <td>@($"{shift.ShiftDate.ToString("dd-MMM-yyyy")}, {shift.ShiftDate.ToString("dddd")}")</td>
                         <td>@AppState.Value.ShiftTypes.FirstOrDefault(st=>st.Id==shift.ShiftTypeId)?.Name</td>
-                        <td>@shift.Comments</td>
-                        <td><button class="btn btn-outline btn-sm shift_comm_btn" onclick="todo"><i class={"fa fa-commenting-o"}></i></button></td>
+                        <td>
+                            <button class="btn btn-outline-secondary btn-sm shift_comm_btn mr-1" @onclick="()=>OpenEditShiftCommentsModal(shift)"><i class="fas fa-pencil-alt"></i></button>
+                            @shift.Comments
+                        </td>
                     </tr>
                 }
             }
@@ -36,5 +38,9 @@
 
 
 @code {
-
+    private void OpenEditShiftCommentsModal(ShiftDTO shift)
+    {
+        Dispatcher.Dispatch(new SetActiveShiftAction(shift));
+        Dispatcher.Dispatch(new SetShowEditShiftCommentsModalAction(true));
+    }
 }

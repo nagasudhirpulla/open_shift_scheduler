@@ -13,11 +13,7 @@ public class SetShowEditShiftCommentsModalAction
     {
         return state with
         {
-            EditShiftCommentsModalState = state.EditShiftCommentsModalState with
-            {
-                showModal = action.IsVisible,
-                Comments = state.ActiveShift.Comments
-            }
+            ShowEditShiftCommentsModal = action.IsVisible
         };
     }
 }

@@ -27,7 +27,14 @@
 </ModalDialog>
 
 @code {
-    private _EditShiftCommentsModalState model => AppState.Value.EditShiftCommentsModalState;
+    private bool _isVisible = false;
+    public bool IsVisible { get => _isVisible; }
+    public void SetVisible(bool isVisible)
+    {
+        Dispatcher.Dispatch(new SetShowEditShiftCommentsModalAction(isVisible));
+    }
+
+    private ShiftCommentsEditorModel model = new();
 
     private class ShiftCommentsEditorModel
     {
@@ -35,10 +42,22 @@
         public string Comments { get; set; } = string.Empty;
     }
 
-    public bool IsVisible { get => AppState.Value.EditShiftCommentsModalState.showModal; }
-    public void SetVisible(bool isVisible)
+    protected override void OnInitialized()
     {
-        Dispatcher.Dispatch(new SetShowEditShiftCommentsModalAction(isVisible));
+        base.OnInitialized();
+        AppState.StateChanged += (newState, e) =>
+        {
+            bool isModalVisibleInApp = ((IState<ShiftsEditUiState>)newState).Value.ShowEditShiftCommentsModal;
+            if (isModalVisibleInApp != IsVisible)
+            {
+                // sync with visibility in state
+                _isVisible = isModalVisibleInApp;
+                if (_isVisible)
+                {
+                    model.Comments = AppState.Value.ActiveShift.Comments;
+                }
+            }
+        };
     }
 
     private void HandleValidSubmit()

@@ -3,6 +3,7 @@
 @using OSS.BlazorUI.Pages.ShiftsEditUI.Components;
 @using OSS.BlazorUI.Pages.ShiftsEditUI.Store;
 @using OSS.Domain.Entities;
+@using System.ComponentModel.DataAnnotations;
 
 @inherits FluxorComponent
 
@@ -42,17 +43,71 @@
 </ModalDialog>
 
 @code {
-    private ShiftParticipation model => AppState.Value.ActiveShiftParticipation;
-
-    public bool IsVisible { get => AppState.Value.ShowEditShiftParticipationModal; }
+    private bool _isVisible = false;
+    public bool IsVisible { get => _isVisible; }
     public void SetVisible(bool isVisible)
     {
         Dispatcher.Dispatch(new SetShowEditShiftParticipationModalAction(isVisible));
     }
 
+    private EditShiftParticipationModel model = new();
+
+    private class EditShiftParticipationModel
+    {
+        [EditorRequired]
+        public string EmployeeId { get; set; } = string.Empty;
+
+        [EditorRequired]
+        [Range(0, int.MaxValue, ErrorMessage = "Please select valid Shift Participation")]
+        public int ShiftParticipationTypeId { get; set; } = -1;
+
+        [EditorRequired]
+        [Range(0, int.MaxValue, ErrorMessage = "Participation Sequence should be greater than 0")]
+        public int ParticipationSequence { get; set; } = -1;
+
+        public int ShiftId { get; set; } = -1;
+
+        public int Id { get; set; } = -1;
+
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        AppState.StateChanged += (newState, e) =>
+        {
+            bool isModalVisibleInApp = ((IState<ShiftsEditUiState>)newState).Value.ShowEditShiftParticipationModal;
+            if (isModalVisibleInApp != IsVisible)
+            {
+                // sync with state if visibility changed
+                _isVisible = isModalVisibleInApp;
+                if (_isVisible)
+                {
+                    var activePart = AppState.Value.ActiveShiftParticipation;
+                    model = new()
+                        {
+                            EmployeeId = activePart.EmployeeId,
+                            ShiftParticipationTypeId = activePart.ShiftParticipationTypeId,
+                            ParticipationSequence = activePart.ParticipationSequence + 1,
+                            ShiftId = activePart.ShiftId,
+                            Id = activePart.Id
+                        };
+                }
+            }
+        };
+    }
+
     private void HandleValidSubmit()
     {
-        Dispatcher.Dispatch(new EditShiftParticipationAction(model));
+        ShiftParticipation newPart = new()
+            {
+                Id = model.Id,
+                EmployeeId = model.EmployeeId,
+                ShiftId = model.ShiftId,
+                ShiftParticipationTypeId = model.ShiftParticipationTypeId,
+                ParticipationSequence = model.ParticipationSequence - 1
+            };
+        Dispatcher.Dispatch(new EditShiftParticipationAction(newPart));
         Dispatcher.Dispatch(new SetShowEditShiftParticipationModalAction(false));
     }
 }

@@ -73,9 +73,9 @@
 
     protected override void OnInitialized()
     {
+        base.OnInitialized();
         Colsize = (int)Math.Floor((double)(12 / (AppState.Value.ShiftTypes.Count)));
         ShiftType = AppState.Value.ShiftTypes.FirstOrDefault(s => s.Id == Shift.ShiftTypeId) ?? new();
-        base.OnInitialized();
     }
 
     private void onShiftPartDelClick(ShiftParticipation sp)
