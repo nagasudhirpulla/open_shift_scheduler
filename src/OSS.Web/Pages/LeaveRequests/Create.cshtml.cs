@@ -45,7 +45,7 @@ public class CreateModel : PageModel
             ViewData["EmployeeId"] = new SelectList((await _mediator.Send(new GetAppUsersListQuery())).Users, "UserId", "DisplayName");
         }
         var leaveTypes = (await _mediator.Send(new GetShiftParticipationTypesQuery())).Where(i => i.IsAbsence).OrderBy(i => i.Id);
-        ViewData["LeaveTypeId"] = new SelectList(leaveTypes, "Id", "Name", leaveTypes.Where(lt => lt.Name.ToLower() == "leave").FirstOrDefault().Id);
+        ViewData["LeaveTypeId"] = new SelectList(leaveTypes, "Id", "Name", leaveTypes.Where(lt => lt.Name.ToLower() == "leave").FirstOrDefault()?.Id);
         return Page();
     }
 
