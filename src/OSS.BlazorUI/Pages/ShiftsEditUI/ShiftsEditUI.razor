@@ -50,14 +50,11 @@
     {
         base.OnInitialized();
         var nowTime = DateTime.Now;
-        Dispatcher.Dispatch(new SetStartDateAction(new DateOnly(nowTime.Year, nowTime.Month, 1)));
-        Dispatcher.Dispatch(new SetEndDateAction(new DateOnly(nowTime.Year, nowTime.Month, DateTime.DaysInMonth(nowTime.Year, nowTime.Month))));
-        Dispatcher.Dispatch(new LoadEmployeesAction());
-        Dispatcher.Dispatch(new LoadShiftTypesAction());
-        Dispatcher.Dispatch(new LoadShiftParticipationTypesAction());
-        Dispatcher.Dispatch(new LoadShiftGroupsAction());
-        // TODO implement pending actions queue feature
-        // Dispatcher.Dispatch(new LoadShiftsAction(AppState.Value.StartDate, AppState.Value.EndDate));
+        var startDt = new DateOnly(nowTime.Year, nowTime.Month, 1);
+        var endDt = new DateOnly(nowTime.Year, nowTime.Month, DateTime.DaysInMonth(nowTime.Year, nowTime.Month));
+        Dispatcher.Dispatch(new SetStartDateAction(startDt));
+        Dispatcher.Dispatch(new SetEndDateAction(endDt));
+        Dispatcher.Dispatch(new LoadInitialAppDataAction(startDt, endDt));
     }
 
     public void OnLoadBtnClicked()
