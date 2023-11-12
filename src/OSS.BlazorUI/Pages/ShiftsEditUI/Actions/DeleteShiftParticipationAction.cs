@@ -22,17 +22,9 @@ public class DeleteShiftParticipationEffect
     [EffectMethod]
     public async Task DeleteShiftParticipation(DeleteShiftParticipationAction action, IDispatcher dispatcher)
     {
-        var shiftParticipation = action.ShiftParticipation;
-        HttpResponseMessage resp = await Http.DeleteAsync($"api/ShiftParticipations/{shiftParticipation.Id}");
-        if (!resp.IsSuccessStatusCode)
-        {
-            Console.WriteLine("Error in deleting a shift participation at server");
-            return;
-        }
-        ShiftParticipation? deletedShiftPart = await resp.Content.ReadFromJsonAsync<ShiftParticipation>();
+        ShiftParticipation? deletedShiftPart = await ServerMediators.DeleteShiftParticipation.Do(Http, action.ShiftParticipation);
         if (deletedShiftPart == null)
         {
-            Console.WriteLine("Unable to parse deleted shift object returned from server");
             return;
         }
         // delete shift participation from UI

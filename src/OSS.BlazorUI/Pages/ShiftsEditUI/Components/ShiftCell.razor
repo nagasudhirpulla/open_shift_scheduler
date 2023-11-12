@@ -31,7 +31,7 @@
     <div class="cell_btns_div d-flex flex-sm-row flex-column mt-auto">
         <button @onclick="()=>OpenAddShiftEmpModal()" class="btn btn-sm btn-outline-success part_add_btn m-1"><span class="h6 small">+Employee</span></button>
         <button @onclick="()=>OpenAddParticipationsFromGrpModal()" class="btn btn-sm btn-outline-success grp_add_btn m-1"><span class="h6 small">+Shift Group</span></button>
-        <button onclick="TODO" class="btn btn-sm btn-outline-danger rem_all_part_btn m-1"><span class="h6 small">-Remove All</span></button>
+        <button @onclick="()=>OnDeleteAllShiftParticipations()" class="btn btn-sm btn-outline-danger rem_all_part_btn m-1"><span class="h6 small">-Remove All</span></button>
     </div>
 </div>
 
@@ -71,16 +71,21 @@
         Dispatcher.Dispatch(new SetShowEditShiftParticipationModalAction(true));
     }
 
+    private void onShiftPartDelClick(ShiftParticipation sp)
+    {
+        Dispatcher.Dispatch(new DeleteShiftParticipationAction(sp));
+    }
+
+    private void OnDeleteAllShiftParticipations()
+    {
+        Dispatcher.Dispatch(new DeleteAllShiftParticipationsAction(Shift));
+    }
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
         Colsize = (int)Math.Floor((double)(12 / (AppState.Value.ShiftTypes.Count)));
         ShiftType = AppState.Value.ShiftTypes.FirstOrDefault(s => s.Id == Shift.ShiftTypeId) ?? new();
-    }
-
-    private void onShiftPartDelClick(ShiftParticipation sp)
-    {
-        Dispatcher.Dispatch(new DeleteShiftParticipationAction(sp));
     }
 
     protected string getPartDecorationStyleStr(ShiftParticipation sp)

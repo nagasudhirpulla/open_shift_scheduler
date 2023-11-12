@@ -1,6 +1,5 @@
 ﻿using Fluxor;
 using OSS.BlazorUI.Pages.ShiftsEditUI.Store;
-using OSS.Domain.Entities;
 
 namespace OSS.BlazorUI.Pages.ShiftsEditUI.Actions;
 
