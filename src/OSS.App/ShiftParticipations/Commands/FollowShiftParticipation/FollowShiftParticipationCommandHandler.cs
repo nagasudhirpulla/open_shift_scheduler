@@ -40,7 +40,7 @@ public class FollowShiftParticipationCommandHandler : IRequestHandler<FollowShif
             newPartSeq += -1;
             newPartSeq = (newPartSeq == -1) ? sp.ParticipationSequence : newPartSeq;
 
-            ShiftParticipation newPart = new ShiftParticipation
+            ShiftParticipation newPart = new()
             {
                 EmployeeId = request.NewEmployeeId,
                 ShiftId = sp.ShiftId,

@@ -21,7 +21,7 @@ public class GetEmployeeCalendarByIdQueryHandler : IRequestHandler<GetEmployeeCa
 
     public async Task<CalendarDTO> Handle(GetEmployeeCalendarByIdQuery request, CancellationToken cancellationToken)
     {
-        CalendarDTO vm = new CalendarDTO();
+        CalendarDTO vm = new();
 
         if (request.StartDate > request.EndDate)
         {
@@ -42,7 +42,7 @@ public class GetEmployeeCalendarByIdQueryHandler : IRequestHandler<GetEmployeeCa
         vm.CalendarEvents = new List<CalendarEventDTO>();
         foreach (ShiftParticipation shiftPart in empShiftParts)
         {
-            CalendarEventDTO ce = new CalendarEventDTO();
+            CalendarEventDTO ce = new();
             ShiftType evntShiftType = shiftPart.Shift.ShiftType;
             ShiftParticipationType evntShiftPartType = shiftPart.ShiftParticipationType;
 

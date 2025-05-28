@@ -23,7 +23,7 @@ public class GetShiftRosterQueryHandler : IRequestHandler<GetShiftRosterQuery, S
     public async Task<ShiftRosterDTO> Handle(GetShiftRosterQuery request, CancellationToken cancellationToken)
     {
         // TODO refine code
-        ShiftRosterDTO vm = new ShiftRosterDTO();
+        ShiftRosterDTO vm = new();
 
         if (request.StartDate > request.EndDate)
         {

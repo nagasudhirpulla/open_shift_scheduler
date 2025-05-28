@@ -18,6 +18,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
     {
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
         if (environment.IsEnvironment("Testing"))
         {
             // Add Identity Infra
@@ -29,7 +30,7 @@ public static class DependencyInjection
             // Add Identity Persistence Infra 
             services.AddDbContext<AppIdentityDbContext>(options =>
                     options.UseNpgsql(
-                      configuration.GetConnectionString("DefaultConnection"), 
+                      connectionString, 
                       b => b.MigrationsAssembly("OSS.Web"))
                 );
         }
@@ -65,12 +66,12 @@ public static class DependencyInjection
         services.AddTransient<IEmailSender, EmailSender>();
 
         // add super admin user details from config as a singleton service
-        IdentityInit identityInit = new IdentityInit();
+        IdentityInit identityInit = new();
         configuration.Bind("IdentityInit", identityInit);
         services.AddSingleton(identityInit);
 
         // add email settings from config as a singleton service
-        EmailConfiguration emailConfig = new EmailConfiguration();
+        EmailConfiguration emailConfig = new();
         configuration.Bind("EmailSettings", emailConfig);
         services.AddSingleton(emailConfig);
 

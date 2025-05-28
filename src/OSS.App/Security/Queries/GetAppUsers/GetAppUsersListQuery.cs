@@ -27,7 +27,7 @@ public class GetAppUsersListQuery : IRequest<UserListVM>
 
         public async Task<UserListVM> Handle(GetAppUsersListQuery request, CancellationToken cancellationToken)
         {
-            UserListVM vm = new UserListVM();
+            UserListVM vm = new();
             vm.Users = new List<UserDTO>();
             // get the list of users
             List<ApplicationUser> users = await _userManager.Users.OrderBy(u => u.UserName).Include(u => u.ShiftGroup).Include(u => u.ShiftRole).Include(u => u.Gender).ToListAsync();

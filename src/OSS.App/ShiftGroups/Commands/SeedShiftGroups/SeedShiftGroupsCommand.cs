@@ -21,7 +21,7 @@ public class SeedShiftGroupsCommand : IRequest<bool>
 
         public async Task<bool> Handle(SeedShiftGroupsCommand request, CancellationToken cancellationToken)
         {
-            List<string> seedShiftGroups = new List<string>() { "General" };
+            List<string> seedShiftGroups = new() { "General" };
             foreach (var shiftGrp in seedShiftGroups)
             {
                 bool isShiftGrpPres = await _context.ShiftGroups.AnyAsync(g => g.Name.ToLower().Equals(shiftGrp.ToLower()));

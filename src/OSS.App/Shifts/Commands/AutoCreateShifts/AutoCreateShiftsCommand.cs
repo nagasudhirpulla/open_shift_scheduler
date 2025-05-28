@@ -100,14 +100,14 @@ public class AutoCreateShiftsCommand : IRequest<bool>
                     }
 
                     // create new shift with the shift participations
-                    Shift newShift = new Shift { ShiftTypeId = currentShiftTypeId, ShiftDate = shiftDate };
+                    Shift newShift = new() { ShiftTypeId = currentShiftTypeId, ShiftDate = shiftDate };
                     _context.Add(newShift);
                     await _context.SaveChangesAsync();
 
                     // create the shift participations for the new shift
                     foreach (ShiftParticipation shiftPart in startDayShift.ShiftParticipations)
                     {
-                        ShiftParticipation newShiftPart = new ShiftParticipation { ShiftId = newShift.Id, EmployeeId = shiftPart.EmployeeId, ParticipationSequence = shiftPart.ParticipationSequence, ShiftParticipationTypeId = shiftPart.ShiftParticipationTypeId };
+                        ShiftParticipation newShiftPart = new() { ShiftId = newShift.Id, EmployeeId = shiftPart.EmployeeId, ParticipationSequence = shiftPart.ParticipationSequence, ShiftParticipationTypeId = shiftPart.ShiftParticipationTypeId };
                         _context.ShiftParticipations.Add(newShiftPart);
                         await _context.SaveChangesAsync();
                     }

@@ -21,7 +21,7 @@ public class SeedShiftParticipationTypesCommand : IRequest<bool>
 
         public async Task<bool> Handle(SeedShiftParticipationTypesCommand request, CancellationToken cancellationToken)
         {
-            List<string> seedPartTypes = new List<string>() { "Normal", "Leave" };
+            List<string> seedPartTypes = new() { "Normal", "Leave" };
             foreach (var partType in seedPartTypes)
             {
                 bool isPartTypePres = await _context.ShiftParticipationTypes.AnyAsync(spt => spt.Name.ToLower().Equals(partType.ToLower()));

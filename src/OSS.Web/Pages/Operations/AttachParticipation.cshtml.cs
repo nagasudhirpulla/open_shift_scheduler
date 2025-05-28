@@ -60,14 +60,14 @@ public class AttachParticipationModel : PageModel
 
     public List<ShiftParticipationType> GetShiftPartTypesWithSame(List<ShiftParticipationType> shiftPartTypes)
     {
-        List<ShiftParticipationType> newShiftPartTypes = new List<ShiftParticipationType>(shiftPartTypes);
+        List<ShiftParticipationType> newShiftPartTypes = new(shiftPartTypes);
         newShiftPartTypes.Insert(0, new ShiftParticipationType() { Id = -1, Name = "Same" });
         return newShiftPartTypes;
     }
 
     public List<ShiftParticipationType> GetShiftPartTypesWithAny(List<ShiftParticipationType> shiftPartTypes)
     {
-        List<ShiftParticipationType> newShiftPartTypes = new List<ShiftParticipationType>(shiftPartTypes);
+        List<ShiftParticipationType> newShiftPartTypes = new(shiftPartTypes);
         newShiftPartTypes.Insert(0, new ShiftParticipationType() { Id = -1, Name = "Any" });
         return newShiftPartTypes;
     }

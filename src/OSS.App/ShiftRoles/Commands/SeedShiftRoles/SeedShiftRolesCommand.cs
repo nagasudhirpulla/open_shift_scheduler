@@ -21,7 +21,7 @@ public class SeedShiftRolesCommand : IRequest<bool>
 
         public async Task<bool> Handle(SeedShiftRolesCommand request, CancellationToken cancellationToken)
         {
-            List<string> seedShiftRoles = new List<string>() { "Shift-Incharge", "Outage-Coordination", "Scheduling-Coordination" };
+            List<string> seedShiftRoles = new() { "Shift-Incharge", "Outage-Coordination", "Scheduling-Coordination" };
             foreach (var shiftRole in seedShiftRoles)
             {
                 bool IsShiftRolePres = await _context.ShiftRoles.AnyAsync(g => g.RoleName.Equals(shiftRole));

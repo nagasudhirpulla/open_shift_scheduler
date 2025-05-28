@@ -18,7 +18,7 @@ public class DeleteAppUserCommandHandler : IRequestHandler<DeleteAppUserCommand,
 
     public async Task<List<string>> Handle(DeleteAppUserCommand request, CancellationToken cancellationToken)
     {
-        List<string> errors = new List<string>();
+        List<string> errors = new();
         ApplicationUser user = await _userManager.FindByIdAsync(request.Id);
         if (user == null)
         {

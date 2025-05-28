@@ -54,7 +54,7 @@ public class SeedUsersCommand : IRequest<bool>
                 ShiftGroup shiftGrp = await _context.ShiftGroups.Where(b => b.Name.ToLower() == "general")
                                                       .FirstOrDefaultAsync();
                 // create desired admin user object
-                ApplicationUser user = new ApplicationUser
+                ApplicationUser user = new()
                 {
                     UserName = AdminUserName,
                     DisplayName = AdminUserName,
@@ -78,14 +78,14 @@ public class SeedUsersCommand : IRequest<bool>
          * **/
         public async Task SeedUserRoles(RoleManager<IdentityRole> roleManager)
         {
-            List<string> desiredRoles = new List<string>() { SecurityConstants.GuestRoleString, SecurityConstants.AdminRoleString };
+            List<string> desiredRoles = new() { SecurityConstants.GuestRoleString, SecurityConstants.AdminRoleString };
             foreach (string roleName in desiredRoles)
             {
                 // check if role doesn't exist
                 if (!await roleManager.RoleExistsAsync(roleName))
                 {
                     // create desired role object
-                    IdentityRole role = new IdentityRole
+                    IdentityRole role = new()
                     {
                         Name = roleName,
                     };

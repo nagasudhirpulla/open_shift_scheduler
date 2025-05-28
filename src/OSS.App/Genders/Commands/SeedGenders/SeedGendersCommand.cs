@@ -21,7 +21,7 @@ public class SeedGendersCommand : IRequest<bool>
 
         public async Task<bool> Handle(SeedGendersCommand request, CancellationToken cancellationToken)
         {
-            List<string> seedGenders = new List<string>() { "Male", "Female" };
+            List<string> seedGenders = new() { "Male", "Female" };
             foreach (var gend in seedGenders)
             {
                 bool isGendPres = await _context.Genders.AnyAsync(g => g.Name.ToLower().Equals(gend.ToLower()));

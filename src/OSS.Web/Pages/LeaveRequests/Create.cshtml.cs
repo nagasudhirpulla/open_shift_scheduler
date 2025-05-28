@@ -52,7 +52,7 @@ public class CreateModel : PageModel
     public async Task<IActionResult> OnPostAsync()
     {
         // validate request
-        CreateLeaveRequestCommand command = new CreateLeaveRequestCommand { LeaveRequest = LeaveRequest, UserId = _userManager.GetUserId(User), IsUserAdmin = User.IsInRole(SecurityConstants.AdminRoleString) };
+        CreateLeaveRequestCommand command = new() { LeaveRequest = LeaveRequest, UserId = _userManager.GetUserId(User), IsUserAdmin = User.IsInRole(SecurityConstants.AdminRoleString) };
         var validator = new CreateLeaveRequestCommandValidator();
         var validationResult = validator.Validate(command);
 

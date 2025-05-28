@@ -21,7 +21,7 @@ public class CreateAppUserCommandHandler : IRequestHandler<CreateAppUserCommand,
 
     public async Task<IdentityResult> Handle(CreateAppUserCommand request, CancellationToken cancellationToken)
     {
-        ApplicationUser user = new ApplicationUser
+        ApplicationUser user = new()
         {
             UserName = request.Username,
             DisplayName = request.DisplayName,

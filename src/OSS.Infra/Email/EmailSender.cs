@@ -18,7 +18,7 @@ public class EmailSender : IEmailSender
     {
         Console.WriteLine("Sending mail...");
 
-        MailMessage message = new MailMessage
+        MailMessage message = new()
         {
             From = new MailAddress(EmailConfig.MailAddress),
             Subject = subject,

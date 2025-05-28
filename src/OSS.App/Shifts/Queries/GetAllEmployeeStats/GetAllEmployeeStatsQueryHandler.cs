@@ -28,7 +28,7 @@ public class GetAllEmployeeStatsQueryHandler : IRequestHandler<GetAllEmployeeSta
 
     public async Task<List<EmployeeStatsDTO>> Handle(GetAllEmployeeStatsQuery request, CancellationToken cancellationToken)
     {
-        List<EmployeeStatsDTO> vm = new List<EmployeeStatsDTO>();
+        List<EmployeeStatsDTO> vm = new();
 
         // get all the shift participations
         List<ShiftParticipation> shiftParts = await _context.ShiftParticipations.Where(sp => sp.Shift.ShiftDate >= request.StartDate.Date && sp.Shift.ShiftDate <= request.EndDate.Date)
@@ -58,7 +58,7 @@ public class GetAllEmployeeStatsQueryHandler : IRequestHandler<GetAllEmployeeSta
             {
                 UserDTO uDTO = _mapper.Map<UserDTO>(emp);
                 uDTO.UserRole = userRole;
-                EmployeeStatsDTO stats = new EmployeeStatsDTO
+                EmployeeStatsDTO stats = new()
                 {
                     Employee = uDTO
                 };

@@ -20,13 +20,13 @@ public class EditAppUserCommandHandler : IRequestHandler<EditAppUserCommand, Lis
 
     public async Task<List<string>> Handle(EditAppUserCommand request, CancellationToken cancellationToken)
     {
-        List<string> errors = new List<string>();
+        List<string> errors = new();
         ApplicationUser user = await _userManager.FindByIdAsync(request.Id);
         if (user == null)
         {
             errors.Add($"Unable to find user with id {request.Id}");
         }
-        List<IdentityError> identityErrors = new List<IdentityError>();
+        List<IdentityError> identityErrors = new();
         // change password if not null
         string newPassword = request.Password;
         if (!string.IsNullOrWhiteSpace(newPassword))

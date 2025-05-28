@@ -84,7 +84,7 @@ public class LoginModel : PageModel
             string emailRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
                                    @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" +
                                       @".)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
-            Regex re = new Regex(emailRegex);
+            Regex re = new(emailRegex);
             if (!re.IsMatch(Input.Email))
             {
                 ModelState.AddModelError(string.Empty, "Email is not valid");
@@ -94,7 +94,7 @@ public class LoginModel : PageModel
         {
             //validate Username format
             string usernameRegex = @"^[a-zA-Z0-9]*$";
-            Regex re = new Regex(usernameRegex);
+            Regex re = new(usernameRegex);
             if (!re.IsMatch(Input.Email))
             {
                 ModelState.AddModelError(string.Empty, "Username is not valid");
