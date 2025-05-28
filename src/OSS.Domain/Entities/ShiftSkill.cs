@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace OSS.Domain.Entities;
+﻿namespace OSS.Domain.Entities;
 
 public class ShiftSkill : BaseEntity
 {

@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace OSS.App.Shifts.Queries.GetEmployeeCalendarById;
 

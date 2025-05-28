@@ -1,15 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using OSS.Domain.Entities;
-using AutoMapper;
 
 namespace OSS.App.Security.Commands.CreateAppUser;
 

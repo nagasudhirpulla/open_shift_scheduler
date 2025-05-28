@@ -1,6 +1,5 @@
 ﻿using System;
 using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 using OSS.App.Mappings;
 using OSS.Domain.Entities;
 

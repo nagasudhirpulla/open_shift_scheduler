@@ -80,10 +80,10 @@ public class Startup(IConfiguration configuration, IWebHostEnvironment environme
 
     public async Task SeedData(IMediator mediator)
     {
-        bool gendersSeeded = await mediator.Send(new SeedGendersCommand());
-        bool shiftRolesSeeded = await mediator.Send(new SeedShiftRolesCommand());
-        bool shiftGroupsSeeded = await mediator.Send(new SeedShiftGroupsCommand());
-        bool usersSeeded = await mediator.Send(new SeedUsersCommand());
-        bool partTypesSeeded = await mediator.Send(new SeedShiftParticipationTypesCommand());
+        _ = await mediator.Send(new SeedGendersCommand());
+        _ = await mediator.Send(new SeedShiftRolesCommand());
+        _ = await mediator.Send(new SeedShiftGroupsCommand());
+        _ = await mediator.Send(new SeedUsersCommand());
+        _ = await mediator.Send(new SeedShiftParticipationTypesCommand());
     }
 }

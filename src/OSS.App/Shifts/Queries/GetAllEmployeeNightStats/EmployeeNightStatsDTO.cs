@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text;
-using OSS.App.Security.Queries.GetAppUsers;
+﻿using OSS.App.Security.Queries.GetAppUsers;
 
 namespace OSS.App.Shifts.Queries.GetAllEmployeeNightStats;
 
