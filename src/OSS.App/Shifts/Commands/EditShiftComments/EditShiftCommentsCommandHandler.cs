@@ -5,47 +5,46 @@ using OSS.Domain.Entities;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OSS.App.Shifts.Commands.EditShiftComments
-{
-    public class EditShiftCommentsCommandHandler : IRequestHandler<EditShiftCommentsCommand, bool>
-    {
-        private readonly AppIdentityDbContext _context;
+namespace OSS.App.Shifts.Commands.EditShiftComments;
 
-        public EditShiftCommentsCommandHandler(AppIdentityDbContext context)
+public class EditShiftCommentsCommandHandler : IRequestHandler<EditShiftCommentsCommand, bool>
+{
+    private readonly AppIdentityDbContext _context;
+
+    public EditShiftCommentsCommandHandler(AppIdentityDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<bool> Handle(EditShiftCommentsCommand request, CancellationToken cancellationToken)
+    {
+        // get the required shift by id
+        Shift shift = await _context.Shifts.FindAsync(request.ShiftId);
+        if (shift == null)
         {
-            _context = context;
+            return false;
         }
 
-        public async Task<bool> Handle(EditShiftCommentsCommand request, CancellationToken cancellationToken)
+        // edit the comments
+        shift.Comments = request.Comments;
+
+        // save changes
+        _context.Entry(shift).State = EntityState.Modified;
+        try
         {
-            // get the required shift by id
-            Shift shift = await _context.Shifts.FindAsync(request.ShiftId);
-            if (shift == null)
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!await _context.Shifts.AnyAsync(e => e.Id == request.ShiftId))
             {
                 return false;
             }
-
-            // edit the comments
-            shift.Comments = request.Comments;
-
-            // save changes
-            _context.Entry(shift).State = EntityState.Modified;
-            try
+            else
             {
-                await _context.SaveChangesAsync();
+                throw;
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await _context.Shifts.AnyAsync(e => e.Id == request.ShiftId))
-                {
-                    return false;
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return true;
         }
+        return true;
     }
 }

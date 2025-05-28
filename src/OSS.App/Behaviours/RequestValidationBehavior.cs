@@ -6,34 +6,29 @@ using FluentValidation;
 using MediatR;
 using ValidationException = OSS.App.Exceptions.ValidationException;
 
-namespace OSS.App.Behaviours
+namespace OSS.App.Behaviours;
+
+public class RequestValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators) : IPipelineBehavior<TRequest, TResponse>
+ where TRequest : notnull
 {
-    public class RequestValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-        where TRequest : IRequest<TResponse>
+    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
-        private readonly IEnumerable<IValidator<TRequest>> _validators;
-
-        public RequestValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
+        if (validators.Any())
         {
-            _validators = validators;
-        }
+            var context = new ValidationContext<TRequest>(request);
 
-        public Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
-        {
-            var context = new ValidationContext(request);
+            var validationResults = await Task.WhenAll(
+                validators.Select(v =>
+                    v.ValidateAsync(context, cancellationToken)));
 
-            var failures = _validators
-                .Select(v => v.Validate(context))
-                .SelectMany(result => result.Errors)
-                .Where(f => f != null)
+            var failures = validationResults
+                .Where(r => r.Errors.Count != 0)
+                .SelectMany(r => r.Errors)
                 .ToList();
 
             if (failures.Count != 0)
-            {
                 throw new ValidationException(failures);
-            }
-
-            return next();
         }
+        return await next(cancellationToken);
     }
 }

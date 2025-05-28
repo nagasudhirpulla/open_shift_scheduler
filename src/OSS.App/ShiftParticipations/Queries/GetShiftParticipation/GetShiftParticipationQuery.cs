@@ -8,25 +8,24 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OSS.App.ShiftParticipations.Queries.GetShiftParticipation
+namespace OSS.App.ShiftParticipations.Queries.GetShiftParticipation;
+
+public class GetShiftParticipationQuery : IRequest<ShiftParticipation>
 {
-    public class GetShiftParticipationQuery : IRequest<ShiftParticipation>
+    public int Id { get; set; }
+    public class GetShiftRolesQueryHandler : IRequestHandler<GetShiftParticipationQuery, ShiftParticipation>
     {
-        public int Id { get; set; }
-        public class GetShiftRolesQueryHandler : IRequestHandler<GetShiftParticipationQuery, ShiftParticipation>
+        private readonly AppIdentityDbContext _context;
+
+        public GetShiftRolesQueryHandler(AppIdentityDbContext context)
         {
-            private readonly AppIdentityDbContext _context;
+            _context = context;
+        }
 
-            public GetShiftRolesQueryHandler(AppIdentityDbContext context)
-            {
-                _context = context;
-            }
-
-            public async Task<ShiftParticipation> Handle(GetShiftParticipationQuery request, CancellationToken cancellationToken)
-            {
-                var shiftParticipation = await _context.ShiftParticipations.FindAsync(request.Id);
-                return shiftParticipation;
-            }
+        public async Task<ShiftParticipation> Handle(GetShiftParticipationQuery request, CancellationToken cancellationToken)
+        {
+            var shiftParticipation = await _context.ShiftParticipations.FindAsync(request.Id);
+            return shiftParticipation;
         }
     }
 }

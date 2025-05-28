@@ -10,39 +10,38 @@ using OSS.App.Data;
 using OSS.App.Security;
 using OSS.Domain.Entities;
 
-namespace OSS.Web.Pages.ShiftRoles
+namespace OSS.Web.Pages.ShiftRoles;
+
+[Authorize(Roles = SecurityConstants.AdminRoleString)]
+public class CreateModel : PageModel
 {
-    [Authorize(Roles = SecurityConstants.AdminRoleString)]
-    public class CreateModel : PageModel
+    private readonly OSS.App.Data.AppIdentityDbContext _context;
+
+    public CreateModel(OSS.App.Data.AppIdentityDbContext context)
     {
-        private readonly OSS.App.Data.AppIdentityDbContext _context;
+        _context = context;
+    }
 
-        public CreateModel(OSS.App.Data.AppIdentityDbContext context)
-        {
-            _context = context;
-        }
+    public IActionResult OnGet()
+    {
+        return Page();
+    }
 
-        public IActionResult OnGet()
+    [BindProperty]
+    public ShiftRole ShiftRole { get; set; }
+
+    // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+    // more details see https://aka.ms/RazorPagesCRUD.
+    public async Task<IActionResult> OnPostAsync()
+    {
+        if (!ModelState.IsValid)
         {
             return Page();
         }
 
-        [BindProperty]
-        public ShiftRole ShiftRole { get; set; }
+        _context.ShiftRoles.Add(ShiftRole);
+        await _context.SaveChangesAsync();
 
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            _context.ShiftRoles.Add(ShiftRole);
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("./Index");
-        }
+        return RedirectToPage("./Index");
     }
 }

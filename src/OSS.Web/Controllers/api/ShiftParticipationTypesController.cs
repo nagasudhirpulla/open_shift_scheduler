@@ -10,25 +10,24 @@ using OSS.App.Security;
 using OSS.App.ShiftParticipationTypes.Queries.GetShiftParticipationTypes;
 using OSS.Domain.Entities;
 
-namespace OSS.Web.Controllers.api
+namespace OSS.Web.Controllers.api;
+
+[Route("api/[controller]")]
+[ApiController]
+[Authorize(Roles = SecurityConstants.AdminRoleString)]
+public class ShiftParticipationTypesController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    [Authorize(Roles = SecurityConstants.AdminRoleString)]
-    public class ShiftParticipationTypesController : ControllerBase
+    public IMediator _mediator { get; private set; }
+
+    public ShiftParticipationTypesController(IMediator mediator)
     {
-        public IMediator _mediator { get; private set; }
+        _mediator = mediator;
+    }
 
-        public ShiftParticipationTypesController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
-        // GET: api/ShiftParticipationTypes
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ShiftParticipationType>>> GetShiftParticipationTypes()
-        {
-            return await _mediator.Send(new GetShiftParticipationTypesQuery());
-        }
+    // GET: api/ShiftParticipationTypes
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<ShiftParticipationType>>> GetShiftParticipationTypes()
+    {
+        return await _mediator.Send(new GetShiftParticipationTypesQuery());
     }
 }

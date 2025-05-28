@@ -4,10 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace OSS.App.LeaveRequests.Commands.AddCommentToLeaveRequest
+namespace OSS.App.LeaveRequests.Commands.AddCommentToLeaveRequest;
+
+public class AddCommentToLeaveRequestCommand : IRequest<LeaveRequestComment>
 {
-    public class AddCommentToLeaveRequestCommand : IRequest<LeaveRequestComment>
-    {
-        public LeaveRequestComment LeaveRequestComment { get; set; }
-    }
+    public LeaveRequestComment LeaveRequestComment { get; set; }
 }

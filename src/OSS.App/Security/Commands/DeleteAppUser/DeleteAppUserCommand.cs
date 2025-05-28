@@ -1,10 +1,9 @@
 ﻿using MediatR;
 using System.Collections.Generic;
 
-namespace OSS.App.Security.Commands.DeleteAppUser
+namespace OSS.App.Security.Commands.DeleteAppUser;
+
+public class DeleteAppUserCommand : IRequest<List<string>>
 {
-    public class DeleteAppUserCommand : IRequest<List<string>>
-    {
-        public string Id { get; set; }
-    }
+    public string Id { get; set; }
 }

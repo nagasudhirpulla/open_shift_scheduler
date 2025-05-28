@@ -11,52 +11,51 @@ using OSS.App.LeaveRequests.Queries.GetLeaveRequestById;
 using OSS.App.Security;
 using OSS.Domain.Entities;
 
-namespace OSS.Web.Pages.LeaveRequests
+namespace OSS.Web.Pages.LeaveRequests;
+
+[Authorize(Roles = SecurityConstants.AdminRoleString)]
+public class ExecuteModel : PageModel
 {
-    [Authorize(Roles = SecurityConstants.AdminRoleString)]
-    public class ExecuteModel : PageModel
+    private readonly IMediator _mediator;
+
+    public ExecuteModel(IMediator mediator)
     {
-        private readonly IMediator _mediator;
+        _mediator = mediator;
+    }
 
-        public ExecuteModel(IMediator mediator)
+    public LeaveRequest LeaveRequest { get; set; }
+
+    public async Task<IActionResult> OnGet(int? id)
+    {
+        if (id == null)
         {
-            _mediator = mediator;
+            return NotFound();
         }
 
-        public LeaveRequest LeaveRequest { get; set; }
+        LeaveRequest = await _mediator.Send(new GetLeaveRequestByIdQuery() { Id = id.Value });
 
-        public async Task<IActionResult> OnGet(int? id)
+        if (LeaveRequest == null)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            return NotFound();
+        }
+        return Page();
+    }
 
-            LeaveRequest = await _mediator.Send(new GetLeaveRequestByIdQuery() { Id = id.Value });
-
-            if (LeaveRequest == null)
-            {
-                return NotFound();
-            }
-            return Page();
+    public async Task<IActionResult> OnPostAsync(int? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        LeaveRequest = await _mediator.Send(new GetLeaveRequestByIdQuery() { Id = id.Value });
+
+        if (LeaveRequest == null)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            LeaveRequest = await _mediator.Send(new GetLeaveRequestByIdQuery() { Id = id.Value });
-
-            if (LeaveRequest == null)
-            {
-                return NotFound();
-            }
-
-            LeaveRequest lr = await _mediator.Send(new ExecuteLeaveRequestCommand() { Id = id.Value });
-            return RedirectToPage("./Details", new { Id = id });
+            return NotFound();
         }
+
+        LeaveRequest lr = await _mediator.Send(new ExecuteLeaveRequestCommand() { Id = id.Value });
+        return RedirectToPage("./Details", new { Id = id });
     }
 }

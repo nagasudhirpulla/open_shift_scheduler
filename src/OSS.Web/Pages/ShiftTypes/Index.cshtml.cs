@@ -8,22 +8,21 @@ using Microsoft.EntityFrameworkCore;
 using OSS.App.Data;
 using OSS.Domain.Entities;
 
-namespace OSS.Web.Pages.ShiftTypes
+namespace OSS.Web.Pages.ShiftTypes;
+
+public class IndexModel : PageModel
 {
-    public class IndexModel : PageModel
+    private readonly OSS.App.Data.AppIdentityDbContext _context;
+
+    public IndexModel(OSS.App.Data.AppIdentityDbContext context)
     {
-        private readonly OSS.App.Data.AppIdentityDbContext _context;
+        _context = context;
+    }
 
-        public IndexModel(OSS.App.Data.AppIdentityDbContext context)
-        {
-            _context = context;
-        }
+    public IList<ShiftType> ShiftType { get; set; }
 
-        public IList<ShiftType> ShiftType { get; set; }
-
-        public async Task OnGetAsync()
-        {
-            ShiftType = await _context.ShiftTypes.OrderBy(st => st.ShiftSequence).ToListAsync();
-        }
+    public async Task OnGetAsync()
+    {
+        ShiftType = await _context.ShiftTypes.OrderBy(st => st.ShiftSequence).ToListAsync();
     }
 }

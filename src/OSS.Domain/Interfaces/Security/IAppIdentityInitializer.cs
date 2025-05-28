@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OSS.Domain.Interfaces.Security
+namespace OSS.Domain.Interfaces.Security;
+
+public interface IAppIdentityInitializer
 {
-    public interface IAppIdentityInitializer
-    {
-        public void SeedData();
-    }
+    public void SeedData();
 }

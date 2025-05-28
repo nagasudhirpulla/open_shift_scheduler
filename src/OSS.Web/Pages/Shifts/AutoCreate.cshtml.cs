@@ -9,36 +9,35 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using OSS.App.Security;
 using OSS.App.Shifts.Commands.AutoCreateShifts;
 
-namespace OSS.Web.Pages.Shifts
+namespace OSS.Web.Pages.Shifts;
+
+[Authorize(Roles = SecurityConstants.AdminRoleString)]
+public class AutoCreateModel : PageModel
 {
-    [Authorize(Roles = SecurityConstants.AdminRoleString)]
-    public class AutoCreateModel : PageModel
+    private readonly IMediator _mediator;
+
+    public AutoCreateModel(IMediator mediator)
     {
-        private readonly IMediator _mediator;
+        _mediator = mediator;
+    }
 
-        public AutoCreateModel(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+    [BindProperty]
+    public AutoCreateShiftsCommand AutoCreateShiftsCommand { get; set; }
 
-        [BindProperty]
-        public AutoCreateShiftsCommand AutoCreateShiftsCommand { get; set; }
+    public IActionResult OnGet()
+    {
+        return Page();
+    }
 
-        public IActionResult OnGet()
+    public async Task<IActionResult> OnPostAsync()
+    {
+        if (!ModelState.IsValid)
         {
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+        bool res = await _mediator.Send(AutoCreateShiftsCommand);
 
-            bool res = await _mediator.Send(AutoCreateShiftsCommand);
-
-            return RedirectToPage("./Edit");
-        }
+        return RedirectToPage("./Edit");
     }
 }

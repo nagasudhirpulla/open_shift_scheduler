@@ -5,15 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace OSS.App.Data.Configurations
+namespace OSS.App.Data.Configurations;
+
+public class ShiftRoleConfiguration : IEntityTypeConfiguration<ShiftRole>
 {
-    public class ShiftRoleConfiguration : IEntityTypeConfiguration<ShiftRole>
+    public void Configure(EntityTypeBuilder<ShiftRole> builder)
     {
-        public void Configure(EntityTypeBuilder<ShiftRole> builder)
-        {
-            builder
-            .HasIndex(b => b.RoleName)
-            .IsUnique();
-        }
+        builder
+        .HasIndex(b => b.RoleName)
+        .IsUnique();
     }
 }

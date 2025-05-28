@@ -21,145 +21,144 @@ using OSS.App.ShiftRoles.Queries.GetShiftRoles;
 using OSS.Domain.Entities;
 using OSS.Web.Extensions;
 
-namespace OSS.Web.Controllers
+namespace OSS.Web.Controllers;
+
+[Authorize(Roles = SecurityConstants.AdminRoleString)]
+public class UsersController : Controller
 {
-    [Authorize(Roles = SecurityConstants.AdminRoleString)]
-    public class UsersController : Controller
+    private readonly ILogger _logger;
+    private readonly IMediator _mediator;
+    private readonly IMapper _mapper;
+
+    public UsersController(ILogger<UsersController> logger, IMediator mediator, IMapper mapper)
     {
-        private readonly ILogger _logger;
-        private readonly IMediator _mediator;
-        private readonly IMapper _mapper;
+        _logger = logger;
+        _mediator = mediator;
+        _mapper = mapper;
+    }
 
-        public UsersController(ILogger<UsersController> logger, IMediator mediator, IMapper mapper)
+    public async Task<IActionResult> Index()
+    {
+        var vm = await _mediator.Send(new GetAppUsersListQuery());
+        return View(vm);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Create()
+    {
+        ViewData["GenderId"] = new SelectList(await _mediator.Send(new GetGendersQuery()), "Id", "Name");
+        ViewData["ShiftGroupId"] = new SelectList(await _mediator.Send(new GetShiftGroupsQuery()), "Id", "Name");
+        ViewData["ShiftRoleId"] = new SelectList(await _mediator.Send(new GetShiftRolesQuery()), "Id", "RoleName");
+        return View(new CreateAppUserCommand());
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(CreateAppUserCommand vm)
+    {
+        vm.BaseUrl = new Uri(new Uri(Request.Scheme + "://" + Request.Host), "roster/Identity/Account/ConfirmEmail").ToString();
+        IdentityResult result = await _mediator.Send(vm);
+        if (result.Succeeded)
         {
-            _logger = logger;
-            _mediator = mediator;
-            _mapper = mapper;
+            _logger.LogInformation($"Created new account for {vm.Username}");
+            return RedirectToAction(nameof(Index)).WithSuccess($"Created new user {vm.Username}");
+        }
+        AddErrors(result);
+
+        // If we got this far, something failed, redisplay form
+        ViewData["GenderId"] = new SelectList(await _mediator.Send(new GetGendersQuery()), "Id", "Name");
+        ViewData["ShiftGroupId"] = new SelectList(await _mediator.Send(new GetShiftGroupsQuery()), "Id", "Name");
+        ViewData["ShiftRoleId"] = new SelectList(await _mediator.Send(new GetShiftRolesQuery()), "Id", "RoleName");
+        return View(vm);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Edit(string id)
+    {
+        ApplicationUser user = await _mediator.Send(new GetRawAppUserByIdQuery() { Id = id });
+        if (user == null)
+        {
+            return NotFound();
         }
 
-        public async Task<IActionResult> Index()
+        EditAppUserCommand vm = _mapper.Map<EditAppUserCommand>(user);
+
+        // If we got this far, something failed, redisplay form
+        // ViewData["UserRole"] = new SelectList(SecurityConstants.GetRoles());
+        ViewData["GenderId"] = new SelectList(await _mediator.Send(new GetGendersQuery()), "Id", "Name");
+        ViewData["ShiftGroupId"] = new SelectList(await _mediator.Send(new GetShiftGroupsQuery()), "Id", "Name");
+        ViewData["ShiftRoleId"] = new SelectList(await _mediator.Send(new GetShiftRolesQuery()), "Id", "RoleName");
+        return View(vm);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(EditAppUserCommand vm)
+    {
+        List<string> errors = await _mediator.Send(vm);
+        AddErrors(errors);
+
+        // check if we have any errors and redirect if successful
+        if (errors.Count == 0)
         {
-            var vm = await _mediator.Send(new GetAppUsersListQuery());
-            return View(vm);
+            _logger.LogInformation("User edit operation successful");
+            return RedirectToAction(nameof(Index)).WithSuccess("User Editing done");
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Create()
+        // If we got this far, something failed, redisplay form
+        // ViewData["UserRole"] = new SelectList(SecurityConstants.GetRoles());
+        ViewData["GenderId"] = new SelectList(await _mediator.Send(new GetGendersQuery()), "Id", "Name");
+        ViewData["ShiftGroupId"] = new SelectList(await _mediator.Send(new GetShiftGroupsQuery()), "Id", "Name");
+        ViewData["ShiftRoleId"] = new SelectList(await _mediator.Send(new GetShiftRolesQuery()), "Id", "RoleName");
+        return View(vm);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Delete(string id)
+    {
+        UserDTO vm = await _mediator.Send(new GetAppUserByIdQuery() { Id = id });
+
+        if (vm == null)
         {
-            ViewData["GenderId"] = new SelectList(await _mediator.Send(new GetGendersQuery()), "Id", "Name");
-            ViewData["ShiftGroupId"] = new SelectList(await _mediator.Send(new GetShiftGroupsQuery()), "Id", "Name");
-            ViewData["ShiftRoleId"] = new SelectList(await _mediator.Send(new GetShiftRolesQuery()), "Id", "RoleName");
-            return View(new CreateAppUserCommand());
+            return NotFound();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateAppUserCommand vm)
-        {
-            vm.BaseUrl = new Uri(new Uri(Request.Scheme + "://" + Request.Host), "roster/Identity/Account/ConfirmEmail").ToString();
-            IdentityResult result = await _mediator.Send(vm);
-            if (result.Succeeded)
-            {
-                _logger.LogInformation($"Created new account for {vm.Username}");
-                return RedirectToAction(nameof(Index)).WithSuccess($"Created new user {vm.Username}");
-            }
-            AddErrors(result);
+        return View(vm);
+    }
 
-            // If we got this far, something failed, redisplay form
-            ViewData["GenderId"] = new SelectList(await _mediator.Send(new GetGendersQuery()), "Id", "Name");
-            ViewData["ShiftGroupId"] = new SelectList(await _mediator.Send(new GetShiftGroupsQuery()), "Id", "Name");
-            ViewData["ShiftRoleId"] = new SelectList(await _mediator.Send(new GetShiftRolesQuery()), "Id", "RoleName");
-            return View(vm);
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete(UserDTO vm)
+    {
+        List<string> errs = await _mediator.Send(new DeleteAppUserCommand() { Id = vm.UserId });
+
+        if (errs.Count == 0)
+        {
+            _logger.LogInformation("User deleted successfully");
+            return RedirectToAction(nameof(Index)).WithSuccess("User deletion done");
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Edit(string id)
+        AddErrors(errs);
+
+        // If we got this far, something failed, redisplay form
+        return View(vm);
+    }
+
+    // helper function
+    private void AddErrors(IdentityResult result)
+    {
+        foreach (IdentityError error in result.Errors)
         {
-            ApplicationUser user = await _mediator.Send(new GetRawAppUserByIdQuery() { Id = id });
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            EditAppUserCommand vm = _mapper.Map<EditAppUserCommand>(user);
-
-            // If we got this far, something failed, redisplay form
-            // ViewData["UserRole"] = new SelectList(SecurityConstants.GetRoles());
-            ViewData["GenderId"] = new SelectList(await _mediator.Send(new GetGendersQuery()), "Id", "Name");
-            ViewData["ShiftGroupId"] = new SelectList(await _mediator.Send(new GetShiftGroupsQuery()), "Id", "Name");
-            ViewData["ShiftRoleId"] = new SelectList(await _mediator.Send(new GetShiftRolesQuery()), "Id", "RoleName");
-            return View(vm);
+            ModelState.AddModelError(string.Empty, error.Description);
         }
+    }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(EditAppUserCommand vm)
+    // helper function
+    private void AddErrors(IEnumerable<string> errs)
+    {
+        foreach (string error in errs)
         {
-            List<string> errors = await _mediator.Send(vm);
-            AddErrors(errors);
-
-            // check if we have any errors and redirect if successful
-            if (errors.Count == 0)
-            {
-                _logger.LogInformation("User edit operation successful");
-                return RedirectToAction(nameof(Index)).WithSuccess("User Editing done");
-            }
-
-            // If we got this far, something failed, redisplay form
-            // ViewData["UserRole"] = new SelectList(SecurityConstants.GetRoles());
-            ViewData["GenderId"] = new SelectList(await _mediator.Send(new GetGendersQuery()), "Id", "Name");
-            ViewData["ShiftGroupId"] = new SelectList(await _mediator.Send(new GetShiftGroupsQuery()), "Id", "Name");
-            ViewData["ShiftRoleId"] = new SelectList(await _mediator.Send(new GetShiftRolesQuery()), "Id", "RoleName");
-            return View(vm);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Delete(string id)
-        {
-            UserDTO vm = await _mediator.Send(new GetAppUserByIdQuery() { Id = id });
-
-            if (vm == null)
-            {
-                return NotFound();
-            }
-
-            return View(vm);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(UserDTO vm)
-        {
-            List<string> errs = await _mediator.Send(new DeleteAppUserCommand() { Id = vm.UserId });
-
-            if (errs.Count == 0)
-            {
-                _logger.LogInformation("User deleted successfully");
-                return RedirectToAction(nameof(Index)).WithSuccess("User deletion done");
-            }
-
-            AddErrors(errs);
-
-            // If we got this far, something failed, redisplay form
-            return View(vm);
-        }
-
-        // helper function
-        private void AddErrors(IdentityResult result)
-        {
-            foreach (IdentityError error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
-        }
-
-        // helper function
-        private void AddErrors(IEnumerable<string> errs)
-        {
-            foreach (string error in errs)
-            {
-                ModelState.AddModelError(string.Empty, error);
-            }
+            ModelState.AddModelError(string.Empty, error);
         }
     }
 }
