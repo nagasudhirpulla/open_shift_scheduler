@@ -8,7 +8,7 @@ Shift roaster managing software
 * PostgreSQL database
 
 ## Steps to run the application in visual studio
-* Clone the repository
+* Clone the repository branch using command like `git clone --single-branch --branch <branchname> <remote-repo>`
 * Open a terminal in the folder wwwroot->js->packages and run `npm install`
 * Open a terminal in the folder wwwroot->js->shifts_edit_ui_app and run `npm install` , `npm run build`. This buils the react application used in shifts editing page
 * open the sln file in visual studio
