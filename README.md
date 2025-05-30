@@ -14,6 +14,6 @@ Shift roaster managing software
 * open the sln file in visual studio
 * Right click on OSS.Web project and select "Set as Startup Project"
 * Right click on OSS.Web project and select "Manage user secrets". Paste the content of appsettings.json and edit it as per requirement
-* Set ASPNETCORE_ENVIRONMENT as "Testing" in OSS.Web->Properties->launchSettings.json file to run the application without database (optional. This uses a file based SQLite database)
+* Set ASPNETCORE_ENVIRONMENT as "Testing" in OSS.Web->Properties->launchSettings.json file to run the application without database (optional. This uses a transient in-memory database)
 * Run database migrations, open view->other windows->package manager console. Select the default project as OSS.Infra. Run the command `Update-Database`
 * Run the application using the play button in the top menu bar
